@@ -40,11 +40,15 @@ func (c *BranchesController) Post() {
 	var v requests.BranchRequestDTO
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 
-	userCheck := functions.GetUserDetails(&c.Controller, v.AddedBy)
+	logs.Info("User ID searched is ", v.AddedBy)
+
+	userid, _ := strconv.ParseInt(v.AddedBy, 10, 64)
+
+	userCheck := functions.GetUserDetails(&c.Controller, userid)
 
 	if userCheck.StatusCode == 200 {
 		if country, err := models.GetCountriesByCode(v.CountryCode); err == nil {
-			var branch models.Branches = models.Branches{Branch: v.Branch, Country: country, Active: 1, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: int(v.AddedBy), ModifiedBy: int(v.AddedBy)}
+			var branch models.Branches = models.Branches{Branch: v.Branch, Country: country, Active: 1, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: int(userid), ModifiedBy: int(userid)}
 			if _, err := models.AddBranches(&branch); err == nil {
 				resp := responses.BranchResponseDTO{StatusCode: 200, Branch: &branch, StatusDesc: "Branch added successfully"}
 				c.Ctx.Output.SetStatus(200)

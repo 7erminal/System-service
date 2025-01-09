@@ -704,8 +704,7 @@
             "type": "object",
             "properties": {
                 "AddedBy": {
-                    "type": "integer",
-                    "format": "int64"
+                    "type": "string"
                 },
                 "Branch": {
                     "type": "string"
