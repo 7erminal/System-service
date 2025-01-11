@@ -116,7 +116,7 @@ paths:
         "200":
           description: ""
           schema:
-            $ref: '#/definitions/models.Branches'
+            $ref: '#/definitions/responses.BranchResponseDTO'
         "403":
           description: :id is not int
     delete:
@@ -411,9 +411,13 @@ definitions:
       DateModified:
         type: string
         format: datetime
+      Location:
+        type: string
       ModifiedBy:
         type: integer
         format: int64
+      PhoneNumber:
+        type: string
   models.Countries:
     title: Countries
     type: object
@@ -513,6 +517,10 @@ definitions:
         type: string
       CountryCode:
         type: string
+      Location:
+        type: string
+      PhoneNumber:
+        type: string
   requests.CountriesRequestDTO:
     title: CountriesRequestDTO
     type: object
@@ -533,6 +541,17 @@ definitions:
       Currency:
         type: string
       Symbol:
+        type: string
+  responses.BranchResponseDTO:
+    title: BranchResponseDTO
+    type: object
+    properties:
+      Branch:
+        $ref: '#/definitions/models.Branches'
+      StatusCode:
+        type: integer
+        format: int64
+      StatusDesc:
         type: string
 tags:
 - name: branches

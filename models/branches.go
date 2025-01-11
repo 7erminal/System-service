@@ -14,6 +14,8 @@ type Branches struct {
 	BranchId     int64      `orm:"auto"`
 	Branch       string     `orm:"size(80)"`
 	Country      *Countries `orm:"rel(fk);column(country)"`
+	Location     string     `orm:"column(location)"`
+	PhoneNumber  string     `orm:"column(phone_number)"`
 	Active       int        `orm:"omitempty"`
 	DateCreated  time.Time  `orm:"type(datetime);omitempty"`
 	DateModified time.Time  `orm:"type(datetime);omitempty"`

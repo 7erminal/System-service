@@ -155,7 +155,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Branches"
+                            "$ref": "#/definitions/responses.BranchResponseDTO"
                         }
                     },
                     "403": {
@@ -566,9 +566,15 @@
                     "type": "string",
                     "format": "datetime"
                 },
+                "Location": {
+                    "type": "string"
+                },
                 "ModifiedBy": {
                     "type": "integer",
                     "format": "int64"
+                },
+                "PhoneNumber": {
+                    "type": "string"
                 }
             }
         },
@@ -711,6 +717,12 @@
                 },
                 "CountryCode": {
                     "type": "string"
+                },
+                "Location": {
+                    "type": "string"
+                },
+                "PhoneNumber": {
+                    "type": "string"
                 }
             }
         },
@@ -741,6 +753,22 @@
                     "type": "string"
                 },
                 "Symbol": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.BranchResponseDTO": {
+            "title": "BranchResponseDTO",
+            "type": "object",
+            "properties": {
+                "Branch": {
+                    "$ref": "#/definitions/models.Branches"
+                },
+                "StatusCode": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "StatusDesc": {
                     "type": "string"
                 }
             }

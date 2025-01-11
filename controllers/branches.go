@@ -48,7 +48,7 @@ func (c *BranchesController) Post() {
 
 	if userCheck.StatusCode == 200 {
 		if country, err := models.GetCountriesByCode(v.CountryCode); err == nil {
-			var branch models.Branches = models.Branches{Branch: v.Branch, Country: country, Active: 1, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: int(userid), ModifiedBy: int(userid)}
+			var branch models.Branches = models.Branches{Branch: v.Branch, Country: country, Location: v.Location, PhoneNumber: v.PhoneNumber, Active: 1, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: int(userid), ModifiedBy: int(userid)}
 			if _, err := models.AddBranches(&branch); err == nil {
 				resp := responses.BranchResponseDTO{StatusCode: 200, Branch: &branch, StatusDesc: "Branch added successfully"}
 				c.Ctx.Output.SetStatus(200)
@@ -166,7 +166,7 @@ func (c *BranchesController) GetAll() {
 // @Description update the Branches
 // @Param	id		path 	string	true		"The id you want to update"
 // @Param	body		body 	models.Branches	true		"body for Branches content"
-// @Success 200 {object} models.Branches
+// @Success 200 {object} responses.BranchResponseDTO
 // @Failure 403 :id is not int
 // @router /:id [put]
 func (c *BranchesController) Put() {
@@ -175,9 +175,13 @@ func (c *BranchesController) Put() {
 	v := models.Branches{BranchId: id}
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 	if err := models.UpdateBranchesById(&v); err == nil {
-		c.Data["json"] = "OK"
+		resp := responses.BranchResponseDTO{StatusCode: 200, Branch: &v, StatusDesc: "Branch updated successfully"}
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = resp
 	} else {
-		c.Data["json"] = err.Error()
+		logs.Error("Branch update failed", err.Error())
+		resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Branch update failed"}
+		c.Data["json"] = resp
 	}
 	c.ServeJSON()
 }
