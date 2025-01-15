@@ -71,32 +71,6 @@
                         "description": ""
                     }
                 }
-            },
-            "post": {
-                "tags": [
-                    "branches"
-                ],
-                "description": "create Branches\n\u003cbr\u003e",
-                "operationId": "BranchesController.Post",
-                "parameters": [
-                    {
-                        "in": "body",
-                        "name": "body",
-                        "description": "body for Branches content",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/requests.BranchRequestDTO"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "{int} models.Branches"
-                    },
-                    "403": {
-                        "description": "body is empty"
-                    }
-                }
             }
         },
         "/branches/{id}": {
@@ -701,27 +675,6 @@
                     "$ref": "#/definitions/models.Profile"
                 },
                 "Username": {
-                    "type": "string"
-                }
-            }
-        },
-        "requests.BranchRequestDTO": {
-            "title": "BranchRequestDTO",
-            "type": "object",
-            "properties": {
-                "AddedBy": {
-                    "type": "string"
-                },
-                "Branch": {
-                    "type": "string"
-                },
-                "CountryCode": {
-                    "type": "string"
-                },
-                "Location": {
-                    "type": "string"
-                },
-                "PhoneNumber": {
                     "type": "string"
                 }
             }

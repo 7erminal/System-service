@@ -5,11 +5,8 @@ import (
 	"errors"
 	"strconv"
 	"strings"
-	"system_service/controllers/functions"
 	"system_service/models"
-	"system_service/structs/requests"
 	"system_service/structs/responses"
-	"time"
 
 	"github.com/beego/beego/v2/core/logs"
 	beego "github.com/beego/beego/v2/server/web"
@@ -36,41 +33,54 @@ func (c *BranchesController) URLMapping() {
 // @Success 201 {int} models.Branches
 // @Failure 403 body is empty
 // @router / [post]
-func (c *BranchesController) Post() {
-	var v requests.BranchRequestDTO
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+// func (c *BranchesController) Post() {
+// 	var v requests.BranchRequestDTO
+// 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 
-	logs.Info("User ID searched is ", v.AddedBy)
+// 	logs.Info("User ID searched is ", v.AddedBy)
 
-	userid, _ := strconv.ParseInt(v.AddedBy, 10, 64)
+// 	userid, _ := strconv.ParseInt(v.AddedBy, 10, 64)
 
-	userCheck := functions.GetUserDetails(&c.Controller, userid)
+// 	userCheck := functions.GetUserDetails(&c.Controller, userid)
 
-	if userCheck.StatusCode == 200 {
-		if country, err := models.GetCountriesByCode(v.CountryCode); err == nil {
-			var branch models.Branches = models.Branches{Branch: v.Branch, Country: country, Location: v.Location, PhoneNumber: v.PhoneNumber, Active: 1, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: int(userid), ModifiedBy: int(userid)}
-			if _, err := models.AddBranches(&branch); err == nil {
-				resp := responses.BranchResponseDTO{StatusCode: 200, Branch: &branch, StatusDesc: "Branch added successfully"}
-				c.Ctx.Output.SetStatus(200)
-				c.Data["json"] = resp
-			} else {
-				logs.Info("Error adding branch ", err.Error())
-				resp := responses.BranchResponseDTO{StatusCode: 402, Branch: nil, StatusDesc: "Branch additon failed"}
-				c.Data["json"] = resp
-			}
-		} else {
-			logs.Info("Error adding branch ", err.Error())
-			resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Error getting specified country"}
-			c.Data["json"] = resp
-		}
-	} else {
-		logs.Info("Error::: User not found ")
-		resp := responses.BranchResponseDTO{StatusCode: 500, Branch: nil, StatusDesc: "Error adding Branch"}
-		c.Data["json"] = resp
-	}
+// 	if userCheck.StatusCode == 200 {
+// 		if country, err := models.GetCountriesByCode(v.CountryCode); err == nil {
+// 			var branch models.Branches = models.Branches{Branch: v.Branch, Country: country, Location: v.Location, PhoneNumber: v.PhoneNumber, Active: 1, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: int(userid), ModifiedBy: int(userid)}
+// 			if _, err := models.AddBranches(&branch); err == nil {
+// 				branchesResp := responses.BranchesResp{
+// 					BranchId: branch.BranchId,
+// 					Branch:       branch.Branch,
+// 					Country: branch.Country,
+// 					Location: branch.Location,
+// 					PhoneNumber: branch.PhoneNumber,
+// 					Active: branch.Active,
+// 					DateCreated: branch.DateCreated,
+// 					DateModified: branch.DateModified,
+// 					CreatedBy: branch.CreatedBy,
+// 					ModifiedBy: branch.ModifiedBy,
+// 				}
 
-	c.ServeJSON()
-}
+// 				resp := responses.BranchResponseDTO{StatusCode: 200, Branch: &branchesResp, StatusDesc: "Branch added successfully"}
+// 				c.Ctx.Output.SetStatus(200)
+// 				c.Data["json"] = resp
+// 			} else {
+// 				logs.Info("Error adding branch ", err.Error())
+// 				resp := responses.BranchResponseDTO{StatusCode: 402, Branch: nil, StatusDesc: "Branch additon failed"}
+// 				c.Data["json"] = resp
+// 			}
+// 		} else {
+// 			logs.Info("Error adding branch ", err.Error())
+// 			resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Error getting specified country"}
+// 			c.Data["json"] = resp
+// 		}
+// 	} else {
+// 		logs.Info("Error::: User not found ")
+// 		resp := responses.BranchResponseDTO{StatusCode: 500, Branch: nil, StatusDesc: "Error adding Branch"}
+// 		c.Data["json"] = resp
+// 	}
+
+// 	c.ServeJSON()
+// }
 
 // GetOne ...
 // @Title Get One
