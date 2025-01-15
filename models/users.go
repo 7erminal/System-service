@@ -24,7 +24,7 @@ type Users struct {
 	IdNumber      string    `orm:"column(id_number);size(100);null"`
 	MaritalStatus string    `orm:"column(marital_status);size(20);null"`
 	Active        int       `orm:"column(active);null"`
-	Role          int64     `orm:"rel(fk);column(role);omitempty;null"`
+	Role          int64     `orm:"column(role);omitempty;null"`
 	IsVerified    bool      `orm:"column(is_verified);null"`
 	DateCreated   time.Time `orm:"column(date_created);type(datetime);null;auto_now_add"`
 	DateModified  time.Time `orm:"column(date_modified);type(datetime);null"`
