@@ -11,16 +11,17 @@ import (
 )
 
 type Branches struct {
-	BranchId     int64      `orm:"auto"`
-	Branch       string     `orm:"size(80)"`
-	Country      *Countries `orm:"rel(fk);column(country_id)"`
-	Location     string     `orm:"column(location)"`
-	PhoneNumber  string     `orm:"column(phone_number)"`
-	Active       int        `orm:"omitempty"`
-	DateCreated  time.Time  `orm:"type(datetime);omitempty"`
-	DateModified time.Time  `orm:"type(datetime);omitempty"`
-	CreatedBy    int        `orm:"omitempty"`
-	ModifiedBy   int        `orm:"omitempty"`
+	BranchId      int64      `orm:"auto"`
+	Branch        string     `orm:"size(80)"`
+	Country       *Countries `orm:"rel(fk);column(country_id)"`
+	Location      string     `orm:"column(location)"`
+	PhoneNumber   string     `orm:"column(phone_number)"`
+	Active        int        `orm:"omitempty"`
+	DateCreated   time.Time  `orm:"type(datetime);omitempty"`
+	DateModified  time.Time  `orm:"type(datetime);omitempty"`
+	CreatedBy     int        `orm:"omitempty"`
+	ModifiedBy    int        `orm:"omitempty"`
+	BranchManager *Users     `orm:"rel(fk);column(branch_manager);null"`
 }
 
 func init() {
@@ -110,7 +111,7 @@ func GetAllBranches(query map[string]string, fields []string, sortby []string, o
 
 	var l []Branches
 	qs = qs.OrderBy(sortFields...).RelatedSel()
-	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
+	if _, err = qs.All(&l, fields...); err == nil {
 		if len(fields) == 0 {
 			for _, v := range l {
 				ml = append(ml, v)

@@ -7,3 +7,7 @@ type BranchRequestDTO struct {
 	Location    string
 	AddedBy     string
 }
+
+type BranchManagerRequestDTO struct {
+	BranchManager string
+}

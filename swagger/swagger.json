@@ -71,6 +71,70 @@
                         "description": ""
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "branches"
+                ],
+                "description": "create Branches\n\u003cbr\u003e",
+                "operationId": "BranchesController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Branches content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.BranchRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "{int} models.Branches"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/branches/branch-manager/{id}": {
+            "put": {
+                "tags": [
+                    "branches"
+                ],
+                "description": "update the Branches manager\n\u003cbr\u003e",
+                "operationId": "BranchesController.Put Branch Manager",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Branches content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Branches"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/responses.BranchResponseDTO"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is not int"
+                    }
+                }
             }
         },
         "/branches/{id}": {
@@ -525,6 +589,9 @@
                     "type": "integer",
                     "format": "int64"
                 },
+                "BranchManager": {
+                    "$ref": "#/definitions/models.Users"
+                },
                 "Country": {
                     "$ref": "#/definitions/models.Countries"
                 },
@@ -675,6 +742,109 @@
                     "$ref": "#/definitions/models.Profile"
                 },
                 "Username": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Users": {
+            "title": "Users",
+            "type": "object",
+            "properties": {
+                "Active": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Address": {
+                    "type": "string"
+                },
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Customer": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "Dob": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "FullName": {
+                    "type": "string"
+                },
+                "Gender": {
+                    "type": "string"
+                },
+                "IdNumber": {
+                    "type": "string"
+                },
+                "IdType": {
+                    "type": "string"
+                },
+                "ImagePath": {
+                    "type": "string"
+                },
+                "IsVerified": {
+                    "type": "boolean"
+                },
+                "MaritalStatus": {
+                    "type": "string"
+                },
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Password": {
+                    "type": "string"
+                },
+                "PhoneNumber": {
+                    "type": "string"
+                },
+                "Role": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "UserId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "UserType": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Username": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.BranchRequestDTO": {
+            "title": "BranchRequestDTO",
+            "type": "object",
+            "properties": {
+                "AddedBy": {
+                    "type": "string"
+                },
+                "Branch": {
+                    "type": "string"
+                },
+                "CountryCode": {
+                    "type": "string"
+                },
+                "Location": {
+                    "type": "string"
+                },
+                "PhoneNumber": {
                     "type": "string"
                 }
             }

@@ -52,6 +52,15 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["system_service/controllers:BranchesController"] = append(beego.GlobalControllerRouter["system_service/controllers:BranchesController"],
+        beego.ControllerComments{
+            Method: "UpdateBranchManager",
+            Router: `/branch-manager/:id`,
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["system_service/controllers:CountriesController"] = append(beego.GlobalControllerRouter["system_service/controllers:CountriesController"],
         beego.ControllerComments{
             Method: "Post",
