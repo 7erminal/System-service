@@ -165,7 +165,7 @@ func (c *BranchesController) GetAll() {
 // @Title Put
 // @Description update the Branches
 // @Param	id		path 	string	true		"The id you want to update"
-// @Param	body		body 	models.Branches	true		"body for Branches content"
+// @Param	body		body 	requests.BranchRequestDTO	true		"body for Branches content"
 // @Success 200 {object} responses.BranchResponseDTO
 // @Failure 403 :id is not int
 // @router /:id [put]
@@ -173,16 +173,39 @@ func (c *BranchesController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	v := models.Branches{BranchId: id}
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
-	if err := models.UpdateBranchesById(&v); err == nil {
-		resp := responses.BranchResponseDTO{StatusCode: 200, Branch: &v, StatusDesc: "Branch updated successfully"}
-		c.Ctx.Output.SetStatus(200)
-		c.Data["json"] = resp
+	var r requests.BranchRequestDTO
+	json.Unmarshal(c.Ctx.Input.RequestBody, &r)
+
+	if country, err := models.GetCountriesByCode(r.CountryCode); err == nil {
+		userid, _ := strconv.ParseInt(r.AddedBy, 10, 64)
+
+		userCheck := functions.GetUserDetails(&c.Controller, userid)
+		if userCheck.StatusCode == 200 {
+			v.Branch = r.Branch
+			v.Country = country
+			v.ModifiedBy = int(userid)
+			v.PhoneNumber = r.PhoneNumber
+			v.Location = r.Location
+			if err := models.UpdateBranchesById(&v); err == nil {
+				resp := responses.BranchResponseDTO{StatusCode: 200, Branch: &v, StatusDesc: "Branch updated successfully"}
+				c.Ctx.Output.SetStatus(200)
+				c.Data["json"] = resp
+			} else {
+				logs.Error("Branch update failed", err.Error())
+				resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Branch update failed"}
+				c.Data["json"] = resp
+			}
+		} else {
+			logs.Error("User not found", userCheck.StatusDesc)
+			resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Branch update failed. User not found"}
+			c.Data["json"] = resp
+		}
 	} else {
-		logs.Error("Branch update failed", err.Error())
-		resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Branch update failed"}
+		logs.Info("Error adding branch ", err.Error())
+		resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Error getting specified country"}
 		c.Data["json"] = resp
 	}
+
 	c.ServeJSON()
 }
 
@@ -240,10 +263,31 @@ func (c *BranchesController) UpdateBranchManager() {
 func (c *BranchesController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
-	if err := models.DeleteBranches(id); err == nil {
-		c.Data["json"] = "OK"
+	message := "Deleted"
+	if branch, err := models.GetBranchesById(id); err == nil {
+		if branch.BranchManager != nil {
+			branch.BranchManager = nil
+			err := models.UpdateBranchesById(branch)
+			if err != nil {
+				logs.Error("Failed to update branch manager ", err.Error())
+			}
+		}
+		if err := models.DeleteBranches(id); err == nil {
+			resp := responses.StringResponseDTO{StatusCode: 200, Value: &message, StatusDesc: "Branch deleted successfully"}
+			c.Ctx.Output.SetStatus(200)
+			c.Data["json"] = resp
+		} else {
+			message = "Deletion Failed:: " + err.Error()
+			resp := responses.StringResponseDTO{StatusCode: 301, Value: &message, StatusDesc: "Branch deletion failed"}
+			c.Ctx.Output.SetStatus(301)
+			c.Data["json"] = resp
+		}
 	} else {
-		c.Data["json"] = err.Error()
+		message = "Deletion Failed:: " + err.Error()
+		resp := responses.StringResponseDTO{StatusCode: 301, Value: &message, StatusDesc: "Branch deletion failed. Branch not found"}
+		c.Ctx.Output.SetStatus(301)
+		c.Data["json"] = resp
 	}
+
 	c.ServeJSON()
 }

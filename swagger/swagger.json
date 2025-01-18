@@ -185,7 +185,7 @@
                         "description": "body for Branches content",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Branches"
+                            "$ref": "#/definitions/requests.BranchRequestDTO"
                         }
                     }
                 ],
