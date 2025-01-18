@@ -176,33 +176,43 @@ func (c *BranchesController) Put() {
 	var r requests.BranchRequestDTO
 	json.Unmarshal(c.Ctx.Input.RequestBody, &r)
 
-	if country, err := models.GetCountriesByCode(r.CountryCode); err == nil {
-		userid, _ := strconv.ParseInt(r.AddedBy, 10, 64)
+	if branch, err := models.GetBranchesById(id); err == nil {
+		if country, err := models.GetCountriesByCode(r.CountryCode); err == nil {
+			userid, _ := strconv.ParseInt(r.AddedBy, 10, 64)
 
-		userCheck := functions.GetUserDetails(&c.Controller, userid)
-		if userCheck.StatusCode == 200 {
-			v.Branch = r.Branch
-			v.Country = country
-			v.ModifiedBy = int(userid)
-			v.PhoneNumber = r.PhoneNumber
-			v.Location = r.Location
-			if err := models.UpdateBranchesById(&v); err == nil {
-				resp := responses.BranchResponseDTO{StatusCode: 200, Branch: &v, StatusDesc: "Branch updated successfully"}
-				c.Ctx.Output.SetStatus(200)
-				c.Data["json"] = resp
+			userCheck := functions.GetUserDetails(&c.Controller, userid)
+			if userCheck.StatusCode == 200 {
+				v.Branch = r.Branch
+				v.Country = country
+				v.ModifiedBy = int(userid)
+				v.PhoneNumber = r.PhoneNumber
+				v.DateCreated = branch.DateCreated
+				v.DateModified = time.Now()
+				v.Active = branch.Active
+				v.CreatedBy = branch.CreatedBy
+				v.Location = r.Location
+				if err := models.UpdateBranchesById(&v); err == nil {
+					resp := responses.BranchResponseDTO{StatusCode: 200, Branch: &v, StatusDesc: "Branch updated successfully"}
+					c.Ctx.Output.SetStatus(200)
+					c.Data["json"] = resp
+				} else {
+					logs.Error("Branch update failed", err.Error())
+					resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Branch update failed"}
+					c.Data["json"] = resp
+				}
 			} else {
-				logs.Error("Branch update failed", err.Error())
-				resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Branch update failed"}
+				logs.Error("User not found", userCheck.StatusDesc)
+				resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Branch update failed. User not found"}
 				c.Data["json"] = resp
 			}
 		} else {
-			logs.Error("User not found", userCheck.StatusDesc)
-			resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Branch update failed. User not found"}
+			logs.Info("Error adding branch ", err.Error())
+			resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Error getting specified country"}
 			c.Data["json"] = resp
 		}
 	} else {
-		logs.Info("Error adding branch ", err.Error())
-		resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Error getting specified country"}
+		resp := responses.BranchResponseDTO{StatusCode: 301, Branch: nil, StatusDesc: "Branch update failed. Branch not found"}
+		c.Ctx.Output.SetStatus(301)
 		c.Data["json"] = resp
 	}
 
