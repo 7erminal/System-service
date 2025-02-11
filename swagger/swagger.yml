@@ -548,9 +548,6 @@ definitions:
       CreatedBy:
         type: integer
         format: int64
-      Customer:
-        type: integer
-        format: int64
       DateCreated:
         type: string
         format: datetime
@@ -584,6 +581,9 @@ definitions:
       PhoneNumber:
         type: string
       Role:
+        type: integer
+        format: int64
+      UserDetails:
         type: integer
         format: int64
       UserId:

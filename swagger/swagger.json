@@ -761,10 +761,6 @@
                     "type": "integer",
                     "format": "int64"
                 },
-                "Customer": {
-                    "type": "integer",
-                    "format": "int64"
-                },
                 "DateCreated": {
                     "type": "string",
                     "format": "datetime"
@@ -812,6 +808,10 @@
                     "type": "string"
                 },
                 "Role": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "UserDetails": {
                     "type": "integer",
                     "format": "int64"
                 },
