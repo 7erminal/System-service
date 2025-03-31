@@ -30,6 +30,11 @@ func init() {
 				&controllers.CurrenciesController{},
 			),
 		),
+		beego.NSNamespace("/status",
+			beego.NSInclude(
+				&controllers.StatusController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }
