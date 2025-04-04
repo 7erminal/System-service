@@ -572,6 +572,179 @@
                 }
             }
         },
+        "/roles-and-permissions/": {
+            "get": {
+                "tags": [
+                    "roles-and-permissions"
+                ],
+                "description": "get Role_permissions\n\u003cbr\u003e",
+                "operationId": "Role_permissionsController.Get All",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "fields",
+                        "description": "Fields returned. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sortby",
+                        "description": "Sorted-by fields. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order",
+                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Limit the size of result set. Must be an integer",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "description": "Start position of result set. Must be an integer",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Role_permissions"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "roles-and-permissions"
+                ],
+                "description": "create Role_permissions\n\u003cbr\u003e",
+                "operationId": "Role_permissionsController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Role_permissions content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.RolePermissionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{int} responses.RolePermissionResponseDTO"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/roles-and-permissions/{id}": {
+            "get": {
+                "tags": [
+                    "roles-and-permissions"
+                ],
+                "description": "get Role_permissions by id\n\u003cbr\u003e",
+                "operationId": "Role_permissionsController.Get One",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The key for staticblock",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Role_permissions"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is empty"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "roles-and-permissions"
+                ],
+                "description": "update the Role_permissions\n\u003cbr\u003e",
+                "operationId": "Role_permissionsController.Put",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Role_permissions content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Role_permissions"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Role_permissions"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is not int"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "roles-and-permissions"
+                ],
+                "description": "delete the Role_permissions\n\u003cbr\u003e",
+                "operationId": "Role_permissionsController.Delete",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} delete success!"
+                    },
+                    "403": {
+                        "description": "id is empty"
+                    }
+                }
+            }
+        },
         "/status/": {
             "get": {
                 "tags": [
@@ -747,9 +920,53 @@
         }
     },
     "definitions": {
-        "1049.\u003cnil\u003e.StatusResponseDTO": {
+        "1451.\u003cnil\u003e.0x1400049de60": {
+            "title": "0x1400049de60",
+            "type": "object"
+        },
+        "1776.\u003cnil\u003e.0x1400049df38": {
+            "title": "0x1400049df38",
+            "type": "object"
+        },
+        "2100.\u003cnil\u003e.StatusResponseDTO": {
             "title": "StatusResponseDTO",
             "type": "object"
+        },
+        "models.Actions": {
+            "title": "Actions",
+            "type": "object",
+            "properties": {
+                "Action": {
+                    "type": "string"
+                },
+                "ActionId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Active": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "Description": {
+                    "type": "string"
+                },
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
         },
         "models.Branches": {
             "title": "Branches",
@@ -886,6 +1103,45 @@
                 }
             }
         },
+        "models.Permissions": {
+            "title": "Permissions",
+            "type": "object",
+            "properties": {
+                "Active": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Permission": {
+                    "type": "string"
+                },
+                "PermissionCode": {
+                    "type": "string"
+                },
+                "PermissionDescription": {
+                    "type": "string"
+                },
+                "PermissionId": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
         "models.Profile": {
             "title": "Profile",
             "type": "object",
@@ -902,6 +1158,81 @@
                 },
                 "Gender": {
                     "type": "string"
+                }
+            }
+        },
+        "models.Role_permissions": {
+            "title": "Role_permissions",
+            "type": "object",
+            "properties": {
+                "Action": {
+                    "$ref": "#/definitions/models.Actions"
+                },
+                "Active": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Permission": {
+                    "$ref": "#/definitions/models.Permissions"
+                },
+                "Role": {
+                    "$ref": "#/definitions/models.Roles"
+                },
+                "RolePermissionId": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "models.Roles": {
+            "title": "Roles",
+            "type": "object",
+            "properties": {
+                "Active": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "Description": {
+                    "type": "string"
+                },
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Role": {
+                    "type": "string"
+                },
+                "RoleId": {
+                    "type": "integer",
+                    "format": "int64"
                 }
             }
         },
@@ -1093,12 +1424,116 @@
                 }
             }
         },
+        "requests.PermissionRequest": {
+            "title": "PermissionRequest",
+            "type": "object",
+            "properties": {
+                "Description": {
+                    "type": "string"
+                },
+                "Permission": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.RolePermissionRequest": {
+            "title": "RolePermissionRequest",
+            "type": "object",
+            "properties": {
+                "Action": {
+                    "type": "string"
+                },
+                "PermissionCode": {
+                    "type": "string"
+                },
+                "Role": {
+                    "type": "integer",
+                    "format": "int64"
+                }
+            }
+        },
+        "requests.RolesRequest": {
+            "title": "RolesRequest",
+            "type": "object",
+            "properties": {
+                "Description": {
+                    "type": "string"
+                },
+                "Role": {
+                    "type": "string"
+                }
+            }
+        },
         "responses.BranchResponseDTO": {
             "title": "BranchResponseDTO",
             "type": "object",
             "properties": {
                 "Branch": {
                     "$ref": "#/definitions/models.Branches"
+                },
+                "StatusCode": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "StatusDesc": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.PermissionResponseDTO": {
+            "title": "PermissionResponseDTO",
+            "type": "object",
+            "properties": {
+                "Permission": {
+                    "$ref": "#/definitions/models.Permissions"
+                },
+                "StatusCode": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "StatusDesc": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.PermissionsAllResponseDTO": {
+            "title": "PermissionsAllResponseDTO",
+            "type": "object",
+            "properties": {
+                "Permissions": {
+                    "$ref": "#/definitions/1776.\u003cnil\u003e.0x1400049df38"
+                },
+                "StatusCode": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "StatusDesc": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.RoleResponseDTO": {
+            "title": "RoleResponseDTO",
+            "type": "object",
+            "properties": {
+                "Role": {
+                    "$ref": "#/definitions/models.Roles"
+                },
+                "StatusCode": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "StatusDesc": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.RolesAllResponseDTO": {
+            "title": "RolesAllResponseDTO",
+            "type": "object",
+            "properties": {
+                "Roles": {
+                    "$ref": "#/definitions/1451.\u003cnil\u003e.0x1400049de60"
                 },
                 "StatusCode": {
                     "type": "integer",
@@ -1121,7 +1556,7 @@
                     "type": "string"
                 },
                 "Statuses": {
-                    "$ref": "#/definitions/1049.\u003cnil\u003e.StatusResponseDTO"
+                    "$ref": "#/definitions/2100.\u003cnil\u003e.StatusResponseDTO"
                 }
             }
         }
@@ -1142,6 +1577,10 @@
         {
             "name": "status",
             "description": "StatusController operations for Status\n"
+        },
+        {
+            "name": "roles-and-permissions",
+            "description": "Role_permissionsController operations for Role_permissions\n"
         }
     ]
 }
