@@ -920,12 +920,12 @@
         }
     },
     "definitions": {
-        "1451.\u003cnil\u003e.0x1400056f740": {
-            "title": "0x1400056f740",
+        "1451.\u003cnil\u003e.0x140005033c8": {
+            "title": "0x140005033c8",
             "type": "object"
         },
-        "1776.\u003cnil\u003e.0x1400056f818": {
-            "title": "0x1400056f818",
+        "1776.\u003cnil\u003e.0x140005034a0": {
+            "title": "0x140005034a0",
             "type": "object"
         },
         "2100.\u003cnil\u003e.StatusResponseDTO": {
@@ -1501,7 +1501,7 @@
             "type": "object",
             "properties": {
                 "Permissions": {
-                    "$ref": "#/definitions/1776.\u003cnil\u003e.0x1400056f818"
+                    "$ref": "#/definitions/1776.\u003cnil\u003e.0x140005034a0"
                 },
                 "StatusCode": {
                     "type": "integer",
@@ -1533,7 +1533,7 @@
             "type": "object",
             "properties": {
                 "Roles": {
-                    "$ref": "#/definitions/1451.\u003cnil\u003e.0x1400056f740"
+                    "$ref": "#/definitions/1451.\u003cnil\u003e.0x140005033c8"
                 },
                 "StatusCode": {
                     "type": "integer",
