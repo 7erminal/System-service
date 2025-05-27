@@ -45,27 +45,42 @@ func (c *BranchesController) Post() {
 	userid, _ := strconv.ParseInt(v.AddedBy, 10, 64)
 
 	userCheck := functions.GetUserDetails(&c.Controller, userid)
+	errorCode := 302
+	message := "Error adding branch. User not found"
 
 	if userCheck.StatusCode == 200 {
 		if country, err := models.GetCountriesByCode(v.CountryCode); err == nil {
 			var branch models.Branches = models.Branches{Branch: v.Branch, Country: country, Location: v.Location, PhoneNumber: v.PhoneNumber, Active: 1, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: int(userid), ModifiedBy: int(userid)}
 			if _, err := models.AddBranches(&branch); err == nil {
-				resp := responses.BranchResponseDTO{StatusCode: 200, Branch: &branch, StatusDesc: "Branch added successfully"}
+				errorCode = 200
+				message = "Branch added successfully"
+				resp := responses.BranchResponseDTO{StatusCode: errorCode, Branch: &branch, StatusDesc: message}
 				c.Ctx.Output.SetStatus(200)
 				c.Data["json"] = resp
 			} else {
 				logs.Info("Error adding branch ", err.Error())
-				resp := responses.BranchResponseDTO{StatusCode: 402, Branch: nil, StatusDesc: "Branch additon failed"}
+				if strings.Contains(strings.ToUpper(err.Error()), "DUPLICATE") || strings.Contains(strings.ToUpper(err.Error()), "UNIQUE") {
+					errorCode = 301
+					message = "Branch already exists with the same name in the specified country"
+				} else {
+					errorCode = 608
+					message = "Error adding branch. Please try again later"
+				}
+				resp := responses.BranchResponseDTO{StatusCode: errorCode, Branch: nil, StatusDesc: message}
 				c.Data["json"] = resp
 			}
 		} else {
 			logs.Info("Error adding branch ", err.Error())
-			resp := responses.BranchResponseDTO{StatusCode: 608, Branch: nil, StatusDesc: "Error getting specified country"}
+			errorCode = 608
+			message = "Error getting specified country. Please try again later"
+			resp := responses.BranchResponseDTO{StatusCode: errorCode, Branch: nil, StatusDesc: message}
 			c.Data["json"] = resp
 		}
 	} else {
 		logs.Info("Error::: User not found ")
-		resp := responses.BranchResponseDTO{StatusCode: 500, Branch: nil, StatusDesc: "Error adding Branch"}
+		errorCode = 608
+		message = "Error adding branch. User not found"
+		resp := responses.BranchResponseDTO{StatusCode: errorCode, Branch: nil, StatusDesc: message}
 		c.Data["json"] = resp
 	}
 
