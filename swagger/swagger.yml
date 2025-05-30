@@ -665,11 +665,11 @@ paths:
         "403":
           description: id is empty
 definitions:
-  1451.<nil>.0x140005033c8:
-    title: "0x140005033c8"
+  1451.<nil>.0x140005073b0:
+    title: "0x140005073b0"
     type: object
-  1776.<nil>.0x140005034a0:
-    title: "0x140005034a0"
+  1776.<nil>.0x14000507488:
+    title: "0x14000507488"
     type: object
   2100.<nil>.StatusResponseDTO:
     title: StatusResponseDTO
@@ -1076,7 +1076,7 @@ definitions:
     type: object
     properties:
       Permissions:
-        $ref: '#/definitions/1776.<nil>.0x140005034a0'
+        $ref: '#/definitions/1776.<nil>.0x14000507488'
       StatusCode:
         type: integer
         format: int64
@@ -1098,7 +1098,7 @@ definitions:
     type: object
     properties:
       Roles:
-        $ref: '#/definitions/1451.<nil>.0x140005033c8'
+        $ref: '#/definitions/1451.<nil>.0x140005073b0'
       StatusCode:
         type: integer
         format: int64
