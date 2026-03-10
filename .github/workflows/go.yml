@@ -5,9 +5,9 @@ name: Go
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "msysmobilizer" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "msysmobilizer" ]
 
 jobs:
 
@@ -26,7 +26,6 @@ jobs:
       env:
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
-          SSH_PASSWORD: ${{ secrets.SSH_PASSWORD }}
       run: |
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
@@ -34,12 +33,12 @@ jobs:
 
         ssh -o StrictHostKeyChecking=no root@185.211.5.90 << 'EOF'
           set -e
-          cd /usr/app/mobile-application/msys-payments-app-gateway
+          cd /usr/app/mobile-application/System-service
           git stash
-          git pull origin main
-          go build -o msys-payments-app-gateway
-          pm2 restart msys-payments-app-gateway || \
-          pm2 start msys-payments-app-gateway --name msys-payments-app-gateway
+          git pull origin msysmobilizer
+          go build -o system-service
+          pm2 restart system-service || \
+          pm2 start system-service --name system-service
         EOF
 
     # - name: Test
