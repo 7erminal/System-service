@@ -1,8 +1,10 @@
 package responses
 
+import "system_service/models"
+
 type UserResponseDTO struct {
 	StatusCode int
-	User       *interface{}
+	User       *models.Users
 	StatusDesc string
 }
 

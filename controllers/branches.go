@@ -42,6 +42,15 @@ func (c *BranchesController) Post() {
 
 	logs.Info("User ID searched is ", v.AddedBy)
 
+	branchManagerID, _ := strconv.ParseInt(v.BranchManager, 10, 64)
+	branchUserCheck := functions.GetUserDetails(&c.Controller, branchManagerID)
+	branchManager := models.Users{}
+
+	if branchUserCheck.StatusCode == 200 {
+		branchManager = *branchUserCheck.User
+	} else {
+		logs.Error("Branch manager ID not found")
+	}
 	userid, _ := strconv.ParseInt(v.AddedBy, 10, 64)
 
 	userCheck := functions.GetUserDetails(&c.Controller, userid)
@@ -50,7 +59,7 @@ func (c *BranchesController) Post() {
 
 	if userCheck.StatusCode == 200 {
 		if country, err := models.GetCountriesByCode(v.CountryCode); err == nil {
-			var branch models.Branches = models.Branches{Branch: v.Branch, Country: country, Location: v.Location, PhoneNumber: v.PhoneNumber, Active: 1, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: int(userid), ModifiedBy: int(userid)}
+			var branch models.Branches = models.Branches{Branch: v.Branch, Country: country, Location: v.Location, PhoneNumber: v.PhoneNumber, Active: 1, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: int(userid), ModifiedBy: int(userid), BranchManager: &branchManager}
 			if _, err := models.AddBranches(&branch); err == nil {
 				errorCode = 200
 				message = "Branch added successfully"
