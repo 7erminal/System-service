@@ -5,15 +5,15 @@ name: Go
 
 on:
   push:
-    branches: [ "msysmobilizer" ]
+    branches: [ "ecommerce" ]
   pull_request:
-    branches: [ "msysmobilizer" ]
+    branches: [ "ecommerce" ]
 
 jobs:
 
   build:
     runs-on: ubuntu-latest
-    environment: production
+    environment: ecommerce
     steps:
     - uses: actions/checkout@v4
 
@@ -26,19 +26,22 @@ jobs:
       env:
           GIT_USERNAME: ${{ secrets.GIT_USERNAME }}
           GIT_PASSWORD: ${{ secrets.GIT_PASSWORD }}
+          SSH_SERVER: ${{ vars.SSH_SERVER }}
+          SSH_USER: ${{ vars.SSH_USER }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
       run: |
         mkdir -p ~/.ssh
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_ed25519
         chmod 600 ~/.ssh/id_ed25519
 
-        ssh -o StrictHostKeyChecking=no root@185.211.5.90 << 'EOF'
+        ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER << 'EOF'
           set -e
-          cd /usr/app/mobile-application/System-service
+          cd /usr/app/ecommerce/ecommerce_system_service
           git stash
-          git pull origin msysmobilizer
-          go build -o system-service
-          pm2 restart system-service || \
-          pm2 start system-service --name system-service
+          git pull origin ecommerce
+          go build -o ecommerce-system-service
+          pm2 restart ecommerce-system-service || \
+          pm2 start ecommerce-system-service --name ecommerce-system-service
         EOF
 
     # - name: Test

@@ -75,7 +75,8 @@ func (c *CurrenciesController) GetOne() {
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
-		c.Data["json"] = v
+		resp := responses.CurrencyResponseDTO{StatusCode: 200, Currency: v, StatusDesc: "Currency fetched successfully"}
+		c.Data["json"] = resp
 	}
 	c.ServeJSON()
 }
