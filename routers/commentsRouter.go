@@ -81,15 +81,6 @@ func init() {
 
     beego.GlobalControllerRouter["system_service/controllers:CountriesController"] = append(beego.GlobalControllerRouter["system_service/controllers:CountriesController"],
         beego.ControllerComments{
-            Method: "GetOneByCode",
-            Router: `/:code`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:CountriesController"] = append(beego.GlobalControllerRouter["system_service/controllers:CountriesController"],
-        beego.ControllerComments{
             Method: "GetOne",
             Router: `/:id`,
             AllowHTTPMethods: []string{"get"},
@@ -111,6 +102,15 @@ func init() {
             Method: "Delete",
             Router: `/:id`,
             AllowHTTPMethods: []string{"delete"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["system_service/controllers:CountriesController"] = append(beego.GlobalControllerRouter["system_service/controllers:CountriesController"],
+        beego.ControllerComments{
+            Method: "GetOneByCode",
+            Router: `/code/:code`,
+            AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})

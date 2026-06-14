@@ -93,7 +93,7 @@ func (c *CountriesController) GetOne() {
 // @Param	code		path 	string	true		"The code for the country"
 // @Success 200 {object} models.Countries
 // @Failure 403 :code is empty
-// @router /:code [get]
+// @router /code/:code [get]
 func (c *CountriesController) GetOneByCode() {
 	code := c.Ctx.Input.Param(":code")
 	v, err := models.GetCountriesByCode(code)
