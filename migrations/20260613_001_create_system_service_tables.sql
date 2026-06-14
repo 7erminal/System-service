@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS roles (
   active INTEGER NOT NULL DEFAULT 1
 );
 
-CREATE INDEX IF NOT EXISTS idx_roles_role ON roles(role);
+CREATE INDEX idx_roles_role ON roles(role);
 
 CREATE TABLE IF NOT EXISTS actions (
   action_id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -30,7 +30,7 @@ CREATE TABLE IF NOT EXISTS actions (
   active INTEGER NOT NULL DEFAULT 1
 );
 
-CREATE INDEX IF NOT EXISTS idx_actions_action ON actions(action);
+CREATE INDEX idx_actions_action ON actions(action);
 
 CREATE TABLE IF NOT EXISTS currencies (
   currency_id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -43,7 +43,7 @@ CREATE TABLE IF NOT EXISTS currencies (
   modified_by INTEGER NOT NULL DEFAULT 0
 );
 
-CREATE INDEX IF NOT EXISTS idx_currencies_currency ON currencies(currency);
+CREATE INDEX idx_currencies_currency ON currencies(currency);
 
 -- 2) Countries ---------------------------------------------------------------
 
@@ -64,8 +64,8 @@ CREATE TABLE IF NOT EXISTS countries (
     ON DELETE RESTRICT
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS uq_countries_country_code ON countries(country_code);
-CREATE INDEX IF NOT EXISTS idx_countries_country ON countries(country);
+CREATE UNIQUE INDEX uq_countries_country_code ON countries(country_code);
+CREATE INDEX idx_countries_country ON countries(country);
 
 -- 3) Permissions -------------------------------------------------------------
 
@@ -81,8 +81,8 @@ CREATE TABLE IF NOT EXISTS permissions (
   active INTEGER NOT NULL DEFAULT 1
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS uq_permissions_permission_code ON permissions(permission_code);
-CREATE INDEX IF NOT EXISTS idx_permissions_permission ON permissions(permission);
+CREATE UNIQUE INDEX uq_permissions_permission_code ON permissions(permission_code);
+CREATE INDEX idx_permissions_permission ON permissions(permission);
 
 -- 4) Role permissions --------------------------------------------------------
 
@@ -114,9 +114,9 @@ CREATE TABLE IF NOT EXISTS role_permissions (
   CONSTRAINT uq_role_permissions_triplet UNIQUE (role_id, permission_id, action_id)
 );
 
-CREATE INDEX IF NOT EXISTS idx_role_permissions_role_id ON role_permissions(role_id);
-CREATE INDEX IF NOT EXISTS idx_role_permissions_permission_id ON role_permissions(permission_id);
-CREATE INDEX IF NOT EXISTS idx_role_permissions_action_id ON role_permissions(action_id);
+CREATE INDEX idx_role_permissions_role_id ON role_permissions(role_id);
+CREATE INDEX idx_role_permissions_permission_id ON role_permissions(permission_id);
+CREATE INDEX idx_role_permissions_action_id ON role_permissions(action_id);
 
 -- 5) Status ------------------------------------------------------------------
 
@@ -131,7 +131,7 @@ CREATE TABLE IF NOT EXISTS status (
   date_modified TIMESTAMP
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS uq_status_status_code ON status(status_code);
-CREATE INDEX IF NOT EXISTS idx_status_status ON status(status);
+CREATE UNIQUE INDEX uq_status_status_code ON status(status_code);
+CREATE INDEX idx_status_status ON status(status);
 
 COMMIT;
