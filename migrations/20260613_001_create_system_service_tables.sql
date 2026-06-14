@@ -7,7 +7,7 @@ BEGIN;
 -- 1) Base lookup tables ------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS roles (
-  role_id BIGSERIAL PRIMARY KEY,
+  role_id BIGINT AUTO_INCREMENT PRIMARY KEY,
   role VARCHAR(100) NOT NULL,
   description VARCHAR(500) NOT NULL DEFAULT '',
   date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS roles (
 CREATE INDEX IF NOT EXISTS idx_roles_role ON roles(role);
 
 CREATE TABLE IF NOT EXISTS actions (
-  action_id BIGSERIAL PRIMARY KEY,
+  action_id BIGINT AUTO_INCREMENT PRIMARY KEY,
   action VARCHAR(50) NOT NULL,
   description VARCHAR(255) NOT NULL DEFAULT '',
   date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS actions (
 CREATE INDEX IF NOT EXISTS idx_actions_action ON actions(action);
 
 CREATE TABLE IF NOT EXISTS currencies (
-  currency_id BIGSERIAL PRIMARY KEY,
+  currency_id BIGINT AUTO_INCREMENT PRIMARY KEY,
   symbol VARCHAR(20) NOT NULL,
   currency VARCHAR(50) NOT NULL,
   active INTEGER NOT NULL DEFAULT 1,
@@ -48,7 +48,7 @@ CREATE INDEX IF NOT EXISTS idx_currencies_currency ON currencies(currency);
 -- 2) Countries ---------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS countries (
-  country_id BIGSERIAL PRIMARY KEY,
+  country_id BIGINT AUTO_INCREMENT PRIMARY KEY,
   country VARCHAR(255) NOT NULL,
   description VARCHAR(500) NOT NULL DEFAULT '',
   country_code VARCHAR(20) NOT NULL,
@@ -70,7 +70,7 @@ CREATE INDEX IF NOT EXISTS idx_countries_country ON countries(country);
 -- 3) Permissions -------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS permissions (
-  permission_id BIGSERIAL PRIMARY KEY,
+  permission_id BIGINT AUTO_INCREMENT PRIMARY KEY,
   permission VARCHAR(100) NOT NULL,
   permission_code VARCHAR(10) NOT NULL,
   permission_description VARCHAR(500) NOT NULL DEFAULT '',
@@ -87,7 +87,7 @@ CREATE INDEX IF NOT EXISTS idx_permissions_permission ON permissions(permission)
 -- 4) Role permissions --------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS role_permissions (
-  role_permission_id BIGSERIAL PRIMARY KEY,
+  role_permission_id BIGINT AUTO_INCREMENT PRIMARY KEY,
   role_id BIGINT NOT NULL,
   permission_id BIGINT NOT NULL,
   action_id BIGINT NOT NULL,
@@ -121,7 +121,7 @@ CREATE INDEX IF NOT EXISTS idx_role_permissions_action_id ON role_permissions(ac
 -- 5) Status ------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS status (
-  status_id BIGSERIAL PRIMARY KEY,
+  status_id BIGINT AUTO_INCREMENT PRIMARY KEY,
   status_code VARCHAR(128) NOT NULL,
   status VARCHAR(128) NOT NULL,
   active INTEGER,
