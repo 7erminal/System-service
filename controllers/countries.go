@@ -23,6 +23,7 @@ type CountriesController struct {
 func (c *CountriesController) URLMapping() {
 	c.Mapping("Post", c.Post)
 	c.Mapping("GetOne", c.GetOne)
+	c.Mapping("GetOneByCode", c.GetOneByCode)
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
@@ -82,6 +83,32 @@ func (c *CountriesController) GetOne() {
 		c.Data["json"] = err.Error()
 	} else {
 		c.Data["json"] = v
+	}
+	c.ServeJSON()
+}
+
+// GetOneByCode ...
+// @Title Get One By Code
+// @Description get Countries by code
+// @Param	code		path 	string	true		"The code for the country"
+// @Success 200 {object} models.Countries
+// @Failure 403 :code is empty
+// @router /:code [get]
+func (c *CountriesController) GetOneByCode() {
+	code := c.Ctx.Input.Param(":code")
+	v, err := models.GetCountriesByCode(code)
+	if err != nil {
+		logs.Info("Error fetching country by code ", err.Error())
+		resp := responses.CountryResponseDTO{StatusCode: 608, Country: nil, StatusDesc: "Error fetching country by code"}
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = resp
+		// c.Ctx.Output.SetStatus(403)
+		//
+		// c.Data["json"] = err.Error()
+	} else {
+		resp := responses.CountryResponseDTO{StatusCode: 200, Country: v, StatusDesc: "Country fetched Successfully"}
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = resp
 	}
 	c.ServeJSON()
 }
