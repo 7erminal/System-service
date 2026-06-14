@@ -58,6 +58,18 @@ func GetCurrenciesByName(currency string) (v *Currencies, err error) {
 	return nil, err
 }
 
+// GetCurrenciesById retrieves Currencies by Id. Returns error if
+// Id doesn't exist
+func GetCurrenciesBySymbol(symbol string) (v *Currencies, err error) {
+	o := orm.NewOrm()
+	v = &Currencies{Symbol: symbol}
+	if err = o.QueryTable(new(Currencies)).Filter("Symbol", symbol).RelatedSel().One(v); err == nil {
+		logs.Info("Currency returned is ", v)
+		return v, nil
+	}
+	return nil, err
+}
+
 // GetAllCurrencies retrieves all Currencies matches certain condition. Returns empty list if
 // no records exist
 func GetAllCurrencies(query map[string]string, fields []string, sortby []string, order []string,

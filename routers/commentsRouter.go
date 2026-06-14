@@ -160,6 +160,24 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["system_service/controllers:CurrenciesController"] = append(beego.GlobalControllerRouter["system_service/controllers:CurrenciesController"],
+        beego.ControllerComments{
+            Method: "GetOneByName",
+            Router: `/name/:name`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["system_service/controllers:CurrenciesController"] = append(beego.GlobalControllerRouter["system_service/controllers:CurrenciesController"],
+        beego.ControllerComments{
+            Method: "GetOneBySymbol",
+            Router: `/symbol/:symbol`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
     beego.GlobalControllerRouter["system_service/controllers:ObjectController"] = append(beego.GlobalControllerRouter["system_service/controllers:ObjectController"],
         beego.ControllerComments{
             Method: "Post",

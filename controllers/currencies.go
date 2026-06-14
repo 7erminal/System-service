@@ -27,6 +27,8 @@ func (c *CurrenciesController) URLMapping() {
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
+	c.Mapping("GetOneByName", c.GetOneByName)
+	c.Mapping("GetOneBySymbol", c.GetOneBySymbol)
 }
 
 // Post ...
@@ -72,6 +74,44 @@ func (c *CurrenciesController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	v, err := models.GetCurrenciesById(id)
+	if err != nil {
+		c.Data["json"] = err.Error()
+	} else {
+		resp := responses.CurrencyResponseDTO{StatusCode: 200, Currency: v, StatusDesc: "Currency fetched successfully"}
+		c.Data["json"] = resp
+	}
+	c.ServeJSON()
+}
+
+// GetOneByName ...
+// @Title Get One By Name
+// @Description get Currencies by name
+// @Param	name		path 	string	true		"The key for staticblock"
+// @Success 200 {object} models.Currencies
+// @Failure 403 :name is empty
+// @router /name/:name [get]
+func (c *CurrenciesController) GetOneByName() {
+	name := c.Ctx.Input.Param(":name")
+	v, err := models.GetCurrenciesByName(name)
+	if err != nil {
+		c.Data["json"] = err.Error()
+	} else {
+		resp := responses.CurrencyResponseDTO{StatusCode: 200, Currency: v, StatusDesc: "Currency fetched successfully"}
+		c.Data["json"] = resp
+	}
+	c.ServeJSON()
+}
+
+// GetOneBySymbol ...
+// @Title Get One By Symbol
+// @Description get Currencies by symbol
+// @Param	symbol		path 	string	true		"The key for staticblock"
+// @Success 200 {object} models.Currencies
+// @Failure 403 :symbol is empty
+// @router /symbol/:symbol [get]
+func (c *CurrenciesController) GetOneBySymbol() {
+	symbol := c.Ctx.Input.Param(":symbol")
+	v, err := models.GetCurrenciesBySymbol(symbol)
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
