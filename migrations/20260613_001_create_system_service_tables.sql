@@ -1,7 +1,6 @@
--- Migration: create tables used by system_service controllers
--- Generated for controllers: branches, countries, currencies, permissions,
+-- Migration: create tables for system_service ORM models
+-- Models included: actions, countries, currencies, permissions,
 -- role_permissions, roles, status
--- Includes FK dependency tables referenced by those models: users, actions
 
 BEGIN;
 
@@ -68,73 +67,7 @@ CREATE TABLE IF NOT EXISTS countries (
 CREATE UNIQUE INDEX IF NOT EXISTS uq_countries_country_code ON countries(country_code);
 CREATE INDEX IF NOT EXISTS idx_countries_country ON countries(country);
 
--- 3) Users (dependency for branches.branch_manager) --------------------------
-
-CREATE TABLE IF NOT EXISTS users (
-  user_id BIGSERIAL PRIMARY KEY,
-  user_details_id BIGINT,
-  image_path VARCHAR(200),
-  user_type INTEGER,
-  full_name VARCHAR(255) NOT NULL,
-  username VARCHAR(40),
-  password VARCHAR(255) NOT NULL,
-  email VARCHAR(255),
-  phone_number VARCHAR(255),
-  gender VARCHAR(10) NOT NULL,
-  dob TIMESTAMP NOT NULL,
-  address VARCHAR(255),
-  id_type VARCHAR(5),
-  id_number VARCHAR(100),
-  marital_status VARCHAR(20),
-  active INTEGER,
-  role BIGINT,
-  is_verified BOOLEAN DEFAULT FALSE,
-  date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  date_modified TIMESTAMP,
-  created_by INTEGER,
-  modified_by INTEGER,
-  CONSTRAINT fk_users_role
-    FOREIGN KEY (role)
-    REFERENCES roles(role_id)
-    ON UPDATE CASCADE
-    ON DELETE SET NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_users_email ON users(email);
-CREATE INDEX IF NOT EXISTS idx_users_phone_number ON users(phone_number);
-CREATE INDEX IF NOT EXISTS idx_users_username ON users(username);
-
--- 4) Branches ----------------------------------------------------------------
-
-CREATE TABLE IF NOT EXISTS branches (
-  branch_id BIGSERIAL PRIMARY KEY,
-  branch VARCHAR(80) NOT NULL,
-  country_id BIGINT NOT NULL,
-  location TEXT NOT NULL,
-  phone_number VARCHAR(255) NOT NULL,
-  active INTEGER DEFAULT 1,
-  date_created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  date_modified TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  created_by INTEGER DEFAULT 0,
-  modified_by INTEGER DEFAULT 0,
-  branch_manager BIGINT,
-  CONSTRAINT uq_branches_branch UNIQUE (branch),
-  CONSTRAINT fk_branches_country
-    FOREIGN KEY (country_id)
-    REFERENCES countries(country_id)
-    ON UPDATE CASCADE
-    ON DELETE RESTRICT,
-  CONSTRAINT fk_branches_branch_manager
-    FOREIGN KEY (branch_manager)
-    REFERENCES users(user_id)
-    ON UPDATE CASCADE
-    ON DELETE SET NULL
-);
-
-CREATE INDEX IF NOT EXISTS idx_branches_country_id ON branches(country_id);
-CREATE INDEX IF NOT EXISTS idx_branches_branch_manager ON branches(branch_manager);
-
--- 5) Permissions -------------------------------------------------------------
+-- 3) Permissions -------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS permissions (
   permission_id BIGSERIAL PRIMARY KEY,
@@ -151,7 +84,7 @@ CREATE TABLE IF NOT EXISTS permissions (
 CREATE UNIQUE INDEX IF NOT EXISTS uq_permissions_permission_code ON permissions(permission_code);
 CREATE INDEX IF NOT EXISTS idx_permissions_permission ON permissions(permission);
 
--- 6) Role permissions --------------------------------------------------------
+-- 4) Role permissions --------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS role_permissions (
   role_permission_id BIGSERIAL PRIMARY KEY,
@@ -185,7 +118,7 @@ CREATE INDEX IF NOT EXISTS idx_role_permissions_role_id ON role_permissions(role
 CREATE INDEX IF NOT EXISTS idx_role_permissions_permission_id ON role_permissions(permission_id);
 CREATE INDEX IF NOT EXISTS idx_role_permissions_action_id ON role_permissions(action_id);
 
--- 7) Status ------------------------------------------------------------------
+-- 5) Status ------------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS status (
   status_id BIGSERIAL PRIMARY KEY,
