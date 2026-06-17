@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: naki-system-service
+  namespace: naki
+  labels:
+    app: naki-system-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: naki-system-service
+  template:
+    metadata:
+      labels:
+        app: naki-system-service
+    spec:
+      imagePullSecrets:
+        - name: acr-pull-secret
+      containers:
+        - name: naki-system-service
+          image: nakiacrplatform.azurecr.io/samples/naki:naki-system-service-1
+          imagePullPolicy: Always
+          ports:
+            - name: http
+              containerPort: 5880
+          envFrom:
+            - configMapRef:
+                name: naki-system-config
+            - secretRef:
+                name: naki-system-secrets
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 12
+            periodSeconds: 10
+            timeoutSeconds: 3
+            failureThreshold: 3
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 25
+            periodSeconds: 15
+            timeoutSeconds: 3
+            failureThreshold: 3
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"

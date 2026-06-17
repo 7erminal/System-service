@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: naki-system-config
+  namespace: naki
+data:
+  APP_HTTP_PORT: "5083"
+  BEEGO_RUNMODE: "prod"
+  DB_HOST: "postgres-platform.nakilink.postgres.database.azure.com"
+  DB_PORT: "5432"
+  DB_NAME: "system_service_test"
+  DB_SSLMODE: "require"
+  ACCOUNTS_BASE_URL: "http://naki-accounts-service"
+  AUTHENTICATION_BASE_URL: "http://naki-authentication-service"
+  CUSTOMER_BASE_URL: "http://naki-customer-management-service"
