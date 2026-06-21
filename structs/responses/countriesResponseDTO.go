@@ -4,12 +4,12 @@ import "system_service/models"
 
 type CountriesResponseDTO struct {
 	StatusCode int
-	Countries  *[]interface{}
+	Result     *[]models.Countries
 	StatusDesc string
 }
 
 type CountryResponseDTO struct {
 	StatusCode int
-	Country    *models.Countries
+	Result     *models.Countries
 	StatusDesc string
 }

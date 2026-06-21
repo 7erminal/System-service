@@ -4,12 +4,12 @@ import "system_service/models"
 
 type CurrenciesResponseDTO struct {
 	StatusCode int
-	Currencies *[]interface{}
+	Result     *[]models.Currencies
 	StatusDesc string
 }
 
 type CurrencyResponseDTO struct {
 	StatusCode int
-	Currency   *models.Currencies
+	Result     *models.Currencies
 	StatusDesc string
 }

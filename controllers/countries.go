@@ -45,22 +45,22 @@ func (c *CountriesController) Post() {
 		if currency, err := models.GetCurrenciesById(currencyId); err == nil {
 			var country models.Countries = models.Countries{Country: v.Country, CountryCode: v.CountryCode, DefaultCurrency: currency, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: 1, ModifiedBy: 1}
 			if _, err := models.AddCountries(&country); err == nil {
-				resp := responses.CountryResponseDTO{StatusCode: 200, Country: &country, StatusDesc: "Country added Successfully"}
+				resp := responses.CountryResponseDTO{StatusCode: 200, Result: &country, StatusDesc: "Country added Successfully"}
 				c.Ctx.Output.SetStatus(200)
 				c.Data["json"] = resp
 			} else {
 				logs.Info("Error adding country ", err.Error())
-				resp := responses.CountryResponseDTO{StatusCode: 608, Country: nil, StatusDesc: "Error adding country"}
+				resp := responses.CountryResponseDTO{StatusCode: 608, Result: nil, StatusDesc: "Error adding country"}
 				c.Data["json"] = resp
 			}
 		} else {
 			logs.Info("Error adding country ", err.Error())
-			resp := responses.CountryResponseDTO{StatusCode: 608, Country: nil, StatusDesc: "Error adding country"}
+			resp := responses.CountryResponseDTO{StatusCode: 608, Result: nil, StatusDesc: "Error adding country"}
 			c.Data["json"] = resp
 		}
 	} else {
 		logs.Info("Country already exist")
-		resp := responses.CountryResponseDTO{StatusCode: 502, Country: nil, StatusDesc: "Country exists"}
+		resp := responses.CountryResponseDTO{StatusCode: 502, Result: nil, StatusDesc: "Country exists"}
 		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = resp
 	}
@@ -99,14 +99,14 @@ func (c *CountriesController) GetOneByCode() {
 	v, err := models.GetCountriesByCode(code)
 	if err != nil {
 		logs.Info("Error fetching country by code ", err.Error())
-		resp := responses.CountryResponseDTO{StatusCode: 608, Country: nil, StatusDesc: "Error fetching country by code"}
+		resp := responses.CountryResponseDTO{StatusCode: 608, Result: nil, StatusDesc: "Error fetching country by code"}
 		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = resp
 		// c.Ctx.Output.SetStatus(403)
 		//
 		// c.Data["json"] = err.Error()
 	} else {
-		resp := responses.CountryResponseDTO{StatusCode: 200, Country: v, StatusDesc: "Country fetched Successfully"}
+		resp := responses.CountryResponseDTO{StatusCode: 200, Result: v, StatusDesc: "Country fetched Successfully"}
 		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = resp
 	}
@@ -170,10 +170,16 @@ func (c *CountriesController) GetAll() {
 	l, err := models.GetAllCountries(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		logs.Info("Error fetching countries ", err.Error())
-		resp := responses.CountriesResponseDTO{StatusCode: 608, Countries: nil, StatusDesc: "Error fetching countries"}
+		resp := responses.CountriesResponseDTO{StatusCode: 608, Result: nil, StatusDesc: "Error fetching countries"}
 		c.Data["json"] = resp
 	} else {
-		resp := responses.CountriesResponseDTO{StatusCode: 200, Countries: &l, StatusDesc: "Countries fetched successfully"}
+		countriesResp := []models.Countries{}
+		for _, urs := range l {
+			m := urs.(models.Countries)
+
+			countriesResp = append(countriesResp, m)
+		}
+		resp := responses.CountriesResponseDTO{StatusCode: 200, Result: &countriesResp, StatusDesc: "Countries fetched successfully"}
 		c.Data["json"] = resp
 	}
 	c.ServeJSON()

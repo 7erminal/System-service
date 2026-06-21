@@ -1,5 +1,5 @@
 # --- Stage 1: Build the Application ---
-FROM golang:1.24-alpine AS builder
+FROM golang:1.26.2-alpine AS builder
 
 # Set the source workspace directory
 WORKDIR /src
@@ -15,7 +15,7 @@ RUN go mod download
 COPY . .
 
 # Compile optimized, static binary dropping debugging symbols and layout info
-RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o /out/customer_management_service .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -trimpath -ldflags="-s -w" -o /out/system_service .
 
 # --- Stage 2: Production Distroless Alpine Runtime ---
 FROM alpine:3.20
