@@ -47,17 +47,17 @@ func (c *CurrenciesController) Post() {
 	if userCheck.StatusCode == 200 {
 		var currency models.Currencies = models.Currencies{Symbol: v.Symbol, Currency: v.Currency, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: int(v.AddedBy), ModifiedBy: int(v.AddedBy)}
 		if _, err := models.AddCurrencies(&currency); err == nil {
-			resp := responses.CurrencyResponseDTO{StatusCode: 200, Currency: &currency, StatusDesc: "Currency added successfully"}
+			resp := responses.CurrencyResponseDTO{StatusCode: 200, Result: &currency, StatusDesc: "Currency added successfully"}
 			c.Ctx.Output.SetStatus(200)
 			c.Data["json"] = resp
 		} else {
 			logs.Error("Error adding currency ", err.Error())
-			resp := responses.CurrencyResponseDTO{StatusCode: 608, Currency: nil, StatusDesc: "Error adding currency"}
+			resp := responses.CurrencyResponseDTO{StatusCode: 608, Result: nil, StatusDesc: "Error adding currency"}
 			c.Data["json"] = resp
 		}
 	} else {
 		logs.Info("Error::: User not found ")
-		resp := responses.CurrencyResponseDTO{StatusCode: 500, Currency: nil, StatusDesc: "Error adding currency"}
+		resp := responses.CurrencyResponseDTO{StatusCode: 500, Result: nil, StatusDesc: "Error adding currency"}
 		c.Data["json"] = resp
 	}
 	c.ServeJSON()
@@ -77,7 +77,7 @@ func (c *CurrenciesController) GetOne() {
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
-		resp := responses.CurrencyResponseDTO{StatusCode: 200, Currency: v, StatusDesc: "Currency fetched successfully"}
+		resp := responses.CurrencyResponseDTO{StatusCode: 200, Result: v, StatusDesc: "Currency fetched successfully"}
 		c.Data["json"] = resp
 	}
 	c.ServeJSON()
@@ -96,7 +96,7 @@ func (c *CurrenciesController) GetOneByName() {
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
-		resp := responses.CurrencyResponseDTO{StatusCode: 200, Currency: v, StatusDesc: "Currency fetched successfully"}
+		resp := responses.CurrencyResponseDTO{StatusCode: 200, Result: v, StatusDesc: "Currency fetched successfully"}
 		c.Data["json"] = resp
 	}
 	c.ServeJSON()
@@ -115,7 +115,7 @@ func (c *CurrenciesController) GetOneBySymbol() {
 	if err != nil {
 		c.Data["json"] = err.Error()
 	} else {
-		resp := responses.CurrencyResponseDTO{StatusCode: 200, Currency: v, StatusDesc: "Currency fetched successfully"}
+		resp := responses.CurrencyResponseDTO{StatusCode: 200, Result: v, StatusDesc: "Currency fetched successfully"}
 		c.Data["json"] = resp
 	}
 	c.ServeJSON()
@@ -178,10 +178,16 @@ func (c *CurrenciesController) GetAll() {
 	l, err := models.GetAllCurrencies(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		logs.Error("Error fetching currencies ", err.Error())
-		resp := responses.CurrenciesResponseDTO{StatusCode: 605, Currencies: nil, StatusDesc: "Error fetching currencies"}
+		resp := responses.CurrenciesResponseDTO{StatusCode: 605, Result: nil, StatusDesc: "Error fetching currencies"}
 		c.Data["json"] = resp
 	} else {
-		resp := responses.CurrenciesResponseDTO{StatusCode: 200, Currencies: &l, StatusDesc: "Currencies fetched successfully"}
+		currenciesResp := []models.Currencies{}
+		for _, urs := range l {
+			m := urs.(models.Currencies)
+
+			currenciesResp = append(currenciesResp, m)
+		}
+		resp := responses.CurrenciesResponseDTO{StatusCode: 200, Result: &currenciesResp, StatusDesc: "Currencies fetched successfully"}
 		c.Data["json"] = resp
 	}
 	c.ServeJSON()
