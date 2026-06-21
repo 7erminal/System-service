@@ -76,6 +76,12 @@ func (c *CurrenciesController) GetOne() {
 	v, err := models.GetCurrenciesById(id)
 	if err != nil {
 		c.Data["json"] = err.Error()
+		logs.Error("Error fetching currency by id ", err.Error())
+		resp := responses.CurrencyResponseDTO{StatusCode: 608, Result: nil, StatusDesc: "Error fetching currency by id"}
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = resp
+		// c.Ctx.Output.SetStatus(403)
+		// c.Data["json"] = err.Error()
 	} else {
 		resp := responses.CurrencyResponseDTO{StatusCode: 200, Result: v, StatusDesc: "Currency fetched successfully"}
 		c.Data["json"] = resp

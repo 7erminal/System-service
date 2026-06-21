@@ -81,8 +81,16 @@ func (c *CountriesController) GetOne() {
 	v, err := models.GetCountriesById(id)
 	if err != nil {
 		c.Data["json"] = err.Error()
+		logs.Error("Error fetching country by id ", err.Error())
+		resp := responses.CountryResponseDTO{StatusCode: 608, Result: nil, StatusDesc: "Error fetching country by id"}
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = resp
+		// c.Ctx.Output.SetStatus(403)
+		// c.Data["json"] = err.Error()
 	} else {
-		c.Data["json"] = v
+		resp := responses.CountryResponseDTO{StatusCode: 200, Result: v, StatusDesc: "Country fetched Successfully"}
+		c.Ctx.Output.SetStatus(200)
+		c.Data["json"] = resp
 	}
 	c.ServeJSON()
 }
@@ -98,7 +106,7 @@ func (c *CountriesController) GetOneByCode() {
 	code := c.Ctx.Input.Param(":code")
 	v, err := models.GetCountriesByCode(code)
 	if err != nil {
-		logs.Info("Error fetching country by code ", err.Error())
+		logs.Error("Error fetching country by code ", err.Error())
 		resp := responses.CountryResponseDTO{StatusCode: 608, Result: nil, StatusDesc: "Error fetching country by code"}
 		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = resp
