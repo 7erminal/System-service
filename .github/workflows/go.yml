@@ -43,7 +43,7 @@ jobs:
           export NVM_DIR="$HOME/.nvm"
           [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" || true
 
-          cd /usr/app/shopmallafrik/system_service
+          cd /usr/app/shopmallafrik/system-service
           git stash
           git pull origin shopmallafrik
           go build -o shopmallafrik-system-service
