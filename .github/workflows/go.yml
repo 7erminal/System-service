@@ -36,12 +36,26 @@ jobs:
 
         ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER << 'EOF'
           set -e
+
+          # Load login shell environment so PATH/NVM-installed pm2 is available.
+          [ -f ~/.bashrc ] && . ~/.bashrc || true
+          [ -f ~/.profile ] && . ~/.profile || true
+          export NVM_DIR="$HOME/.nvm"
+          [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" || true
+
           cd /usr/app/shopmallafrik/shopmallafrik_system_service
           git stash
           git pull origin shopmallafrik
           go build -o shopmallafrik-system-service
-          pm2 restart shopmallafrik-system-service || \
-          pm2 start shopmallafrik-system-service --name shopmallafrik-system-service
+
+          PM2_BIN="$(command -v pm2 || true)"
+          if [ -z "$PM2_BIN" ]; then
+            echo "pm2 not found in PATH: $PATH"
+            exit 1
+          fi
+
+          "$PM2_BIN" restart shopmallafrik-system-service || \
+          "$PM2_BIN" start ./shopmallafrik-system-service --name shopmallafrik-system-service
         EOF
 
     # - name: Test
