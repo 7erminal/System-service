@@ -5,15 +5,15 @@ name: Go
 
 on:
   push:
-    branches: [ "ecommerce" ]
+    branches: [ "shopmallafrik" ]
   pull_request:
-    branches: [ "ecommerce" ]
+    branches: [ "shopmallafrik" ]
 
 jobs:
 
   build:
     runs-on: ubuntu-latest
-    environment: ecommerce
+    environment: shopmallafrik
     steps:
     - uses: actions/checkout@v4
 
@@ -36,12 +36,12 @@ jobs:
 
         ssh -o StrictHostKeyChecking=no $SSH_USER@$SSH_SERVER << 'EOF'
           set -e
-          cd /usr/app/ecommerce/ecommerce_system_service
+          cd /usr/app/shopmallafrik/shopmallafrik_system_service
           git stash
-          git pull origin ecommerce
-          go build -o ecommerce-system-service
-          pm2 restart ecommerce-system-service || \
-          pm2 start ecommerce-system-service --name ecommerce-system-service
+          git pull origin shopmallafrik
+          go build -o shopmallafrik-system-service
+          pm2 restart shopmallafrik-system-service || \
+          pm2 start shopmallafrik-system-service --name shopmallafrik-system-service
         EOF
 
     # - name: Test
