@@ -100,6 +100,7 @@ func (c *CurrenciesController) GetOneByName() {
 	name := c.Ctx.Input.Param(":name")
 	v, err := models.GetCurrenciesByName(name)
 	if err != nil {
+		logs.Error("Error fetching currency by name ", err.Error())
 		c.Data["json"] = err.Error()
 	} else {
 		resp := responses.CurrencyResponseDTO{StatusCode: 200, Result: v, StatusDesc: "Currency fetched successfully"}
