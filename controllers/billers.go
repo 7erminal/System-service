@@ -101,12 +101,34 @@ func (c *BillersController) GetOne() {
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	v, err := models.GetBillersById(id)
 	if err != nil {
-		billerResp := responses.BillerResponseDTO{
-			StatusCode: 500,
-			Biller:     nil,
-			StatusDesc: "Failed to fetch Biller: " + err.Error(),
+		v, err = models.GetBillerByCode(idStr)
+		if err != nil {
+			billerResp := responses.BillerResponseDTO{
+				StatusCode: 500,
+				Biller:     nil,
+				StatusDesc: "Failed to fetch Biller: " + err.Error(),
+			}
+			c.Data["json"] = billerResp
+		} else {
+			dateCreatedStr := v.DateCreated.Format("2006-01-02 15:04:05")
+			dateModifiedStr := v.DateModified.Format("2006-01-02 15:04:05")
+			billerObj := responses.BillerObject{
+				BillerId:     v.BillerId,
+				BillerName:   v.BillerName,
+				CreatedBy:    v.CreatedBy,
+				ModifiedBy:   v.ModifiedBy,
+				DateCreated:  dateCreatedStr,
+				DateModified: dateModifiedStr,
+				Active:       v.Active,
+				Operator:     v.Operator.OperatorCode,
+			}
+			billerResp := responses.BillerResponseDTO{
+				StatusCode: 200,
+				Biller:     &billerObj,
+				StatusDesc: "Biller fetched successfully",
+			}
+			c.Data["json"] = billerResp
 		}
-		c.Data["json"] = billerResp
 	} else {
 		dateCreatedStr := v.DateCreated.Format("2006-01-02 15:04:05")
 		dateModifiedStr := v.DateModified.Format("2006-01-02 15:04:05")
