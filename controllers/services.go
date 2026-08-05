@@ -97,12 +97,34 @@ func (c *ServicesController) GetOne() {
 	}
 	v, err := models.GetServicesById(id)
 	if err != nil {
-		serviceResp := responses.ServiceResponseDTO{
-			StatusCode: 500,
-			Result:     responses.ServiceObject{},
-			StatusDesc: "Failed to fetch Service: " + err.Error(),
+		v, err := models.GetServicesByCode(idStr)
+		if err != nil {
+			serviceResp := responses.ServiceResponseDTO{
+				StatusCode: 500,
+				Result:     responses.ServiceObject{},
+				StatusDesc: "Failed to fetch Service: " + err.Error(),
+			}
+			c.Data["json"] = serviceResp
+		} else {
+			dateCreatedStr := v.DateCreated.Format("2006-01-02 15:04:05")
+			dateModifiedStr := v.DateModified.Format("2006-01-02 15:04:05")
+			serviceResp := responses.ServiceResponseDTO{
+				StatusCode: 200,
+				Result: responses.ServiceObject{
+					ServiceId:          v.ServiceId,
+					ServiceName:        v.ServiceName,
+					ServiceCode:        v.ServiceCode,
+					ServiceDescription: v.ServiceDescription,
+					DateCreated:        dateCreatedStr,
+					DateModified:       dateModifiedStr,
+					CreatedBy:          v.CreatedBy,
+					ModifiedBy:         v.ModifiedBy,
+					Active:             v.Active,
+				},
+				StatusDesc: "Service fetched successfully",
+			}
+			c.Data["json"] = serviceResp
 		}
-		c.Data["json"] = serviceResp
 	} else {
 		dateCreatedStr := v.DateCreated.Format("2006-01-02 15:04:05")
 		dateModifiedStr := v.DateModified.Format("2006-01-02 15:04:05")
