@@ -11,7 +11,7 @@ import (
 )
 
 type Theme_configs struct {
-	Id              int64     `orm:"auto"`
+	Id              int64     `orm:"auto;column(theme_config_id)"`
 	ThemeId         *Theme    `orm:"rel(fk)"`
 	ThemeConfigCode string    `orm:"size(255)"`
 	ThemeProperties string    `orm:"type(longtext)"`
