@@ -65,8 +65,8 @@ func (c *ApplicationController) Post() {
 			statusMessage = "Application created. Adding theme association."
 
 			apt := models.Application_themes{
-				ApplicationId: v,
-				ThemeId:       *theme,
+				ApplicationId: &v,
+				ThemeId:       theme,
 			}
 			if apthid, err := models.AddApplication_themes(&apt); err == nil {
 				logs.Info("ApplicationTheme created with ID: ", apthid)

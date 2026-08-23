@@ -11,11 +11,11 @@ import (
 )
 
 type Application_themes struct {
-	Id            int64       `orm:"auto;column(application_theme_id)"`
-	ApplicationId Application `orm:"rel(fk)"`
-	ThemeId       Theme       `orm:"rel(fk)"`
-	DateCreated   time.Time   `orm:"type(datetime)"`
-	DateModified  time.Time   `orm:"type(datetime)"`
+	Id            int64        `orm:"auto;column(application_theme_id)"`
+	ApplicationId *Application `orm:"rel(fk)"`
+	ThemeId       *Theme       `orm:"rel(fk)"`
+	DateCreated   time.Time    `orm:"type(datetime)"`
+	DateModified  time.Time    `orm:"type(datetime)"`
 	CreatedBy     int
 	ModifiedBy    int
 	Active        int
@@ -46,7 +46,7 @@ func GetApplication_themesById(id int64) (v *Application_themes, err error) {
 
 func GetApplication_themesByApplicationId(id int64) (v *Application_themes, err error) {
 	o := orm.NewOrm()
-	application := Application{ApplicationId: id}
+	application := &Application{ApplicationId: id}
 	v = &Application_themes{ApplicationId: application}
 	if err = o.QueryTable(new(Application_themes)).Filter("ApplicationId", id).RelatedSel().One(v); err == nil {
 		return v, nil
