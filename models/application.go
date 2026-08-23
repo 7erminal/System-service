@@ -48,6 +48,15 @@ func GetApplicationById(id int64) (v *Application, err error) {
 	return nil, err
 }
 
+func GetApplicationByCode(code string) (v *Application, err error) {
+	o := orm.NewOrm()
+	v = &Application{ApplicationCode: code}
+	if err = o.QueryTable(new(Application)).Filter("ApplicationCode", code).RelatedSel().One(v); err == nil {
+		return v, nil
+	}
+	return nil, err
+}
+
 // GetAllApplication retrieves all Application matches certain condition. Returns empty list if
 // no records exist
 func GetAllApplication(query map[string]string, fields []string, sortby []string, order []string,

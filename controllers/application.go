@@ -119,40 +119,45 @@ func (c *ApplicationController) Post() {
 // @Param	id		path 	string	true		"The key for Application"
 // @Success 200 {object} responses.ApplicationResponse
 // @Failure 403 :id is empty
-// @router /:id [get]
+// @router /:code [get]
 func (c *ApplicationController) GetOne() {
-	idStr := c.Ctx.Input.Param(":id")
-	logs.Info("GetOne request received: id=", idStr)
-	id, _ := strconv.ParseInt(idStr, 0, 64)
-	v, err := models.GetApplication_themesByApplicationId(id)
+	code := c.Ctx.Input.Param(":code")
+	logs.Info("GetOne request received: code=", code)
+	a, err := models.GetApplicationByCode(code)
 
 	statusCode := 400
 	statusMessage := "Bad Request"
 	var result responses.ApplicationResponseData
 
-	if err == nil {
-		statusCode = 200
-		statusMessage = "Application retrieved successfully"
-		result = responses.ApplicationResponseData{
-			ApplicationId:    v.ApplicationId.ApplicationId,
-			ApplicationCode:  v.ApplicationId.ApplicationCode,
-			ApplicationName:  v.ApplicationId.ApplicationName,
-			ApplicationLogo:  v.ApplicationId.ApplicationLogo,
-			ThemeColors:      v.ApplicationId.ThemeColors,
-			DefaultFontsize:  v.ApplicationId.DefaultFontsize,
-			ApplicationImage: v.ApplicationId.ApplicationImage,
-			DateCreated:      v.ApplicationId.DateCreated,
-			DateModified:     v.ApplicationId.DateModified,
-			Active:           v.ApplicationId.Active,
-			Theme: &responses.ThemeResponseData{
-				ThemeId:   v.ThemeId.ThemeId,
-				ThemeCode: v.ThemeId.ThemeCode,
-				ThemeName: v.ThemeId.ThemeName,
-			},
-		}
+	if err != nil {
+
 	} else {
-		statusCode = 404
-		statusMessage = "Application not found"
+
+		v, erra := models.GetApplication_themesByApplicationId(a.ApplicationId)
+		if erra == nil {
+			statusCode = 200
+			statusMessage = "Application retrieved successfully"
+			result = responses.ApplicationResponseData{
+				ApplicationId:    v.ApplicationId.ApplicationId,
+				ApplicationCode:  v.ApplicationId.ApplicationCode,
+				ApplicationName:  v.ApplicationId.ApplicationName,
+				ApplicationLogo:  v.ApplicationId.ApplicationLogo,
+				ThemeColors:      v.ApplicationId.ThemeColors,
+				DefaultFontsize:  v.ApplicationId.DefaultFontsize,
+				ApplicationImage: v.ApplicationId.ApplicationImage,
+				DateCreated:      v.ApplicationId.DateCreated,
+				DateModified:     v.ApplicationId.DateModified,
+				Active:           v.ApplicationId.Active,
+				Theme: &responses.ThemeResponseData{
+					ThemeId:   v.ThemeId.ThemeId,
+					ThemeCode: v.ThemeId.ThemeCode,
+					ThemeName: v.ThemeId.ThemeName,
+				},
+			}
+		} else {
+			statusCode = 404
+			statusMessage = "Application not found"
+		}
 	}
 
 	response := responses.ApplicationResponse{
