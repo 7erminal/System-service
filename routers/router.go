@@ -35,6 +35,35 @@ func init() {
 				&controllers.Role_permissionsController{},
 			),
 		),
+		beego.NSNamespace("/services",
+			beego.NSInclude(
+				&controllers.ServicesController{},
+			),
+		),
+
+		beego.NSNamespace("/operators",
+			beego.NSInclude(
+				&controllers.OperatorController{},
+			),
+		),
+
+		beego.NSNamespace("/billers",
+			beego.NSInclude(
+				&controllers.BillersController{},
+			),
+		),
+
+		beego.NSNamespace("/applications",
+			beego.NSInclude(
+				&controllers.ApplicationController{},
+			),
+		),
+
+		beego.NSNamespace("/themes",
+			beego.NSInclude(
+				&controllers.ThemeController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }

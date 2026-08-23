@@ -1,6 +1,6 @@
 -- Migration: create tables for system_service ORM models
--- Models included: actions, countries, currencies, permissions,
--- role_permissions, roles, status
+-- Models included: actions, billers, countries, currencies, operators,
+-- permissions, role_permissions, roles, services, status
 
 BEGIN;
 
@@ -45,6 +45,36 @@ CREATE TABLE IF NOT EXISTS currencies (
 
 CREATE INDEX idx_currencies_currency ON currencies(currency);
 
+CREATE TABLE IF NOT EXISTS operators (
+  operator_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  operator_code VARCHAR(80) NOT NULL,
+  operator_name VARCHAR(80) NOT NULL,
+  description VARCHAR(255) NOT NULL DEFAULT '',
+  date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  date_modified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_by INTEGER NOT NULL DEFAULT 0,
+  modified_by INTEGER NOT NULL DEFAULT 0,
+  active INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE INDEX idx_operators_operator_code ON operators(operator_code);
+CREATE INDEX idx_operators_operator_name ON operators(operator_name);
+
+CREATE TABLE IF NOT EXISTS services (
+  service_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  service_name VARCHAR(100) NOT NULL,
+  service_code VARCHAR(100) NOT NULL,
+  service_description VARCHAR(300) NOT NULL,
+  date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  date_modified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_by INTEGER NOT NULL DEFAULT 0,
+  modified_by INTEGER NOT NULL DEFAULT 0,
+  active INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE INDEX idx_services_service_code ON services(service_code);
+CREATE INDEX idx_services_service_name ON services(service_name);
+
 -- 2) Countries ---------------------------------------------------------------
 
 CREATE TABLE IF NOT EXISTS countries (
@@ -66,6 +96,29 @@ CREATE TABLE IF NOT EXISTS countries (
 
 CREATE UNIQUE INDEX uq_countries_country_code ON countries(country_code);
 CREATE INDEX idx_countries_country ON countries(country);
+
+CREATE TABLE IF NOT EXISTS billers (
+  biller_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  biller_name VARCHAR(80) NOT NULL,
+  biller_code VARCHAR(80) NOT NULL,
+  biller_reference_id VARCHAR(250) NOT NULL,
+  description VARCHAR(255) NOT NULL DEFAULT '',
+  operator_id BIGINT NOT NULL,
+  date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  date_modified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_by VARCHAR(255) NOT NULL,
+  modified_by VARCHAR(255) NOT NULL,
+  active INTEGER NOT NULL DEFAULT 1,
+  CONSTRAINT fk_billers_operator
+    FOREIGN KEY (operator_id)
+    REFERENCES operators(operator_id)
+    ON UPDATE CASCADE
+    ON DELETE RESTRICT
+);
+
+CREATE INDEX idx_billers_biller_code ON billers(biller_code);
+CREATE INDEX idx_billers_biller_name ON billers(biller_name);
+CREATE INDEX idx_billers_operator_id ON billers(operator_id);
 
 -- 3) Permissions -------------------------------------------------------------
 

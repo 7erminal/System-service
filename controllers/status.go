@@ -40,7 +40,6 @@ func (c *StatusController) Post() {
 		c.Ctx.Output.SetStatus(201)
 		c.Data["json"] = v
 	} else {
-		logs.Error("Error adding status ", err.Error())
 		c.Data["json"] = err.Error()
 	}
 	c.ServeJSON()
@@ -58,7 +57,6 @@ func (c *StatusController) GetOne() {
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	v, err := models.GetStatusById(id)
 	if err != nil {
-		logs.Error("Error fetching status by id ", err.Error())
 		c.Data["json"] = err.Error()
 	} else {
 		c.Data["json"] = v
