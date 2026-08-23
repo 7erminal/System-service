@@ -52,6 +52,18 @@ func init() {
 				&controllers.BillersController{},
 			),
 		),
+
+		beego.NSNamespace("/applications",
+			beego.NSInclude(
+				&controllers.ApplicationController{},
+			),
+		),
+
+		beego.NSNamespace("/themes",
+			beego.NSInclude(
+				&controllers.ThemeController{},
+			),
+		),
 	)
 	beego.AddNamespace(ns)
 }
