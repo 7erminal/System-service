@@ -28,7 +28,7 @@ func init() {
     beego.GlobalControllerRouter["system_service/controllers:ApplicationController"] = append(beego.GlobalControllerRouter["system_service/controllers:ApplicationController"],
         beego.ControllerComments{
             Method: "GetOne",
-            Router: `/:id`,
+            Router: `/:code`,
             AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
@@ -48,6 +48,15 @@ func init() {
             Method: "Delete",
             Router: `/:id`,
             AllowHTTPMethods: []string{"delete"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["system_service/controllers:ApplicationController"] = append(beego.GlobalControllerRouter["system_service/controllers:ApplicationController"],
+        beego.ControllerComments{
+            Method: "UploadImage",
+            Router: `/upload-image`,
+            AllowHTTPMethods: []string{"post"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})

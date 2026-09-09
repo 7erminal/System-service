@@ -3,6 +3,7 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"net/http"
 	"strconv"
 	"strings"
 	"system_service/models"
@@ -26,6 +27,7 @@ func (c *ApplicationController) URLMapping() {
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
 	c.Mapping("Delete", c.Delete)
+	c.Mapping("UploadImage", c.UploadImage)
 }
 
 // Post ...
@@ -398,6 +400,62 @@ func (c *ApplicationController) Delete() {
 		Result:        &result,
 	}
 	logs.Info("Delete response: ", response)
+	c.Data["json"] = response
+	c.ServeJSON()
+}
+
+// UploadImage ...
+// @Title Upload Image
+// @Description upload an image for the application
+// @Param	Image		formData 	file	true		"The image file to upload"
+// @Param	ItemID		query 	string	true		"The ID of the item to associate the image with"
+// @Success 200 {object} models.ItemImageResponseDTO
+// @Failure 400,500 {object} models.ErrorResponse
+// @router /upload-image [post]
+func (c *ApplicationController) UploadImage() {
+	// var v models.Item_images
+
+	logs.Info("Data received is ", c.Ctx.Input.Query("ItemID"))
+
+	file, header, err := c.GetFile("Image")
+	system := strings.ToLower(c.Ctx.Input.Query("System"))
+
+	logs.Info("Data received is ", file)
+
+	if err != nil {
+		// c.Ctx.Output.SetStatus(http.StatusBadRequest)
+		c.Data["json"] = map[string]string{"error": "Failed to get image file."}
+		logs.Error("Failed to get the file ", err)
+		c.ServeJSON()
+		return
+	}
+	defer file.Close()
+
+	// Save the uploaded file
+	fileName := header.Filename
+	logs.Info("File Name Extracted is ", fileName)
+	filePath := "/uploads/application/" + system + "/" + fileName // Define your file path
+	logs.Info("File Path Extracted is ", filePath)
+	host, _ := beego.AppConfig.String("imagesUploadBaseUrl")
+	filePath = host + filePath
+	logs.Info("Full file path is ", filePath)
+	viewHost, _ := beego.AppConfig.String("imagesBaseUrl")
+	viewFilePath := viewHost + filePath
+	err = c.SaveToFile("Image", filePath)
+	if err != nil {
+		c.Ctx.Output.SetStatus(http.StatusInternalServerError)
+		logs.Error("Error saving file", err)
+		// c.Data["json"] = map[string]string{"error": "Failed to save the image file."}
+		errorMessage := "Error: Failed to save the image file"
+
+		resp := responses.SystemImageResponseDTO{StatusCode: http.StatusInternalServerError, Result: errorMessage, StatusDesc: "Internal Server Error"}
+
+		c.Data["json"] = resp
+		c.ServeJSON()
+		return
+	}
+
+	response := responses.SystemImageResponseDTO{StatusCode: 200, Result: viewFilePath, StatusDesc: "Image uploaded successfully"}
 	c.Data["json"] = response
 	c.ServeJSON()
 }

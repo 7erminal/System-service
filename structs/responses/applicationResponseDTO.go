@@ -60,3 +60,9 @@ type ApplicationThemesResponse struct {
 	StatusMessage string                        `json:"status_message"`
 	Result        ApplicationThemesResponseData `json:"result"`
 }
+
+type SystemImageResponseDTO struct {
+	StatusCode int
+	Result     string
+	StatusDesc string
+}
