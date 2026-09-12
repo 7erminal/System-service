@@ -570,6 +570,7 @@ func (c *ApplicationController) UploadImage() {
 	system := strings.ToLower(c.Ctx.Input.Query("System"))
 
 	logs.Info("Data received is ", file)
+	logs.Info("System received is ", system)
 
 	if err != nil {
 		// c.Ctx.Output.SetStatus(http.StatusBadRequest)
