@@ -57,7 +57,7 @@ func (c *ThemeController) Post() {
 		themeConfig := models.Theme_configs{
 			ThemeConfigCode: req.ThemeCode + "_CONFIG",
 			ThemeProperties: "",
-			ThemeId:         &v,
+			Theme:           &v,
 		}
 
 		if _, err := models.AddTheme_configs(&themeConfig); err == nil {
@@ -343,7 +343,7 @@ func (c *ThemeController) AddThemeConfig() {
 	}
 
 	themeConfig := models.Theme_configs{
-		ThemeId:         theme,
+		Theme:           theme,
 		ThemeConfigCode: theme.ThemeCode + "_CONFIG_" + strconv.FormatInt(time.Now().UnixNano(), 10),
 		ThemeProperties: req.Config,
 	}
@@ -407,7 +407,7 @@ func (c *ThemeController) RemoveThemeConfig() {
 		return
 	}
 
-	theme, err := models.GetThemeById(themeConfig.ThemeId.ThemeId)
+	theme, err := models.GetThemeById(themeConfig.Theme.ThemeId)
 	if err != nil {
 		statusCode = 404
 		statusMessage = "Theme not found"

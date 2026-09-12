@@ -11,7 +11,7 @@ import (
 )
 
 type Theme struct {
-	ThemeId      int64     `orm:"auto"`
+	ThemeId      int64     `orm:"auto;column(theme_id)"`
 	ThemeCode    string    `orm:"size(255)"`
 	ThemeName    string    `orm:"size(255)"`
 	DateCreated  time.Time `orm:"type(datetime)"`

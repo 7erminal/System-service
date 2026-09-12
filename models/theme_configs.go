@@ -12,7 +12,7 @@ import (
 
 type Theme_configs struct {
 	Id              int64     `orm:"auto;column(theme_config_id)"`
-	ThemeId         *Theme    `orm:"rel(fk)"`
+	Theme           *Theme    `orm:"rel(fk)"`
 	ThemeConfigCode string    `orm:"size(255)"`
 	ThemeProperties string    `orm:"type(longtext)"`
 	DateCreated     time.Time `orm:"type(datetime)"`
@@ -57,7 +57,7 @@ func GetTheme_configsByCode(code string) (v *Theme_configs, err error) {
 func GetTheme_configsByThemeId(id int64) (v *Theme_configs, err error) {
 	o := orm.NewOrm()
 
-	v = &Theme_configs{ThemeId: &Theme{ThemeId: id}}
+	v = &Theme_configs{Theme: &Theme{ThemeId: id}}
 	if err = o.QueryTable(new(Theme_configs)).Filter("ThemeId", id).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
