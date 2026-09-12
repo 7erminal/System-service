@@ -601,4 +601,22 @@ func init() {
             Filters: nil,
             Params: nil})
 
+    beego.GlobalControllerRouter["system_service/controllers:ThemeController"] = append(beego.GlobalControllerRouter["system_service/controllers:ThemeController"],
+        beego.ControllerComments{
+            Method: "AddThemeConfig",
+            Router: `/:id/config`,
+            AllowHTTPMethods: []string{"post"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["system_service/controllers:ThemeController"] = append(beego.GlobalControllerRouter["system_service/controllers:ThemeController"],
+        beego.ControllerComments{
+            Method: "RemoveThemeConfig",
+            Router: `/config/:id`,
+            AllowHTTPMethods: []string{"delete"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
 }

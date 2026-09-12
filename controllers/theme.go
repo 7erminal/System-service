@@ -8,6 +8,7 @@ import (
 	"system_service/models"
 	"system_service/structs/requests"
 	"system_service/structs/responses"
+	"time"
 
 	"github.com/beego/beego/v2/core/logs"
 
@@ -25,6 +26,8 @@ func (c *ThemeController) URLMapping() {
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
+	c.Mapping("AddThemeConfig", c.AddThemeConfig)
+	c.Mapping("RemoveThemeConfig", c.RemoveThemeConfig)
 	c.Mapping("Delete", c.Delete)
 }
 
@@ -291,6 +294,151 @@ func (c *ThemeController) Put() {
 		Result:        &result,
 	}
 	logs.Info("Put response: ", response)
+	c.Data["json"] = response
+	c.ServeJSON()
+}
+
+// AddThemeConfig ...
+// @Title Add Theme Config
+// @Description add a theme configuration for an existing theme
+// @Param	id		path 	string	true		"The theme id"
+// @Param	body		body 	requests.UpdateThemeRequest	true		"body for theme config"
+// @Success 200 {object} responses.ThemeResponse
+// @Failure 400,404,500
+// @router /:id/config [post]
+func (c *ThemeController) AddThemeConfig() {
+	idStr := c.Ctx.Input.Param(":id")
+	id, err := strconv.ParseInt(idStr, 0, 64)
+	var req requests.UpdateThemeRequest
+	json.Unmarshal(c.Ctx.Input.RequestBody, &req)
+
+	statusCode := 400
+	statusMessage := "Bad Request"
+	var result responses.ThemeResponseData
+
+	if err != nil {
+		statusMessage = "Invalid theme id"
+		response := responses.ThemeResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &result}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	if strings.TrimSpace(req.Config) == "" {
+		statusMessage = "config is required"
+		response := responses.ThemeResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &result}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	theme, err := models.GetThemeById(id)
+	if err != nil {
+		statusCode = 404
+		statusMessage = "Theme not found"
+		response := responses.ThemeResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &result}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	themeConfig := models.Theme_configs{
+		ThemeId:         theme,
+		ThemeConfigCode: theme.ThemeCode + "_CONFIG_" + strconv.FormatInt(time.Now().UnixNano(), 10),
+		ThemeProperties: req.Config,
+	}
+
+	if _, err := models.AddTheme_configs(&themeConfig); err != nil {
+		statusCode = 500
+		statusMessage = "Internal server error: " + err.Error()
+	} else {
+		freshTheme, getErr := models.GetThemeById(id)
+		if getErr != nil {
+			statusCode = 500
+			statusMessage = "Theme config added but failed to fetch updated theme"
+		} else {
+			statusCode = 200
+			statusMessage = "Theme config added successfully"
+			result = responses.ThemeResponseData{
+				ThemeId:     freshTheme.ThemeId,
+				ThemeCode:   freshTheme.ThemeCode,
+				ThemeName:   freshTheme.ThemeName,
+				ThemeConfig: freshTheme.ThemeConfigs,
+			}
+		}
+	}
+
+	response := responses.ThemeResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &result}
+	logs.Info("AddThemeConfig response: ", response)
+	c.Data["json"] = response
+	c.ServeJSON()
+}
+
+// RemoveThemeConfig ...
+// @Title Remove Theme Config
+// @Description remove a theme configuration by config id
+// @Param	id		path 	string	true		"The theme config id"
+// @Success 200 {object} responses.ThemeResponse
+// @Failure 400,404,500
+// @router /config/:id [delete]
+func (c *ThemeController) RemoveThemeConfig() {
+	idStr := c.Ctx.Input.Param(":id")
+	id, err := strconv.ParseInt(idStr, 0, 64)
+
+	statusCode := 400
+	statusMessage := "Bad Request"
+	var result responses.ThemeResponseData
+
+	if err != nil {
+		statusMessage = "Invalid theme config id"
+		response := responses.ThemeResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &result}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	themeConfig, err := models.GetTheme_configsById(id)
+	if err != nil {
+		statusCode = 404
+		statusMessage = "Theme configuration not found"
+		response := responses.ThemeResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &result}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	theme, err := models.GetThemeById(themeConfig.ThemeId.ThemeId)
+	if err != nil {
+		statusCode = 404
+		statusMessage = "Theme not found"
+		response := responses.ThemeResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &result}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	if err := models.DeleteTheme_configs(id); err != nil {
+		statusCode = 500
+		statusMessage = "Internal server error: " + err.Error()
+	} else {
+		freshTheme, getErr := models.GetThemeById(theme.ThemeId)
+		if getErr != nil {
+			statusCode = 500
+			statusMessage = "Theme config removed but failed to fetch updated theme"
+		} else {
+			statusCode = 200
+			statusMessage = "Theme config removed successfully"
+			result = responses.ThemeResponseData{
+				ThemeId:     freshTheme.ThemeId,
+				ThemeCode:   freshTheme.ThemeCode,
+				ThemeName:   freshTheme.ThemeName,
+				ThemeConfig: freshTheme.ThemeConfigs,
+			}
+		}
+	}
+
+	response := responses.ThemeResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &result}
+	logs.Info("RemoveThemeConfig response: ", response)
 	c.Data["json"] = response
 	c.ServeJSON()
 }
