@@ -26,6 +26,7 @@ func (c *ApplicationController) URLMapping() {
 	c.Mapping("GetOne", c.GetOne)
 	c.Mapping("GetAll", c.GetAll)
 	c.Mapping("Put", c.Put)
+	c.Mapping("UpdateTheme", c.UpdateTheme)
 	c.Mapping("Delete", c.Delete)
 	c.Mapping("UploadImage", c.UploadImage)
 }
@@ -346,6 +347,151 @@ func (c *ApplicationController) Put() {
 		Result:        &result,
 	}
 	logs.Info("Put response: ", response)
+	c.Data["json"] = response
+	c.ServeJSON()
+}
+
+// UpdateTheme ...
+// @Title Update Application Theme
+// @Description update application theme by application id using theme code
+// @Param	id		path 	string	true		"The application id"
+// @Param	body		body 	requests.UpdateThemeRequest	true		"body with theme_code"
+// @Success 200 {object} responses.ApplicationResponse
+// @Failure 400,404,500
+// @router /:id/theme [put]
+func (c *ApplicationController) UpdateTheme() {
+	idStr := c.Ctx.Input.Param(":id")
+	id, err := strconv.ParseInt(idStr, 0, 64)
+
+	statusCode := 400
+	statusMessage := "Bad Request"
+	var result responses.ApplicationResponseData
+
+	if err != nil {
+		statusMessage = "Invalid application id"
+		response := responses.ApplicationResponse{
+			StatusCode:    statusCode,
+			StatusMessage: statusMessage,
+			Result:        &result,
+		}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	var req requests.UpdateThemeRequest
+	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &req); err != nil {
+		statusMessage = "Invalid request body"
+		response := responses.ApplicationResponse{
+			StatusCode:    statusCode,
+			StatusMessage: statusMessage,
+			Result:        &result,
+		}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	if strings.TrimSpace(req.ThemeCode) == "" {
+		statusMessage = "theme_code is required"
+		response := responses.ApplicationResponse{
+			StatusCode:    statusCode,
+			StatusMessage: statusMessage,
+			Result:        &result,
+		}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	app, err := models.GetApplicationById(id)
+	if err != nil {
+		statusCode = 404
+		statusMessage = "Application not found"
+		response := responses.ApplicationResponse{
+			StatusCode:    statusCode,
+			StatusMessage: statusMessage,
+			Result:        &result,
+		}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	theme, err := models.GetThemeByCode(req.ThemeCode)
+	if err != nil {
+		statusCode = 404
+		statusMessage = "Theme not found"
+		response := responses.ApplicationResponse{
+			StatusCode:    statusCode,
+			StatusMessage: statusMessage,
+			Result:        &result,
+		}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	appTheme, err := models.GetApplication_themesByApplicationId(id)
+	if err != nil {
+		statusCode = 404
+		statusMessage = "Application theme association not found"
+		response := responses.ApplicationResponse{
+			StatusCode:    statusCode,
+			StatusMessage: statusMessage,
+			Result:        &result,
+		}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	appTheme.ThemeId = theme
+	if err := models.UpdateApplication_themesById(appTheme); err != nil {
+		statusCode = 500
+		statusMessage = "Internal server error: " + err.Error()
+		response := responses.ApplicationResponse{
+			StatusCode:    statusCode,
+			StatusMessage: statusMessage,
+			Result:        &result,
+		}
+		c.Data["json"] = response
+		c.ServeJSON()
+		return
+	}
+
+	updatedAppTheme, err := models.GetApplication_themesByApplicationId(id)
+	if err != nil {
+		statusCode = 500
+		statusMessage = "Theme updated but failed to fetch updated application theme"
+	} else {
+		statusCode = 200
+		statusMessage = "Application theme updated successfully"
+		result = responses.ApplicationResponseData{
+			ApplicationId:    app.ApplicationId,
+			ApplicationCode:  app.ApplicationCode,
+			ApplicationName:  app.ApplicationName,
+			ApplicationLogo:  app.ApplicationLogo,
+			ThemeColors:      app.ThemeColors,
+			DefaultFontsize:  app.DefaultFontsize,
+			ApplicationImage: app.ApplicationImage,
+			DateCreated:      app.DateCreated,
+			DateModified:     app.DateModified,
+			Active:           app.Active,
+			Theme: &responses.ThemeResponseData{
+				ThemeId:   updatedAppTheme.ThemeId.ThemeId,
+				ThemeCode: updatedAppTheme.ThemeId.ThemeCode,
+				ThemeName: updatedAppTheme.ThemeId.ThemeName,
+			},
+		}
+	}
+
+	response := responses.ApplicationResponse{
+		StatusCode:    statusCode,
+		StatusMessage: statusMessage,
+		Result:        &result,
+	}
+	logs.Info("UpdateTheme response: ", response)
 	c.Data["json"] = response
 	c.ServeJSON()
 }
