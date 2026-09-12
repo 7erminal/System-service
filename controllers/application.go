@@ -3,12 +3,14 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
 	"system_service/models"
 	"system_service/structs/requests"
 	"system_service/structs/responses"
+	"time"
 
 	"github.com/beego/beego/v2/core/logs"
 
@@ -54,8 +56,10 @@ func (c *ApplicationController) Post() {
 		statusMessage = "Theme not found"
 	} else {
 
+		// Generate application code
+		applicationCode := fmt.Sprintf("APP-%d", time.Now().Unix())
 		v := models.Application{
-			ApplicationCode:  req.ApplicationCode,
+			ApplicationCode:  applicationCode,
 			ApplicationName:  req.ApplicationName,
 			ApplicationLogo:  req.ApplicationLogo,
 			ThemeColors:      req.ThemeColors,
@@ -314,7 +318,6 @@ func (c *ApplicationController) Put() {
 
 	v := models.Application{
 		ApplicationId:    id,
-		ApplicationCode:  req.ApplicationCode,
 		ApplicationName:  req.ApplicationName,
 		ApplicationLogo:  req.ApplicationLogo,
 		ThemeColors:      req.ThemeColors,
