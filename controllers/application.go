@@ -68,8 +68,8 @@ func (c *ApplicationController) Post() {
 			statusMessage = "Application created. Adding theme association."
 
 			apt := models.Application_themes{
-				ApplicationId: &v,
-				ThemeId:       theme,
+				Application: &v,
+				Theme:       theme,
 			}
 			if apthid, err := models.AddApplication_themes(&apt); err == nil {
 				logs.Info("ApplicationTheme created with ID: ", apthid)
@@ -141,20 +141,20 @@ func (c *ApplicationController) GetOne() {
 			statusCode = 200
 			statusMessage = "Application retrieved successfully"
 			result = responses.ApplicationResponseData{
-				ApplicationId:    v.ApplicationId.ApplicationId,
-				ApplicationCode:  v.ApplicationId.ApplicationCode,
-				ApplicationName:  v.ApplicationId.ApplicationName,
-				ApplicationLogo:  v.ApplicationId.ApplicationLogo,
-				ThemeColors:      v.ApplicationId.ThemeColors,
-				DefaultFontsize:  v.ApplicationId.DefaultFontsize,
-				ApplicationImage: v.ApplicationId.ApplicationImage,
-				DateCreated:      v.ApplicationId.DateCreated,
-				DateModified:     v.ApplicationId.DateModified,
-				Active:           v.ApplicationId.Active,
+				ApplicationId:    v.Application.ApplicationId,
+				ApplicationCode:  v.Application.ApplicationCode,
+				ApplicationName:  v.Application.ApplicationName,
+				ApplicationLogo:  v.Application.ApplicationLogo,
+				ThemeColors:      v.Application.ThemeColors,
+				DefaultFontsize:  v.Application.DefaultFontsize,
+				ApplicationImage: v.Application.ApplicationImage,
+				DateCreated:      v.Application.DateCreated,
+				DateModified:     v.Application.DateModified,
+				Active:           v.Application.Active,
 				Theme: &responses.ThemeResponseData{
-					ThemeId:   v.ThemeId.ThemeId,
-					ThemeCode: v.ThemeId.ThemeCode,
-					ThemeName: v.ThemeId.ThemeName,
+					ThemeId:   v.Theme.ThemeId,
+					ThemeCode: v.Theme.ThemeCode,
+					ThemeName: v.Theme.ThemeName,
 				},
 			}
 		} else {
@@ -245,20 +245,20 @@ func (c *ApplicationController) GetAll() {
 		for _, app := range l {
 			m := app.(models.Application_themes)
 			appsResp = append(appsResp, responses.ApplicationResponseData{
-				ApplicationId:    m.ApplicationId.ApplicationId,
-				ApplicationCode:  m.ApplicationId.ApplicationCode,
-				ApplicationName:  m.ApplicationId.ApplicationName,
-				ApplicationLogo:  m.ApplicationId.ApplicationLogo,
-				ThemeColors:      m.ApplicationId.ThemeColors,
-				DefaultFontsize:  m.ApplicationId.DefaultFontsize,
-				ApplicationImage: m.ApplicationId.ApplicationImage,
-				DateCreated:      m.ApplicationId.DateCreated,
-				DateModified:     m.ApplicationId.DateModified,
-				Active:           m.ApplicationId.Active,
+				ApplicationId:    m.Application.ApplicationId,
+				ApplicationCode:  m.Application.ApplicationCode,
+				ApplicationName:  m.Application.ApplicationName,
+				ApplicationLogo:  m.Application.ApplicationLogo,
+				ThemeColors:      m.Application.ThemeColors,
+				DefaultFontsize:  m.Application.DefaultFontsize,
+				ApplicationImage: m.Application.ApplicationImage,
+				DateCreated:      m.Application.DateCreated,
+				DateModified:     m.Application.DateModified,
+				Active:           m.Application.Active,
 				Theme: &responses.ThemeResponseData{
-					ThemeId:   m.ThemeId.ThemeId,
-					ThemeCode: m.ThemeId.ThemeCode,
-					ThemeName: m.ThemeId.ThemeName,
+					ThemeId:   m.Theme.ThemeId,
+					ThemeCode: m.Theme.ThemeCode,
+					ThemeName: m.Theme.ThemeName,
 				},
 			})
 		}
@@ -446,7 +446,7 @@ func (c *ApplicationController) UpdateTheme() {
 		return
 	}
 
-	appTheme.ThemeId = theme
+	appTheme.Theme = theme
 	if err := models.UpdateApplication_themesById(appTheme); err != nil {
 		statusCode = 500
 		statusMessage = "Internal server error: " + err.Error()
@@ -479,9 +479,9 @@ func (c *ApplicationController) UpdateTheme() {
 			DateModified:     app.DateModified,
 			Active:           app.Active,
 			Theme: &responses.ThemeResponseData{
-				ThemeId:   updatedAppTheme.ThemeId.ThemeId,
-				ThemeCode: updatedAppTheme.ThemeId.ThemeCode,
-				ThemeName: updatedAppTheme.ThemeId.ThemeName,
+				ThemeId:   updatedAppTheme.Theme.ThemeId,
+				ThemeCode: updatedAppTheme.Theme.ThemeCode,
+				ThemeName: updatedAppTheme.Theme.ThemeName,
 			},
 		}
 	}
