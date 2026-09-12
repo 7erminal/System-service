@@ -6,59 +6,59 @@ import (
 )
 
 type ThemeResponseData struct {
-	ThemeId     int64                   `json:"theme_id"`
-	ThemeCode   string                  `json:"theme_code"`
-	ThemeName   string                  `json:"theme_name"`
-	ThemeConfig []*models.Theme_configs `json:"theme_config"`
+	ThemeId     int64
+	ThemeCode   string
+	ThemeName   string
+	ThemeConfig []*models.Theme_configs
 }
 
 type ThemeResponse struct {
-	StatusCode    int                `json:"status_code"`
-	StatusMessage string             `json:"status_message"`
-	Result        *ThemeResponseData `json:"result"`
+	StatusCode    int
+	StatusMessage string
+	Result        *ThemeResponseData
 }
 
 type ThemeResponseList struct {
-	StatusCode    int                 `json:"status_code"`
-	StatusMessage string              `json:"status_message"`
-	Result        []ThemeResponseData `json:"result"`
+	StatusCode    int
+	StatusMessage string
+	Result        []ThemeResponseData
 }
 
 type ApplicationResponseData struct {
-	ApplicationId    int64              `json:"application_id"`
-	ApplicationCode  string             `json:"application_code"`
-	ApplicationName  string             `json:"application_name"`
-	ApplicationLogo  string             `json:"application_logo"`
-	ThemeColors      string             `json:"theme_colors"`
-	DefaultFontsize  string             `json:"default_fontsize"`
-	ApplicationImage string             `json:"application_image"`
-	DateCreated      time.Time          `json:"date_created"`
-	DateModified     time.Time          `json:"date_modified"`
-	Active           int                `json:"active"`
-	Theme            *ThemeResponseData `json:"theme"`
+	ApplicationId    int64
+	ApplicationCode  string
+	ApplicationName  string
+	ApplicationLogo  string
+	ThemeColors      string
+	DefaultFontsize  string
+	ApplicationImage string
+	DateCreated      time.Time
+	DateModified     time.Time
+	Active           int
+	Theme            *ThemeResponseData
 }
 
 type ApplicationResponse struct {
-	StatusCode    int                      `json:"status_code"`
-	StatusMessage string                   `json:"status_message"`
-	Result        *ApplicationResponseData `json:"result"`
+	StatusCode    int
+	StatusMessage string
+	Result        *ApplicationResponseData
 }
 
 type ApplicationsResponse struct {
-	StatusCode    int                        `json:"status_code"`
-	StatusMessage string                     `json:"status_message"`
-	Result        *[]ApplicationResponseData `json:"result"`
+	StatusCode    int
+	StatusMessage string
+	Result        *[]ApplicationResponseData
 }
 
 type ApplicationThemesResponseData struct {
-	Application ApplicationResponseData `json:"application"`
-	Theme       ThemeResponseData       `json:"theme"`
+	Application ApplicationResponseData
+	Theme       ThemeResponseData
 }
 
 type ApplicationThemesResponse struct {
-	StatusCode    int                           `json:"status_code"`
-	StatusMessage string                        `json:"status_message"`
-	Result        ApplicationThemesResponseData `json:"result"`
+	StatusCode    int
+	StatusMessage string
+	Result        ApplicationThemesResponseData
 }
 
 type SystemImageResponseDTO struct {

@@ -1,20 +1,20 @@
 package requests
 
 type ThemeRequest struct {
-	ThemeCode string `json:"theme_code"`
-	ThemeName string `json:"theme_name"`
+	ThemeCode string
+	ThemeName string
 }
 
 type ApplicationRequest struct {
-	ApplicationName  string `json:"application_name"`
-	ApplicationLogo  string `json:"application_logo"`
-	ThemeColors      string `json:"theme_colors"`
-	DefaultFontsize  string `json:"default_fontsize"`
-	ApplicationImage string `json:"application_image"`
-	ThemeCode        string `json:"theme_code"`
+	ApplicationName  string
+	ApplicationLogo  string
+	ThemeColors      string
+	DefaultFontsize  string
+	ApplicationImage string
+	ThemeCode        string
 }
 
 type UpdateThemeRequest struct {
-	ThemeCode string `json:"theme_code"`
-	Config    string `json:"config"`
+	ThemeCode string
+	Config    string
 }
