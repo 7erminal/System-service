@@ -1,15 +1,52 @@
 package responses
 
 import (
-	"system_service/models"
 	"time"
 )
 
+type ThemePersonalConfigData struct {
+	ThemeConfigCode string
+	ThemeProperties string
+	ShowBanner      bool
+	BannerImages    string
+	BorderRadius    float64
+	DateCreated     time.Time
+	DateModified    time.Time
+	CreatedBy       int
+	ModifiedBy      int
+	Active          int
+}
+
+type ThemeConfigData struct {
+	ThemeConfigCode string
+	ThemeProperties string
+	DateCreated     time.Time
+	DateModified    time.Time
+	CreatedBy       int
+	ModifiedBy      int
+	Active          int
+}
+
+type ThemePersonalResponseData struct {
+	ThemeId      int64
+	ThemeCode    string
+	ThemeName    string
+	DateCreated  time.Time
+	DateModified time.Time
+	CreatedBy    int
+	ModifiedBy   int
+	ThemeConfig  []ThemePersonalConfigData
+}
+
 type ThemeResponseData struct {
-	ThemeId     int64
-	ThemeCode   string
-	ThemeName   string
-	ThemeConfig []*models.Theme_configs
+	ThemeId      int64
+	ThemeCode    string
+	ThemeName    string
+	DateCreated  time.Time
+	DateModified time.Time
+	CreatedBy    int
+	ModifiedBy   int
+	ThemeConfig  []ThemeConfigData
 }
 
 type ThemeResponse struct {
@@ -35,7 +72,7 @@ type ApplicationResponseData struct {
 	DateCreated      time.Time
 	DateModified     time.Time
 	Active           int
-	Theme            *ThemeResponseData
+	Theme            *ThemePersonalResponseData
 }
 
 type ApplicationResponse struct {

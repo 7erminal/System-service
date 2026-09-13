@@ -83,7 +83,7 @@ func (c *ApplicationController) Post() {
 				statusMessage = "Application created successfully"
 				v.ApplicationId = id
 
-				themeResp := responses.ThemeResponseData{
+				themeResp := responses.ThemePersonalResponseData{
 					ThemeId:   theme.ThemeId,
 					ThemeCode: theme.ThemeCode,
 					ThemeName: theme.ThemeName,
@@ -144,6 +144,33 @@ func (c *ApplicationController) GetOne() {
 		if erra == nil {
 			statusCode = 200
 			statusMessage = "Application retrieved successfully"
+
+			themeConfigs := []responses.ThemePersonalConfigData{}
+
+			for _, tc := range v.Theme.ThemeConfigs {
+				themeConfigs = append(themeConfigs, responses.ThemePersonalConfigData{
+					ThemeConfigCode: tc.ThemeConfigCode,
+					ThemeProperties: tc.ThemeProperties,
+					ShowBanner:      v.ShowBanner,
+					BannerImages:    v.BannerImages,
+					BorderRadius:    v.BorderRadius,
+					DateCreated:     tc.DateCreated,
+					DateModified:    tc.DateModified,
+					CreatedBy:       tc.CreatedBy,
+					ModifiedBy:      tc.ModifiedBy,
+					Active:          tc.Active,
+				})
+			}
+			themeResp := responses.ThemePersonalResponseData{
+				ThemeId:      v.Theme.ThemeId,
+				ThemeCode:    v.Theme.ThemeCode,
+				ThemeName:    v.Theme.ThemeName,
+				ThemeConfig:  themeConfigs,
+				DateCreated:  v.Theme.DateCreated,
+				DateModified: v.Theme.DateModified,
+				CreatedBy:    v.Theme.CreatedBy,
+				ModifiedBy:   v.Theme.ModifiedBy,
+			}
 			result = responses.ApplicationResponseData{
 				ApplicationId:    v.Application.ApplicationId,
 				ApplicationCode:  v.Application.ApplicationCode,
@@ -155,11 +182,7 @@ func (c *ApplicationController) GetOne() {
 				DateCreated:      v.Application.DateCreated,
 				DateModified:     v.Application.DateModified,
 				Active:           v.Application.Active,
-				Theme: &responses.ThemeResponseData{
-					ThemeId:   v.Theme.ThemeId,
-					ThemeCode: v.Theme.ThemeCode,
-					ThemeName: v.Theme.ThemeName,
-				},
+				Theme:            &themeResp,
 			}
 		} else {
 			statusCode = 404
@@ -249,6 +272,24 @@ func (c *ApplicationController) GetAll() {
 
 		for _, app := range l {
 			m := app.(models.Application_themes)
+
+			themeConfigs := []responses.ThemePersonalConfigData{}
+
+			for _, tc := range m.Theme.ThemeConfigs {
+				themeConfigs = append(themeConfigs, responses.ThemePersonalConfigData{
+					ThemeConfigCode: tc.ThemeConfigCode,
+					ThemeProperties: tc.ThemeProperties,
+					ShowBanner:      m.ShowBanner,
+					BannerImages:    m.BannerImages,
+					BorderRadius:    m.BorderRadius,
+					DateCreated:     tc.DateCreated,
+					DateModified:    tc.DateModified,
+					CreatedBy:       tc.CreatedBy,
+					ModifiedBy:      tc.ModifiedBy,
+					Active:          tc.Active,
+				})
+			}
+
 			appsResp = append(appsResp, responses.ApplicationResponseData{
 				ApplicationId:    m.Application.ApplicationId,
 				ApplicationCode:  m.Application.ApplicationCode,
@@ -260,10 +301,15 @@ func (c *ApplicationController) GetAll() {
 				DateCreated:      m.Application.DateCreated,
 				DateModified:     m.Application.DateModified,
 				Active:           m.Application.Active,
-				Theme: &responses.ThemeResponseData{
-					ThemeId:   m.Theme.ThemeId,
-					ThemeCode: m.Theme.ThemeCode,
-					ThemeName: m.Theme.ThemeName,
+				Theme: &responses.ThemePersonalResponseData{
+					ThemeId:      m.Theme.ThemeId,
+					ThemeCode:    m.Theme.ThemeCode,
+					ThemeName:    m.Theme.ThemeName,
+					DateCreated:  m.Theme.DateCreated,
+					DateModified: m.Theme.DateModified,
+					CreatedBy:    m.Theme.CreatedBy,
+					ModifiedBy:   m.Theme.ModifiedBy,
+					ThemeConfig:  themeConfigs,
 				},
 			})
 		}
@@ -477,6 +523,22 @@ func (c *ApplicationController) UpdateTheme() {
 	} else {
 		statusCode = 200
 		statusMessage = "Application theme updated successfully"
+
+		themeConfigs := []responses.ThemePersonalConfigData{}
+		for x := range updatedAppTheme.Theme.ThemeConfigs {
+			themeConfigs = append(themeConfigs, responses.ThemePersonalConfigData{
+				ThemeConfigCode: updatedAppTheme.Theme.ThemeConfigs[x].ThemeConfigCode,
+				ThemeProperties: updatedAppTheme.Theme.ThemeConfigs[x].ThemeProperties,
+				ShowBanner:      updatedAppTheme.ShowBanner,
+				BannerImages:    updatedAppTheme.BannerImages,
+				BorderRadius:    updatedAppTheme.BorderRadius,
+				DateCreated:     updatedAppTheme.Theme.ThemeConfigs[x].DateCreated,
+				DateModified:    updatedAppTheme.Theme.ThemeConfigs[x].DateModified,
+				CreatedBy:       updatedAppTheme.Theme.ThemeConfigs[x].CreatedBy,
+				ModifiedBy:      updatedAppTheme.Theme.ThemeConfigs[x].ModifiedBy,
+				Active:          updatedAppTheme.Theme.ThemeConfigs[x].Active,
+			})
+		}
 		result = responses.ApplicationResponseData{
 			ApplicationId:    app.ApplicationId,
 			ApplicationCode:  app.ApplicationCode,
@@ -488,10 +550,15 @@ func (c *ApplicationController) UpdateTheme() {
 			DateCreated:      app.DateCreated,
 			DateModified:     app.DateModified,
 			Active:           app.Active,
-			Theme: &responses.ThemeResponseData{
-				ThemeId:   updatedAppTheme.Theme.ThemeId,
-				ThemeCode: updatedAppTheme.Theme.ThemeCode,
-				ThemeName: updatedAppTheme.Theme.ThemeName,
+			Theme: &responses.ThemePersonalResponseData{
+				ThemeId:      updatedAppTheme.Theme.ThemeId,
+				ThemeCode:    updatedAppTheme.Theme.ThemeCode,
+				ThemeName:    updatedAppTheme.Theme.ThemeName,
+				DateCreated:  updatedAppTheme.Theme.DateCreated,
+				DateModified: updatedAppTheme.Theme.DateModified,
+				CreatedBy:    updatedAppTheme.Theme.CreatedBy,
+				ModifiedBy:   updatedAppTheme.Theme.ModifiedBy,
+				ThemeConfig:  themeConfigs,
 			},
 		}
 	}

@@ -14,6 +14,9 @@ type Application_themes struct {
 	Id           int64        `orm:"auto;column(application_theme_id)"`
 	Application  *Application `orm:"rel(fk)"`
 	Theme        *Theme       `orm:"rel(fk)"`
+	ShowBanner   bool         `orm:"type(boolean)"`
+	BannerImages string       `orm:"type(text)"`
+	BorderRadius float64      `orm:"type(double)"`
 	DateCreated  time.Time    `orm:"type(datetime)"`
 	DateModified time.Time    `orm:"type(datetime)"`
 	CreatedBy    int

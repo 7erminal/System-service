@@ -66,13 +66,23 @@ func (c *ThemeController) Post() {
 			statusCode = 500
 			statusMessage = "Internal server error: " + err.Error()
 		}
-		result = responses.ThemeResponseData{
-			ThemeId:   v.ThemeId,
-			ThemeCode: v.ThemeCode,
-			ThemeName: v.ThemeName,
-			ThemeConfig: []*models.Theme_configs{
-				&themeConfig,
+
+		themeConfigsResp := []responses.ThemeConfigData{
+			{
+				ThemeConfigCode: themeConfig.ThemeConfigCode,
+				ThemeProperties: themeConfig.ThemeProperties,
+				DateCreated:     themeConfig.DateCreated,
+				DateModified:    themeConfig.DateModified,
+				CreatedBy:       themeConfig.CreatedBy,
+				ModifiedBy:      themeConfig.ModifiedBy,
+				Active:          themeConfig.Active,
 			},
+		}
+		result = responses.ThemeResponseData{
+			ThemeId:     v.ThemeId,
+			ThemeCode:   v.ThemeCode,
+			ThemeName:   v.ThemeName,
+			ThemeConfig: themeConfigsResp,
 		}
 
 	} else {
@@ -109,11 +119,23 @@ func (c *ThemeController) GetOne() {
 	if err == nil {
 		statusCode = 200
 		statusMessage = "Theme retrieved successfully"
+		themeConfigsResp := []responses.ThemeConfigData{}
+		for _, tc := range v.ThemeConfigs {
+			themeConfigsResp = append(themeConfigsResp, responses.ThemeConfigData{
+				ThemeConfigCode: tc.ThemeConfigCode,
+				ThemeProperties: tc.ThemeProperties,
+				DateCreated:     tc.DateCreated,
+				DateModified:    tc.DateModified,
+				CreatedBy:       tc.CreatedBy,
+				ModifiedBy:      tc.ModifiedBy,
+				Active:          tc.Active,
+			})
+		}
 		result = responses.ThemeResponseData{
 			ThemeId:     v.ThemeId,
 			ThemeCode:   v.ThemeCode,
 			ThemeName:   v.ThemeName,
-			ThemeConfig: v.ThemeConfigs,
+			ThemeConfig: themeConfigsResp,
 		}
 	} else {
 		statusCode = 404
@@ -202,11 +224,24 @@ func (c *ThemeController) GetAll() {
 		for _, urs := range l {
 			m := urs.(models.Theme)
 
+			themeConfigsResp := []responses.ThemeConfigData{}
+			for _, tc := range m.ThemeConfigs {
+				themeConfigsResp = append(themeConfigsResp, responses.ThemeConfigData{
+					ThemeConfigCode: tc.ThemeConfigCode,
+					ThemeProperties: tc.ThemeProperties,
+					DateCreated:     tc.DateCreated,
+					DateModified:    tc.DateModified,
+					CreatedBy:       tc.CreatedBy,
+					ModifiedBy:      tc.ModifiedBy,
+					Active:          tc.Active,
+				})
+			}
+
 			themesResp = append(themesResp, responses.ThemeResponseData{
 				ThemeId:     m.ThemeId,
 				ThemeCode:   m.ThemeCode,
 				ThemeName:   m.ThemeName,
-				ThemeConfig: m.ThemeConfigs,
+				ThemeConfig: themeConfigsResp,
 			})
 		}
 
@@ -273,13 +308,22 @@ func (c *ThemeController) Put() {
 			if err := models.UpdateTheme_configsById(themeConfig); err == nil {
 				statusCode = 200
 				statusMessage = "Theme updated successfully"
-				result = responses.ThemeResponseData{
-					ThemeId:   theme.ThemeId,
-					ThemeCode: theme.ThemeCode,
-					ThemeName: theme.ThemeName,
-					ThemeConfig: []*models.Theme_configs{
-						themeConfig,
+				themeConfigsResp := []responses.ThemeConfigData{
+					{
+						ThemeConfigCode: themeConfig.ThemeConfigCode,
+						ThemeProperties: themeConfig.ThemeProperties,
+						DateCreated:     themeConfig.DateCreated,
+						DateModified:    themeConfig.DateModified,
+						CreatedBy:       themeConfig.CreatedBy,
+						ModifiedBy:      themeConfig.ModifiedBy,
+						Active:          themeConfig.Active,
 					},
+				}
+				result = responses.ThemeResponseData{
+					ThemeId:     theme.ThemeId,
+					ThemeCode:   theme.ThemeCode,
+					ThemeName:   theme.ThemeName,
+					ThemeConfig: themeConfigsResp,
 				}
 			} else {
 				statusCode = 500
@@ -359,11 +403,23 @@ func (c *ThemeController) AddThemeConfig() {
 		} else {
 			statusCode = 200
 			statusMessage = "Theme config added successfully"
+			themeConfigsResp := []responses.ThemeConfigData{}
+			for _, tc := range freshTheme.ThemeConfigs {
+				themeConfigsResp = append(themeConfigsResp, responses.ThemeConfigData{
+					ThemeConfigCode: tc.ThemeConfigCode,
+					ThemeProperties: tc.ThemeProperties,
+					DateCreated:     tc.DateCreated,
+					DateModified:    tc.DateModified,
+					CreatedBy:       tc.CreatedBy,
+					ModifiedBy:      tc.ModifiedBy,
+					Active:          tc.Active,
+				})
+			}
 			result = responses.ThemeResponseData{
 				ThemeId:     freshTheme.ThemeId,
 				ThemeCode:   freshTheme.ThemeCode,
 				ThemeName:   freshTheme.ThemeName,
-				ThemeConfig: freshTheme.ThemeConfigs,
+				ThemeConfig: themeConfigsResp,
 			}
 		}
 	}
@@ -428,11 +484,23 @@ func (c *ThemeController) RemoveThemeConfig() {
 		} else {
 			statusCode = 200
 			statusMessage = "Theme config removed successfully"
+			themeConfigsResp := []responses.ThemeConfigData{}
+			for _, tc := range freshTheme.ThemeConfigs {
+				themeConfigsResp = append(themeConfigsResp, responses.ThemeConfigData{
+					ThemeConfigCode: tc.ThemeConfigCode,
+					ThemeProperties: tc.ThemeProperties,
+					DateCreated:     tc.DateCreated,
+					DateModified:    tc.DateModified,
+					CreatedBy:       tc.CreatedBy,
+					ModifiedBy:      tc.ModifiedBy,
+					Active:          tc.Active,
+				})
+			}
 			result = responses.ThemeResponseData{
 				ThemeId:     freshTheme.ThemeId,
 				ThemeCode:   freshTheme.ThemeCode,
 				ThemeName:   freshTheme.ThemeName,
-				ThemeConfig: freshTheme.ThemeConfigs,
+				ThemeConfig: themeConfigsResp,
 			}
 		}
 	}
