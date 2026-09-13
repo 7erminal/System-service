@@ -592,13 +592,15 @@ func (c *ApplicationController) UploadImage() {
 	fileName := header.Filename
 	logs.Info("File Name Extracted is ", fileName)
 	filePath := "/uploads/application/" + system + "/" + fileName // Define your file path
+	viewHost, _ := beego.AppConfig.String("imagesBaseUrl")
+	viewFilePath := viewHost + filePath
 	logs.Info("File Path Extracted is ", filePath)
 	host, _ := beego.AppConfig.String("imagesUploadBaseUrl")
 	filePath = host + filePath
 	logs.Info("Full file path is ", filePath)
-	viewHost, _ := beego.AppConfig.String("imagesBaseUrl")
-	viewFilePath := viewHost + filePath
+
 	err = c.SaveToFile("Image", filePath)
+
 	if err != nil {
 		c.Ctx.Output.SetStatus(http.StatusInternalServerError)
 		logs.Error("Error saving file", err)
