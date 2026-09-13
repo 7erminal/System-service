@@ -246,6 +246,7 @@ func (c *ApplicationController) GetAll() {
 		statusMessage = "Applications retrieved successfully"
 
 		appsResp := []responses.ApplicationResponseData{}
+
 		for _, app := range l {
 			m := app.(models.Application_themes)
 			appsResp = append(appsResp, responses.ApplicationResponseData{
@@ -270,10 +271,16 @@ func (c *ApplicationController) GetAll() {
 	}
 
 	responseList := result
+	logs.Info("Number of applications retrieved: ", len(responseList))
+
+	respData := responses.ApplicationsData{
+		Data:  &responseList,
+		Count: len(responseList),
+	}
 	response := responses.ApplicationsResponse{
 		StatusCode:    statusCode,
 		StatusMessage: statusMessage,
-		Result:        &responseList,
+		Result:        respData,
 	}
 	logs.Info("GetAll response: ", response)
 	c.Data["json"] = response

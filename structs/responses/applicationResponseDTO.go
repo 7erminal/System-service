@@ -44,10 +44,15 @@ type ApplicationResponse struct {
 	Result        *ApplicationResponseData
 }
 
+type ApplicationsData struct {
+	Data  *[]ApplicationResponseData
+	Count int
+}
+
 type ApplicationsResponse struct {
 	StatusCode    int
 	StatusMessage string
-	Result        *[]ApplicationResponseData
+	Result        ApplicationsData
 }
 
 type ApplicationThemesResponseData struct {
