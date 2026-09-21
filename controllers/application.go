@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"system_service/controllers/functions"
 	"system_service/models"
 	"system_service/structs/requests"
 	"system_service/structs/responses"
@@ -624,6 +625,135 @@ func (c *ApplicationController) Delete() {
 	}
 	logs.Info("Delete response: ", response)
 	c.Data["json"] = response
+	c.ServeJSON()
+}
+
+// AddApplicationShop ...
+// @Title Add Application Shop
+// @Description add a shop to the application
+// @Param	body		body 	requests.ApplicationShopRequest	true		"body for Shop content"
+// @Success 200 {object} responses.ApplicationResponse
+// @Failure 403 body is empty
+// @router /add-shop [post]
+func (c *ApplicationController) AddApplicationShop() {
+	var v requests.ApplicationShopRequest
+	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+
+	statusCode := 400
+	statusMessage := "Bad Request"
+
+	if application, err := models.GetApplicationByCode(v.ApplicationCode); err == nil {
+		shopResp := functions.GetShop(&c.Controller, v.ShopId)
+
+		if shopResp.StatusCode == 200 {
+			asm := models.Application_shops{
+				Application: application,
+				Shop:        shopResp.Result.ShopId,
+			}
+			if _, err := models.AddApplication_shops(&asm); err == nil {
+				message := "Shop Added Successfully"
+				statusCode = 200
+				statusMessage = message
+				appData := responses.ApplicationResponseData{
+					ApplicationId:    application.ApplicationId,
+					ApplicationCode:  application.ApplicationCode,
+					ApplicationName:  application.ApplicationName,
+					ApplicationLogo:  application.ApplicationLogo,
+					ThemeColors:      application.ThemeColors,
+					DefaultFontsize:  application.DefaultFontsize,
+					ApplicationImage: application.ApplicationImage,
+					DateCreated:      application.DateCreated,
+					DateModified:     application.DateModified,
+					Active:           application.Active,
+					// Theme: application.Theme,
+				}
+				var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &appData}
+				c.Data["json"] = resp
+			} else {
+				statusCode = 500
+				statusMessage = err.Error()
+				var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+				c.Data["json"] = resp
+			}
+		} else {
+			statusCode = shopResp.StatusCode
+			statusMessage = shopResp.StatusDesc
+			var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+			c.Data["json"] = resp
+		}
+	} else {
+		statusCode = 404
+		statusMessage = "Application not found"
+		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+		c.Data["json"] = resp
+	}
+
+	c.ServeJSON()
+}
+
+// RemoveApplicationShop ...
+// @Title Remove Application Shop
+// @Description remove a shop from the application
+// @Param	body		body 	requests.ApplicationShopRequest	true		"body for Shop content"
+// @Success 200 {object} responses.ApplicationResponse
+// @Failure 403 body is empty
+// @router /remove-shop [post]
+func (c *ApplicationController) RemoveApplicationShop() {
+	var v requests.ApplicationShopRequest
+	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+
+	statusCode := 400
+	statusMessage := "Bad Request"
+
+	if application, err := models.GetApplicationByCode(v.ApplicationCode); err == nil {
+		shopResp := functions.GetShop(&c.Controller, v.ShopId)
+
+		if shopResp.StatusCode == 200 {
+			if as, err := models.GetApplication_shopsByAppAndShop(application.ApplicationId, shopResp.Result.ShopId); err == nil {
+				if err := models.DeleteApplication_shops(as.Id); err == nil {
+					message := "Shop Removed Successfully"
+					statusCode = 200
+					statusMessage = message
+					appData := responses.ApplicationResponseData{
+						ApplicationId:    application.ApplicationId,
+						ApplicationCode:  application.ApplicationCode,
+						ApplicationName:  application.ApplicationName,
+						ApplicationLogo:  application.ApplicationLogo,
+						ThemeColors:      application.ThemeColors,
+						DefaultFontsize:  application.DefaultFontsize,
+						ApplicationImage: application.ApplicationImage,
+						DateCreated:      application.DateCreated,
+						DateModified:     application.DateModified,
+						Active:           application.Active,
+						// Theme: application.Theme,
+					}
+					var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &appData}
+					c.Data["json"] = resp
+				} else {
+					statusCode = 500
+					statusMessage = err.Error()
+					var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+					c.Data["json"] = resp
+				}
+			} else {
+				statusCode = 500
+				statusMessage = err.Error()
+				var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+				c.Data["json"] = resp
+			}
+		} else {
+			statusCode = shopResp.StatusCode
+			statusMessage = shopResp.StatusDesc
+			var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+			c.Data["json"] = resp
+		}
+	} else {
+		statusCode = 404
+		statusMessage = "Application not found"
+		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+		c.Data["json"] = resp
+	}
+
 	c.ServeJSON()
 }
 

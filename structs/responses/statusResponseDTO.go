@@ -8,10 +8,10 @@ type StatusResponseDTO struct {
 type StatusResponse struct {
 	StatusCode int
 	StatusDesc string
-	Status     *StatusResponseDTO
+	Result     *StatusResponseDTO
 }
 type StatusListResponse struct {
 	StatusCode int
 	StatusDesc string
-	Statuses   *[]StatusResponseDTO
+	Result     *[]StatusResponseDTO
 }

@@ -18,3 +18,8 @@ type UpdateThemeRequest struct {
 	ThemeCode string
 	Config    string
 }
+
+type ApplicationShopRequest struct {
+	ShopId          string
+	ApplicationCode string
+}

@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"strings"
 	"system_service/models"
+	"system_service/structs/requests"
 	"system_service/structs/responses"
 
 	"github.com/beego/beego/v2/core/logs"
@@ -29,18 +30,42 @@ func (c *StatusController) URLMapping() {
 // Post ...
 // @Title Post
 // @Description create Status
-// @Param	body		body 	models.Status	true		"body for Status content"
-// @Success 201 {int} models.Status
+// @Param	body		body 	requests.Status	true		"body for Status content"
+// @Success 201 {int} requests.Status
 // @Failure 403 body is empty
 // @router / [post]
 func (c *StatusController) Post() {
-	var v models.Status
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+	var req requests.Status
+	json.Unmarshal(c.Ctx.Input.RequestBody, &req)
+
+	statusCode := 608
+	message := "CreateStatus error"
+
+	v := models.Status{
+		Status:     req.Status,
+		StatusCode: req.StatusCode,
+		Active:     1,
+	}
 	if _, err := models.AddStatus(&v); err == nil {
 		c.Ctx.Output.SetStatus(201)
-		c.Data["json"] = v
+		statusCode = 200
+		message = "CreateStatus success"
+		resp := responses.StatusResponse{
+			StatusCode: statusCode,
+			StatusDesc: message,
+			Result: &responses.StatusResponseDTO{
+				Status:     v.Status,
+				StatusCode: v.StatusCode,
+				StatusId:   v.StatusId,
+			},
+		}
+		c.Data["json"] = resp
 	} else {
-		c.Data["json"] = err.Error()
+		c.Data["json"] = responses.StatusResponse{
+			StatusCode: statusCode,
+			StatusDesc: message,
+			Result:     nil,
+		}
 	}
 	c.ServeJSON()
 }
@@ -56,10 +81,32 @@ func (c *StatusController) GetOne() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	v, err := models.GetStatusById(id)
+	statusCode := 608
+	message := "GetStatusById error"
+	resp := responses.StatusResponseDTO{}
 	if err != nil {
-		c.Data["json"] = err.Error()
+		logs.Error(err)
+		statusCode = 608
+		message = "GetStatusById error"
+		c.Data["json"] = responses.StatusResponse{
+			StatusCode: statusCode,
+			StatusDesc: message,
+			Result:     nil,
+		}
 	} else {
-		c.Data["json"] = v
+		statusCode = 200
+		message = "GetStatusById success"
+		resp = responses.StatusResponseDTO{
+			Status:     v.Status,
+			StatusCode: v.StatusCode,
+			StatusId:   v.StatusId,
+		}
+		response := responses.StatusResponse{
+			StatusCode: statusCode,
+			StatusDesc: message,
+			Result:     &resp,
+		}
+		c.Data["json"] = response
 	}
 	c.ServeJSON()
 }
@@ -124,7 +171,7 @@ func (c *StatusController) GetAll() {
 	l, err := models.GetAllStatus(query, fields, sortby, order, offset, limit)
 	if err != nil {
 		logs.Error("GetAllStatus error: ", err)
-		resp := responses.StatusListResponse{StatusCode: statusCode, StatusDesc: message, Statuses: nil}
+		resp := responses.StatusListResponse{StatusCode: statusCode, StatusDesc: message, Result: nil}
 		c.Data["json"] = resp
 		// c.Data["json"] = err.Error()
 	} else {
@@ -146,7 +193,7 @@ func (c *StatusController) GetAll() {
 			}
 			statusDTOs = append(statusDTOs, statusDTO)
 		}
-		resp := responses.StatusListResponse{StatusCode: statusCode, StatusDesc: message, Statuses: &statusDTOs}
+		resp := responses.StatusListResponse{StatusCode: statusCode, StatusDesc: message, Result: &statusDTOs}
 		c.Data["json"] = resp
 	}
 	c.ServeJSON()
@@ -163,12 +210,36 @@ func (c *StatusController) GetAll() {
 func (c *StatusController) Put() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
-	v := models.Status{StatusId: id}
-	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+	statusCode := 608
+	message := "UpdateStatus error"
+	resp := responses.StatusResponseDTO{}
+	req := requests.Status{}
+	json.Unmarshal(c.Ctx.Input.RequestBody, &req)
+	v := models.Status{
+		StatusId:   id,
+		StatusCode: req.StatusCode,
+		Status:     req.Status,
+	}
 	if err := models.UpdateStatusById(&v); err == nil {
-		c.Data["json"] = "OK"
+		statusCode = 200
+		message = "UpdateStatus success"
+		resp = responses.StatusResponseDTO{
+			StatusId:   v.StatusId,
+			StatusCode: v.StatusCode,
+			Status:     v.Status,
+		}
+		c.Data["json"] = responses.StatusResponse{
+			StatusCode: statusCode,
+			StatusDesc: message,
+			Result:     &resp,
+		}
 	} else {
-		c.Data["json"] = err.Error()
+		logs.Error("UpdateStatus error: ", err)
+		c.Data["json"] = responses.StatusResponse{
+			StatusCode: statusCode,
+			StatusDesc: message,
+			Result:     nil,
+		}
 	}
 	c.ServeJSON()
 }
@@ -184,9 +255,22 @@ func (c *StatusController) Delete() {
 	idStr := c.Ctx.Input.Param(":id")
 	id, _ := strconv.ParseInt(idStr, 0, 64)
 	if err := models.DeleteStatus(id); err == nil {
-		c.Data["json"] = "OK"
+		statusCode := 200
+		message := "DeleteStatus success"
+		c.Data["json"] = responses.StatusResponse{
+			StatusCode: statusCode,
+			StatusDesc: message,
+			Result:     nil,
+		}
 	} else {
-		c.Data["json"] = err.Error()
+		statusCode := 608
+		message := "DeleteStatus error"
+		logs.Error("DeleteStatus error: ", err)
+		c.Data["json"] = responses.StatusResponse{
+			StatusCode: statusCode,
+			StatusDesc: message,
+			Result:     nil,
+		}
 	}
 	c.ServeJSON()
 }

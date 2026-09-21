@@ -47,3 +47,40 @@ func GetUserDetails(c *beego.Controller, userid int64) (resp responses.UserRespo
 
 	return data
 }
+
+func GetShop(c *beego.Controller, shopid string) (resp responses.ShopResponse) {
+	host, _ := beego.AppConfig.String("customerBaseUrl")
+
+	logs.Info("Getting shop details ", shopid)
+
+	request := api.NewRequest(
+		host,
+		"/v1/shops/"+shopid,
+		api.GET)
+	// request.Params["username"] = username
+	// request.Params = {"UserId": strconv.Itoa(int(userid))}
+	client := api.Client{
+		Request: request,
+		Type_:   "params",
+	}
+	res, err := client.SendRequest()
+	if err != nil {
+		logs.Error("client.Error: %v", err)
+		c.Data["json"] = err.Error()
+	}
+	defer res.Body.Close()
+	read, err := io.ReadAll(res.Body)
+	if err != nil {
+		c.Data["json"] = err.Error()
+	}
+
+	logs.Info("Raw response received is ", res)
+	// data := map[string]interface{}{}
+	var data responses.ShopResponse
+	json.Unmarshal(read, &data)
+	c.Data["json"] = data
+
+	logs.Info("Resp is ", data)
+
+	return data
+}
