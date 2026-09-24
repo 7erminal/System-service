@@ -660,6 +660,7 @@ func (c *ApplicationController) AddApplicationShop() {
 
 		if appShop, err := models.GetApplicationShopsByAppAndShop(application.ApplicationCode, v.ShopId); err == nil {
 			if appShop != nil {
+				logs.Info("Application shop already exists for application code: ", application.ApplicationCode, " and shop ID: ", v.ShopId)
 				statusCode = 400
 				statusMessage = "Application shop already exists"
 				var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
@@ -707,6 +708,7 @@ func (c *ApplicationController) AddApplicationShop() {
 				}
 			}
 		} else {
+			logs.Error("Error adding application shop: ", err)
 			statusCode = 500
 			statusMessage = "Internal server error: " + err.Error()
 			var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
