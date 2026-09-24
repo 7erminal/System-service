@@ -20,6 +20,6 @@ type UpdateThemeRequest struct {
 }
 
 type ApplicationShopRequest struct {
-	ShopId          string
-	ApplicationCode string
+	ShopId        string
+	ApplicationId string
 }

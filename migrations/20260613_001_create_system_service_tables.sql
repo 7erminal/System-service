@@ -1,6 +1,6 @@
 -- Migration: create tables for system_service ORM models
 -- Models included: actions, billers, countries, currencies, operators,
--- permissions, role_permissions, roles, services, status
+-- permissions, role_permissions, roles, services, status, application_shops
 
 BEGIN;
 
@@ -186,5 +186,60 @@ CREATE TABLE IF NOT EXISTS status (
 
 CREATE UNIQUE INDEX uq_status_status_code ON status(status_code);
 CREATE INDEX idx_status_status ON status(status);
+
+-- 6) Application shops -------------------------------------------------------
+
+CREATE TABLE IF NOT EXISTS application_shops (
+  application_shop_id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  application_id BIGINT NOT NULL,
+  shop_id VARCHAR(255) NOT NULL,
+  date_created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  date_modified TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  created_by INTEGER NOT NULL DEFAULT 0,
+  modified_by INTEGER NOT NULL DEFAULT 0,
+  active INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE INDEX idx_application_shops_application_id ON application_shops(application_id);
+CREATE INDEX idx_application_shops_shop_id ON application_shops(shop_id);
+
+-- Align FK column type with the referenced table to avoid MySQL 3780
+SET @parent_app_id_col_type := (
+  SELECT COLUMN_TYPE
+  FROM information_schema.COLUMNS
+  WHERE TABLE_SCHEMA = DATABASE()
+    AND TABLE_NAME = 'application'
+    AND COLUMN_NAME = 'application_id'
+  LIMIT 1
+);
+
+SET @align_app_shops_app_id_sql := IF(
+  @parent_app_id_col_type IS NULL,
+  'SELECT 1',
+  CONCAT('ALTER TABLE application_shops MODIFY COLUMN application_id ', @parent_app_id_col_type, ' NOT NULL')
+);
+
+PREPARE align_app_shops_app_id_stmt FROM @align_app_shops_app_id_sql;
+EXECUTE align_app_shops_app_id_stmt;
+DEALLOCATE PREPARE align_app_shops_app_id_stmt;
+
+SET @has_fk_application_shops_application := (
+  SELECT COUNT(*)
+  FROM information_schema.TABLE_CONSTRAINTS
+  WHERE CONSTRAINT_SCHEMA = DATABASE()
+    AND TABLE_NAME = 'application_shops'
+    AND CONSTRAINT_NAME = 'fk_application_shops_application'
+    AND CONSTRAINT_TYPE = 'FOREIGN KEY'
+);
+
+SET @add_fk_application_shops_application_sql := IF(
+  @has_fk_application_shops_application = 0,
+  'ALTER TABLE application_shops ADD CONSTRAINT fk_application_shops_application FOREIGN KEY (application_id) REFERENCES application(application_id) ON UPDATE CASCADE ON DELETE RESTRICT',
+  'SELECT 1'
+);
+
+PREPARE add_fk_application_shops_application_stmt FROM @add_fk_application_shops_application_sql;
+EXECUTE add_fk_application_shops_application_stmt;
+DEALLOCATE PREPARE add_fk_application_shops_application_stmt;
 
 COMMIT;

@@ -32,6 +32,8 @@ func (c *ApplicationController) URLMapping() {
 	c.Mapping("UpdateTheme", c.UpdateTheme)
 	c.Mapping("Delete", c.Delete)
 	c.Mapping("UploadImage", c.UploadImage)
+	c.Mapping("RemoveApplicationShop", c.RemoveApplicationShop)
+	c.Mapping("AddApplicationShop", c.AddApplicationShop)
 }
 
 // Post ...
@@ -642,7 +644,9 @@ func (c *ApplicationController) AddApplicationShop() {
 	statusCode := 400
 	statusMessage := "Bad Request"
 
-	if application, err := models.GetApplicationByCode(v.ApplicationCode); err == nil {
+	appIdInt64, _ := strconv.ParseInt(v.ApplicationId, 10, 64)
+
+	if application, err := models.GetApplicationById(appIdInt64); err == nil {
 		shopResp := functions.GetShop(&c.Controller, v.ShopId)
 
 		if shopResp.StatusCode == 200 {
