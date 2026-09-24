@@ -814,6 +814,13 @@ func (c *ApplicationController) GetApplicationShops() {
 		order = strings.Split(v, ",")
 	}
 	// query: k:v,k:v
+	query_ := c.GetString("query")
+	logs.Info("Query received is ", query_)
+	if query_ != "" {
+		query_ = strings.TrimSpace(query_) + ",Active:1"
+	} else {
+		query_ = "Active:1"
+	}
 	if v := c.GetString("query"); v != "" {
 		for _, cond := range strings.Split(v, ",") {
 			kv := strings.SplitN(cond, ":", 2)
