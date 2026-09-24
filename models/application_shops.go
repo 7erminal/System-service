@@ -44,10 +44,10 @@ func GetApplicationShopsById(id int64) (v *ApplicationShops, err error) {
 	return nil, err
 }
 
-func GetApplicationShopsByAppAndShop(appid int64, shopid string) (v *ApplicationShops, err error) {
+func GetApplicationShopsByAppAndShop(appcode string, shopid string) (v *ApplicationShops, err error) {
 	o := orm.NewOrm()
 	v = &ApplicationShops{}
-	if err = o.QueryTable(new(ApplicationShops)).Filter("Application__ApplicationId", appid).Filter("Shop", shopid).RelatedSel().One(v); err == nil {
+	if err = o.QueryTable(new(ApplicationShops)).Filter("Application__ApplicationCode", appcode).Filter("Shop", shopid).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err
