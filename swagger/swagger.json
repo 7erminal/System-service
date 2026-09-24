@@ -151,7 +151,7 @@
             }
         },
         "/applications/remove-shop": {
-            "post": {
+            "delete": {
                 "tags": [
                     "applications"
                 ],
@@ -1893,12 +1893,12 @@
             "title": "ApplicationResponseData",
             "type": "object"
         },
-        "6242.\u003cnil\u003e.0x459237a39a70": {
-            "title": "0x459237a39a70",
+        "6242.\u003cnil\u003e.0x6ee9af73db00": {
+            "title": "0x6ee9af73db00",
             "type": "object"
         },
-        "6567.\u003cnil\u003e.0x459237a39b48": {
-            "title": "0x459237a39b48",
+        "6567.\u003cnil\u003e.0x6ee9af73dbd8": {
+            "title": "0x6ee9af73dbd8",
             "type": "object"
         },
         "7371.\u003cnil\u003e.StatusResponseDTO": {
@@ -2682,7 +2682,7 @@
             "type": "object",
             "properties": {
                 "Permissions": {
-                    "$ref": "#/definitions/6567.\u003cnil\u003e.0x459237a39b48"
+                    "$ref": "#/definitions/6567.\u003cnil\u003e.0x6ee9af73dbd8"
                 },
                 "StatusCode": {
                     "type": "integer",
@@ -2714,7 +2714,7 @@
             "type": "object",
             "properties": {
                 "Roles": {
-                    "$ref": "#/definitions/6242.\u003cnil\u003e.0x459237a39a70"
+                    "$ref": "#/definitions/6242.\u003cnil\u003e.0x6ee9af73db00"
                 },
                 "StatusCode": {
                     "type": "integer",

@@ -721,7 +721,7 @@ func (c *ApplicationController) AddApplicationShop() {
 // @Param	body		body 	requests.ApplicationShopRequest	true		"body for Shop content"
 // @Success 200 {object} responses.ApplicationResponse
 // @Failure 403 body is empty
-// @router /remove-shop [post]
+// @router /remove-shop [delete]
 func (c *ApplicationController) RemoveApplicationShop() {
 	var v requests.ApplicationShopRequest
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)

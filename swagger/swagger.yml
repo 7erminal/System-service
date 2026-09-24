@@ -205,7 +205,7 @@ paths:
         400,500:
           description: '{object} responses.ErrorResponse'
   /applications/remove-shop:
-    post:
+    delete:
       tags:
       - applications
       description: |-
@@ -1367,11 +1367,11 @@ definitions:
   2015.<nil>.ApplicationResponseData:
     title: ApplicationResponseData
     type: object
-  6242.<nil>.0x459237a39a70:
-    title: "0x459237a39a70"
+  6242.<nil>.0x6ee9af73db00:
+    title: "0x6ee9af73db00"
     type: object
-  6567.<nil>.0x459237a39b48:
-    title: "0x459237a39b48"
+  6567.<nil>.0x6ee9af73dbd8:
+    title: "0x6ee9af73dbd8"
     type: object
   7371.<nil>.StatusResponseDTO:
     title: StatusResponseDTO
@@ -1923,7 +1923,7 @@ definitions:
     type: object
     properties:
       Permissions:
-        $ref: '#/definitions/6567.<nil>.0x459237a39b48'
+        $ref: '#/definitions/6567.<nil>.0x6ee9af73dbd8'
       StatusCode:
         type: integer
         format: int64
@@ -1945,7 +1945,7 @@ definitions:
     type: object
     properties:
       Roles:
-        $ref: '#/definitions/6242.<nil>.0x459237a39a70'
+        $ref: '#/definitions/6242.<nil>.0x6ee9af73db00'
       StatusCode:
         type: integer
         format: int64
