@@ -732,6 +732,7 @@ func (c *ApplicationController) AddApplicationShop() {
 // @Failure 403 body is empty
 // @router /remove-shop [delete]
 func (c *ApplicationController) RemoveApplicationShop() {
+	logs.Info("Request received to remove shop")
 	var v requests.ApplicationShopRequest
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 
