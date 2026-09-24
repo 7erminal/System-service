@@ -656,6 +656,16 @@ func (c *ApplicationController) AddApplicationShop() {
 
 	appIdInt64, _ := strconv.ParseInt(v.ApplicationId, 10, 64)
 
+	if appShop, err := models.GetApplicationShopsByAppAndShop(appIdInt64, v.ShopId); err == nil {
+		if appShop != nil {
+			statusCode = 400
+			statusMessage = "Application shop already exists"
+			var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+			c.Data["json"] = resp
+			c.ServeJSON()
+			return
+		}
+	}
 	if application, err := models.GetApplicationById(appIdInt64); err == nil {
 		shopResp := functions.GetShop(&c.Controller, v.ShopId)
 
