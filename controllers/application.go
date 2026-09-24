@@ -775,7 +775,6 @@ func (c *ApplicationController) RemoveApplicationShop() {
 // GetApplicationShops ...
 // @Title Get Application Shops
 // @Description get the shops associated with an application
-// @Param	ApplicationID		query 	string	true		"The ID of the application"
 // @Success 200 {object} responses.ApplicationResponseDTO
 // @Failure 400,500 {object} responses.ErrorResponse
 // @router /get-application-shops [get]
