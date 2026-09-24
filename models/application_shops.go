@@ -14,8 +14,8 @@ type Application_shops struct {
 	Id           int64        `orm:"auto;column(application_shop_id)"`
 	Application  *Application `orm:"rel(fk)"`
 	Shop         string       `orm:"column(shop_id);size(255)"`
-	DateCreated  time.Time    `orm:"type(datetime)"`
-	DateModified time.Time    `orm:"type(datetime)"`
+	DateCreated  time.Time    `orm:"type(datetime);auto_now_add"`
+	DateModified time.Time    `orm:"type(datetime);auto_now"`
 	CreatedBy    int
 	ModifiedBy   int
 	Active       int
