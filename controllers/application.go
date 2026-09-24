@@ -34,6 +34,7 @@ func (c *ApplicationController) URLMapping() {
 	c.Mapping("UploadImage", c.UploadImage)
 	c.Mapping("RemoveApplicationShop", c.RemoveApplicationShop)
 	c.Mapping("AddApplicationShop", c.AddApplicationShop)
+	c.Mapping("GetApplicationShops", c.GetApplicationShops)
 }
 
 // Post ...
@@ -768,6 +769,99 @@ func (c *ApplicationController) RemoveApplicationShop() {
 		c.Data["json"] = resp
 	}
 
+	c.ServeJSON()
+}
+
+// GetApplicationShops ...
+// @Title Get Application Shops
+// @Description get the shops associated with an application
+// @Param	ApplicationID		query 	string	true		"The ID of the application"
+// @Success 200 {object} responses.ApplicationResponseDTO
+// @Failure 400,500 {object} responses.ErrorResponse
+// @router /get-application-shops [get]
+func (c *ApplicationController) GetApplicationShops() {
+	var fields []string
+	var sortby []string
+	var order []string
+	var query = make(map[string]string)
+	var limit int64 = 10
+	var offset int64
+
+	logs.Info("GetAll request received")
+
+	statusCode := 400
+	statusMessage := "Bad Request"
+	var result []responses.ApplicationShopFullResponseData
+
+	// fields: col1,col2,entity.col3
+	if v := c.GetString("fields"); v != "" {
+		fields = strings.Split(v, ",")
+	}
+	// limit: 10 (default is 10)
+	if v, err := c.GetInt64("limit"); err == nil {
+		limit = v
+	}
+	// offset: 0 (default is 0)
+	if v, err := c.GetInt64("offset"); err == nil {
+		offset = v
+	}
+	// sortby: col1,col2
+	if v := c.GetString("sortby"); v != "" {
+		sortby = strings.Split(v, ",")
+	}
+	// order: desc,asc
+	if v := c.GetString("order"); v != "" {
+		order = strings.Split(v, ",")
+	}
+	// query: k:v,k:v
+	if v := c.GetString("query"); v != "" {
+		for _, cond := range strings.Split(v, ",") {
+			kv := strings.SplitN(cond, ":", 2)
+			if len(kv) != 2 {
+				c.Data["json"] = errors.New("Error: invalid query key/value pair")
+				c.ServeJSON()
+				return
+			}
+			k, v := kv[0], kv[1]
+			query[k] = v
+		}
+	}
+
+	l, err := models.GetAllApplicationShops(query, fields, sortby, order, offset, limit)
+	if err != nil {
+		statusCode = 500
+		statusMessage = "Internal server error: " + err.Error()
+	} else {
+		for _, shop := range l {
+			m := shop.(models.ApplicationShops)
+			result = append(result, responses.ApplicationShopFullResponseData{
+				Application: responses.ApplicationResponseData{
+					ApplicationId:    m.Application.ApplicationId,
+					ApplicationCode:  m.Application.ApplicationCode,
+					ApplicationName:  m.Application.ApplicationName,
+					ApplicationLogo:  m.Application.ApplicationLogo,
+					ThemeColors:      m.Application.ThemeColors,
+					DefaultFontsize:  m.Application.DefaultFontsize,
+					ApplicationImage: m.Application.ApplicationImage,
+					DateCreated:      m.Application.DateCreated,
+					DateModified:     m.Application.DateModified,
+					Active:           m.Application.Active,
+					Theme:            nil,
+					ApplicationShops: []responses.ApplicationShopResponseData{},
+				},
+				ShopId: m.Shop,
+			})
+		}
+		statusCode = 200
+		statusMessage = "Shops retrieved successfully"
+	}
+
+	resp := responses.ApplicationShopsResponse{
+		StatusCode:    statusCode,
+		StatusMessage: statusMessage,
+		Result:        result,
+	}
+	c.Data["json"] = resp
 	c.ServeJSON()
 }
 

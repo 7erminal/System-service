@@ -80,6 +80,17 @@ type ApplicationShopResponseData struct {
 	ShopId string
 }
 
+type ApplicationShopFullResponseData struct {
+	Application ApplicationResponseData
+	ShopId      string
+}
+
+type ApplicationShopsResponse struct {
+	StatusCode    int
+	StatusMessage string
+	Result        []ApplicationShopFullResponseData
+}
+
 type ApplicationResponse struct {
 	StatusCode    int
 	StatusMessage string

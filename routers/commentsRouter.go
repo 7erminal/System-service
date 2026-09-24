@@ -72,6 +72,15 @@ func init() {
 
     beego.GlobalControllerRouter["system_service/controllers:ApplicationController"] = append(beego.GlobalControllerRouter["system_service/controllers:ApplicationController"],
         beego.ControllerComments{
+            Method: "GetApplicationShops",
+            Router: `/get-application-shops`,
+            AllowHTTPMethods: []string{"get"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["system_service/controllers:ApplicationController"] = append(beego.GlobalControllerRouter["system_service/controllers:ApplicationController"],
+        beego.ControllerComments{
             Method: "RemoveApplicationShop",
             Router: `/remove-shop`,
             AllowHTTPMethods: []string{"post"},
