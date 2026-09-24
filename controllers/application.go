@@ -667,54 +667,45 @@ func (c *ApplicationController) AddApplicationShop() {
 				c.Data["json"] = resp
 				c.ServeJSON()
 				return
-			} else {
-				shopResp := functions.GetShop(&c.Controller, v.ShopId)
+			}
+		}
+		shopResp := functions.GetShop(&c.Controller, v.ShopId)
 
-				if shopResp.StatusCode == 200 {
-					asm := models.ApplicationShops{
-						Application: application,
-						Shop:        shopResp.Result.ShopId,
-					}
-					if _, err := models.AddApplicationShops(&asm); err == nil {
-						message := "Shop Added Successfully"
-						statusCode = 200
-						statusMessage = message
-						appData := responses.ApplicationResponseData{
-							ApplicationId:    application.ApplicationId,
-							ApplicationCode:  application.ApplicationCode,
-							ApplicationName:  application.ApplicationName,
-							ApplicationLogo:  application.ApplicationLogo,
-							ThemeColors:      application.ThemeColors,
-							DefaultFontsize:  application.DefaultFontsize,
-							ApplicationImage: application.ApplicationImage,
-							DateCreated:      application.DateCreated,
-							DateModified:     application.DateModified,
-							Active:           application.Active,
-							// Theme: application.Theme,
-						}
-						var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &appData}
-						c.Data["json"] = resp
-					} else {
-						statusCode = 500
-						statusMessage = err.Error()
-						var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
-						c.Data["json"] = resp
-					}
-				} else {
-					statusCode = shopResp.StatusCode
-					statusMessage = shopResp.StatusDesc
-					var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
-					c.Data["json"] = resp
+		if shopResp.StatusCode == 200 {
+			asm := models.ApplicationShops{
+				Application: application,
+				Shop:        shopResp.Result.ShopId,
+			}
+			if _, err := models.AddApplicationShops(&asm); err == nil {
+				message := "Shop Added Successfully"
+				statusCode = 200
+				statusMessage = message
+				appData := responses.ApplicationResponseData{
+					ApplicationId:    application.ApplicationId,
+					ApplicationCode:  application.ApplicationCode,
+					ApplicationName:  application.ApplicationName,
+					ApplicationLogo:  application.ApplicationLogo,
+					ThemeColors:      application.ThemeColors,
+					DefaultFontsize:  application.DefaultFontsize,
+					ApplicationImage: application.ApplicationImage,
+					DateCreated:      application.DateCreated,
+					DateModified:     application.DateModified,
+					Active:           application.Active,
+					// Theme: application.Theme,
 				}
+				var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &appData}
+				c.Data["json"] = resp
+			} else {
+				statusCode = 500
+				statusMessage = err.Error()
+				var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+				c.Data["json"] = resp
 			}
 		} else {
-			logs.Error("Error adding application shop: ", err)
-			statusCode = 500
-			statusMessage = "Internal server error: " + err.Error()
+			statusCode = shopResp.StatusCode
+			statusMessage = shopResp.StatusDesc
 			var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
 			c.Data["json"] = resp
-			c.ServeJSON()
-			return
 		}
 	} else {
 		statusCode = 404
