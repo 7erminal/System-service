@@ -709,7 +709,8 @@ func (c *ApplicationController) RemoveApplicationShop() {
 	statusCode := 400
 	statusMessage := "Bad Request"
 
-	if application, err := models.GetApplicationByCode(v.ApplicationCode); err == nil {
+	appIdInt64, _ := strconv.ParseInt(v.ApplicationId, 10, 64)
+	if application, err := models.GetApplicationById(appIdInt64); err == nil {
 		shopResp := functions.GetShop(&c.Controller, v.ShopId)
 
 		if shopResp.StatusCode == 200 {
