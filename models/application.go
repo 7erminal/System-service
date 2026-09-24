@@ -23,7 +23,7 @@ type Application struct {
 	CreatedBy        int
 	ModifiedBy       int
 	Active           int
-	ApplicationShops []ApplicationShops `orm:"reverse(many)"`
+	ApplicationShops *[]ApplicationShops `orm:"reverse(many)"`
 }
 
 func init() {

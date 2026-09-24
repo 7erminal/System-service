@@ -177,7 +177,7 @@ func (c *ApplicationController) GetOne() {
 			}
 
 			appShops := []responses.ApplicationShopResponseData{}
-			for _, as := range a.ApplicationShops {
+			for _, as := range *a.ApplicationShops {
 				appShops = append(appShops, responses.ApplicationShopResponseData{
 					ShopId: as.Shop,
 				})
