@@ -15,13 +15,13 @@
     },
     "basePath": "/v1",
     "paths": {
-        "/branches/": {
+        "/applications/": {
             "get": {
                 "tags": [
-                    "branches"
+                    "applications"
                 ],
-                "description": "get Branches\n\u003cbr\u003e",
-                "operationId": "BranchesController.Get All",
+                "description": "get Application\n\u003cbr\u003e",
+                "operationId": "ApplicationController.Get All",
                 "parameters": [
                     {
                         "in": "query",
@@ -64,7 +64,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Branches"
+                            "$ref": "#/definitions/responses.ApplicationsResponse"
                         }
                     },
                     "403": {
@@ -74,24 +74,24 @@
             },
             "post": {
                 "tags": [
-                    "branches"
+                    "applications"
                 ],
-                "description": "create Branches\n\u003cbr\u003e",
-                "operationId": "BranchesController.Post",
+                "description": "create Application\n\u003cbr\u003e",
+                "operationId": "ApplicationController.Post",
                 "parameters": [
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "body for Branches content",
+                        "description": "body for Application content",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.BranchRequestDTO"
+                            "$ref": "#/definitions/requests.ApplicationRequest"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "{int} models.Branches"
+                        "description": "{int} responses.ApplicationResponse"
                     },
                     "403": {
                         "description": "body is empty"
@@ -99,13 +99,160 @@
                 }
             }
         },
-        "/branches/branch-manager/{id}": {
+        "/applications/add-shop": {
+            "post": {
+                "tags": [
+                    "applications"
+                ],
+                "description": "add a shop to the application\n\u003cbr\u003e",
+                "operationId": "ApplicationController.Add Application Shop",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Shop content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.ApplicationShopRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ApplicationResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/applications/get-application-shops": {
+            "get": {
+                "tags": [
+                    "applications"
+                ],
+                "description": "get the shops associated with an application\n\u003cbr\u003e",
+                "operationId": "ApplicationController.Get Application Shops",
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ApplicationResponseDTO"
+                        }
+                    },
+                    "400,500": {
+                        "description": "{object} responses.ErrorResponse"
+                    }
+                }
+            }
+        },
+        "/applications/remove-shop": {
+            "post": {
+                "tags": [
+                    "applications"
+                ],
+                "description": "remove a shop from the application\n\u003cbr\u003e",
+                "operationId": "ApplicationController.Remove Application Shop",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Shop content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.ApplicationShopRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ApplicationResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/applications/upload-image": {
+            "post": {
+                "tags": [
+                    "applications"
+                ],
+                "description": "upload an image for the application\n\u003cbr\u003e",
+                "operationId": "ApplicationController.Upload Image",
+                "parameters": [
+                    {
+                        "in": "formData",
+                        "name": "Image",
+                        "description": "The image file to upload",
+                        "required": true,
+                        "type": "file"
+                    },
+                    {
+                        "in": "query",
+                        "name": "ItemID",
+                        "description": "The ID of the item to associate the image with",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.ItemImageResponseDTO"
+                        }
+                    },
+                    "400,500": {
+                        "description": "{object} models.ErrorResponse"
+                    }
+                }
+            }
+        },
+        "/applications/{code}": {
+            "get": {
+                "tags": [
+                    "applications"
+                ],
+                "description": "get Application by id\n\u003cbr\u003e",
+                "operationId": "ApplicationController.Get One",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The key for Application",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ApplicationResponse"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is empty"
+                    }
+                }
+            }
+        },
+        "/applications/{id}": {
             "put": {
                 "tags": [
-                    "branches"
+                    "applications"
                 ],
-                "description": "update the Branches manager\n\u003cbr\u003e",
-                "operationId": "BranchesController.Put Branch Manager",
+                "description": "update the Application\n\u003cbr\u003e",
+                "operationId": "ApplicationController.Put",
                 "parameters": [
                     {
                         "in": "path",
@@ -117,10 +264,10 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "body for Branches content",
+                        "description": "body for Application content",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Branches"
+                            "$ref": "#/definitions/requests.ApplicationRequest"
                         }
                     }
                 ],
@@ -128,22 +275,171 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/responses.BranchResponseDTO"
+                            "$ref": "#/definitions/responses.ApplicationResponse"
                         }
                     },
                     "403": {
                         "description": ":id is not int"
                     }
                 }
+            },
+            "delete": {
+                "tags": [
+                    "applications"
+                ],
+                "description": "delete the Application\n\u003cbr\u003e",
+                "operationId": "ApplicationController.Delete",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ApplicationResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "id is empty"
+                    }
+                }
             }
         },
-        "/branches/{id}": {
+        "/applications/{id}/theme": {
+            "put": {
+                "tags": [
+                    "applications"
+                ],
+                "description": "update application theme by application id using theme code\n\u003cbr\u003e",
+                "operationId": "ApplicationController.Update Application Theme",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The application id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body with theme_code",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateThemeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ApplicationResponse"
+                        }
+                    },
+                    "400,404,500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/billers/": {
             "get": {
                 "tags": [
-                    "branches"
+                    "billers"
                 ],
-                "description": "get Branches by id\n\u003cbr\u003e",
-                "operationId": "BranchesController.Get One",
+                "description": "get Billers\n\u003cbr\u003e",
+                "operationId": "BillersController.Get All",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "fields",
+                        "description": "Fields returned. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sortby",
+                        "description": "Sorted-by fields. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order",
+                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Limit the size of result set. Must be an integer",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "description": "Start position of result set. Must be an integer",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Billers"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "billers"
+                ],
+                "description": "create Billers\n\u003cbr\u003e",
+                "operationId": "BillersController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Billers content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.BillerRequestDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "{int} responses.BillerResponseDTO"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/billers/{id}": {
+            "get": {
+                "tags": [
+                    "billers"
+                ],
+                "description": "get Billers by id\n\u003cbr\u003e",
+                "operationId": "BillersController.Get One",
                 "parameters": [
                     {
                         "in": "path",
@@ -157,7 +453,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/models.Branches"
+                            "$ref": "#/definitions/models.Billers"
                         }
                     },
                     "403": {
@@ -167,10 +463,10 @@
             },
             "put": {
                 "tags": [
-                    "branches"
+                    "billers"
                 ],
-                "description": "update the Branches\n\u003cbr\u003e",
-                "operationId": "BranchesController.Put",
+                "description": "update the Billers\n\u003cbr\u003e",
+                "operationId": "BillersController.Put",
                 "parameters": [
                     {
                         "in": "path",
@@ -182,10 +478,10 @@
                     {
                         "in": "body",
                         "name": "body",
-                        "description": "body for Branches content",
+                        "description": "body for Billers content",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/requests.BranchRequestDTO"
+                            "$ref": "#/definitions/models.Billers"
                         }
                     }
                 ],
@@ -193,7 +489,7 @@
                     "200": {
                         "description": "",
                         "schema": {
-                            "$ref": "#/definitions/responses.BranchResponseDTO"
+                            "$ref": "#/definitions/models.Billers"
                         }
                     },
                     "403": {
@@ -203,10 +499,10 @@
             },
             "delete": {
                 "tags": [
-                    "branches"
+                    "billers"
                 ],
-                "description": "delete the Branches\n\u003cbr\u003e",
-                "operationId": "BranchesController.Delete",
+                "description": "delete the Billers\n\u003cbr\u003e",
+                "operationId": "BillersController.Delete",
                 "parameters": [
                     {
                         "in": "path",
@@ -306,6 +602,35 @@
                     },
                     "403": {
                         "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/countries/code/{code}": {
+            "get": {
+                "tags": [
+                    "countries"
+                ],
+                "description": "get Countries by code\n\u003cbr\u003e",
+                "operationId": "CountriesController.Get One By Code",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "code",
+                        "description": "The code for the country",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Countries"
+                        }
+                    },
+                    "403": {
+                        "description": ":code is empty"
                     }
                 }
             }
@@ -483,6 +808,64 @@
                 }
             }
         },
+        "/currencies/name/{name}": {
+            "get": {
+                "tags": [
+                    "currencies"
+                ],
+                "description": "get Currencies by name\n\u003cbr\u003e",
+                "operationId": "CurrenciesController.Get One By Name",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "name",
+                        "description": "The key for staticblock",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Currencies"
+                        }
+                    },
+                    "403": {
+                        "description": ":name is empty"
+                    }
+                }
+            }
+        },
+        "/currencies/symbol/{symbol}": {
+            "get": {
+                "tags": [
+                    "currencies"
+                ],
+                "description": "get Currencies by symbol\n\u003cbr\u003e",
+                "operationId": "CurrenciesController.Get One By Symbol",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "symbol",
+                        "description": "The key for staticblock",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Currencies"
+                        }
+                    },
+                    "403": {
+                        "description": ":symbol is empty"
+                    }
+                }
+            }
+        },
         "/currencies/{id}": {
             "get": {
                 "tags": [
@@ -553,6 +936,179 @@
                 ],
                 "description": "delete the Currencies\n\u003cbr\u003e",
                 "operationId": "CurrenciesController.Delete",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} delete success!"
+                    },
+                    "403": {
+                        "description": "id is empty"
+                    }
+                }
+            }
+        },
+        "/operators/": {
+            "get": {
+                "tags": [
+                    "operators"
+                ],
+                "description": "get Operator\n\u003cbr\u003e",
+                "operationId": "OperatorController.Get All",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "fields",
+                        "description": "Fields returned. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sortby",
+                        "description": "Sorted-by fields. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order",
+                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Limit the size of result set. Must be an integer",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "description": "Start position of result set. Must be an integer",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Operator"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "operators"
+                ],
+                "description": "create Operator\n\u003cbr\u003e",
+                "operationId": "OperatorController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Operator content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Operator"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "{int} models.Operator"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/operators/{id}": {
+            "get": {
+                "tags": [
+                    "operators"
+                ],
+                "description": "get Operator by id\n\u003cbr\u003e",
+                "operationId": "OperatorController.Get One",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The key for staticblock",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Operator"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is empty"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "operators"
+                ],
+                "description": "update the Operator\n\u003cbr\u003e",
+                "operationId": "OperatorController.Put",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Operator content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Operator"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Operator"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is not int"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "operators"
+                ],
+                "description": "delete the Operator\n\u003cbr\u003e",
+                "operationId": "OperatorController.Delete",
                 "parameters": [
                     {
                         "in": "path",
@@ -745,6 +1301,179 @@
                 }
             }
         },
+        "/services/": {
+            "get": {
+                "tags": [
+                    "services"
+                ],
+                "description": "get Services\n\u003cbr\u003e",
+                "operationId": "ServicesController.Get All",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "fields",
+                        "description": "Fields returned. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sortby",
+                        "description": "Sorted-by fields. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order",
+                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Limit the size of result set. Must be an integer",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "description": "Start position of result set. Must be an integer",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Services"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "services"
+                ],
+                "description": "create Services\n\u003cbr\u003e",
+                "operationId": "ServicesController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Services content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Services"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "{int} models.Services"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/services/{id}": {
+            "get": {
+                "tags": [
+                    "services"
+                ],
+                "description": "get Services by id\n\u003cbr\u003e",
+                "operationId": "ServicesController.Get One",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The key for staticblock",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Services"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is empty"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "services"
+                ],
+                "description": "update the Services\n\u003cbr\u003e",
+                "operationId": "ServicesController.Put",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Services content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Services"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Services"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is not int"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "services"
+                ],
+                "description": "delete the Services\n\u003cbr\u003e",
+                "operationId": "ServicesController.Delete",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} delete success!"
+                    },
+                    "403": {
+                        "description": "id is empty"
+                    }
+                }
+            }
+        },
         "/status/": {
             "get": {
                 "tags": [
@@ -815,13 +1544,13 @@
                         "description": "body for Status content",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Status"
+                            "$ref": "#/definitions/requests.Status"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "{int} models.Status"
+                        "description": "{int} requests.Status"
                     },
                     "403": {
                         "description": "body is empty"
@@ -917,18 +1646,262 @@
                     }
                 }
             }
+        },
+        "/themes/": {
+            "get": {
+                "tags": [
+                    "themes"
+                ],
+                "description": "get Theme\n\u003cbr\u003e",
+                "operationId": "ThemeController.Get All",
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "query",
+                        "description": "Filter. e.g. col1:v1,col2:v2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "fields",
+                        "description": "Fields returned. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "sortby",
+                        "description": "Sorted-by fields. e.g. col1,col2 ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "order",
+                        "description": "Order corresponding to each sortby field, if single value, apply to all sortby fields. e.g. desc,asc ...",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "limit",
+                        "description": "Limit the size of result set. Must be an integer",
+                        "type": "string"
+                    },
+                    {
+                        "in": "query",
+                        "name": "offset",
+                        "description": "Start position of result set. Must be an integer",
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ThemeResponseList"
+                        }
+                    },
+                    "403": {
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "themes"
+                ],
+                "description": "create Theme\n\u003cbr\u003e",
+                "operationId": "ThemeController.Post",
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Theme content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.ThemeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "{int} responses.ThemeResponse"
+                    },
+                    "403": {
+                        "description": "body is empty"
+                    }
+                }
+            }
+        },
+        "/themes/config/{id}": {
+            "delete": {
+                "tags": [
+                    "themes"
+                ],
+                "description": "remove a theme configuration by config id\n\u003cbr\u003e",
+                "operationId": "ThemeController.Remove Theme Config",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The theme config id",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ThemeResponse"
+                        }
+                    },
+                    "400,404,500": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/themes/{id}": {
+            "get": {
+                "tags": [
+                    "themes"
+                ],
+                "description": "get Theme by id\n\u003cbr\u003e",
+                "operationId": "ThemeController.Get One",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The key for staticblock",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ThemeResponse"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is empty"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "themes"
+                ],
+                "description": "update the Theme\n\u003cbr\u003e",
+                "operationId": "ThemeController.Put",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to update",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for Theme content",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.ThemeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/models.Theme"
+                        }
+                    },
+                    "403": {
+                        "description": ":id is not int"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "themes"
+                ],
+                "description": "delete the Theme\n\u003cbr\u003e",
+                "operationId": "ThemeController.Delete",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The id you want to delete",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{string} delete success!"
+                    },
+                    "403": {
+                        "description": "id is empty"
+                    }
+                }
+            }
+        },
+        "/themes/{id}/config": {
+            "post": {
+                "tags": [
+                    "themes"
+                ],
+                "description": "add a theme configuration for an existing theme\n\u003cbr\u003e",
+                "operationId": "ThemeController.Add Theme Config",
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "description": "The theme id",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "body for theme config",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/requests.UpdateThemeRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "schema": {
+                            "$ref": "#/definitions/responses.ThemeResponse"
+                        }
+                    },
+                    "400,404,500": {
+                        "description": ""
+                    }
+                }
+            }
         }
     },
     "definitions": {
-        "1451.\u003cnil\u003e.0x140005073b0": {
-            "title": "0x140005073b0",
+        "2015.\u003cnil\u003e.ApplicationResponseData": {
+            "title": "ApplicationResponseData",
             "type": "object"
         },
-        "1776.\u003cnil\u003e.0x14000507488": {
-            "title": "0x14000507488",
+        "6242.\u003cnil\u003e.0x459237a39a70": {
+            "title": "0x459237a39a70",
             "type": "object"
         },
-        "2100.\u003cnil\u003e.StatusResponseDTO": {
+        "6567.\u003cnil\u003e.0x459237a39b48": {
+            "title": "0x459237a39b48",
+            "type": "object"
+        },
+        "7371.\u003cnil\u003e.StatusResponseDTO": {
             "title": "StatusResponseDTO",
             "type": "object"
         },
@@ -968,30 +1941,29 @@
                 }
             }
         },
-        "models.Branches": {
-            "title": "Branches",
+        "models.Billers": {
+            "title": "Billers",
             "type": "object",
             "properties": {
                 "Active": {
                     "type": "integer",
                     "format": "int64"
                 },
-                "Branch": {
+                "BillerCode": {
                     "type": "string"
                 },
-                "BranchId": {
+                "BillerId": {
                     "type": "integer",
                     "format": "int64"
                 },
-                "BranchManager": {
-                    "$ref": "#/definitions/models.Users"
+                "BillerName": {
+                    "type": "string"
                 },
-                "Country": {
-                    "$ref": "#/definitions/models.Countries"
+                "BillerReferenceId": {
+                    "type": "string"
                 },
                 "CreatedBy": {
-                    "type": "integer",
-                    "format": "int64"
+                    "type": "string"
                 },
                 "DateCreated": {
                     "type": "string",
@@ -1001,15 +1973,14 @@
                     "type": "string",
                     "format": "datetime"
                 },
-                "Location": {
+                "Description": {
                     "type": "string"
                 },
                 "ModifiedBy": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "PhoneNumber": {
                     "type": "string"
+                },
+                "Operator": {
+                    "$ref": "#/definitions/models.Operator"
                 }
             }
         },
@@ -1087,6 +2058,10 @@
                 }
             }
         },
+        "models.ItemImageResponseDTO": {
+            "title": "ItemImageResponseDTO",
+            "type": "object"
+        },
         "models.Object": {
             "title": "Object",
             "type": "object",
@@ -1100,6 +2075,45 @@
                 "Score": {
                     "type": "integer",
                     "format": "int64"
+                }
+            }
+        },
+        "models.Operator": {
+            "title": "Operator",
+            "type": "object",
+            "properties": {
+                "Active": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "Description": {
+                    "type": "string"
+                },
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "OperatorCode": {
+                    "type": "string"
+                },
+                "OperatorId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "OperatorName": {
+                    "type": "string"
                 }
             }
         },
@@ -1139,25 +2153,6 @@
                 "PermissionId": {
                     "type": "integer",
                     "format": "int64"
-                }
-            }
-        },
-        "models.Profile": {
-            "title": "Profile",
-            "type": "object",
-            "properties": {
-                "Address": {
-                    "type": "string"
-                },
-                "Age": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Email": {
-                    "type": "string"
-                },
-                "Gender": {
-                    "type": "string"
                 }
             }
         },
@@ -1236,6 +2231,45 @@
                 }
             }
         },
+        "models.Services": {
+            "title": "Services",
+            "type": "object",
+            "properties": {
+                "Active": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ServiceCode": {
+                    "type": "string"
+                },
+                "ServiceDescription": {
+                    "type": "string"
+                },
+                "ServiceId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ServiceName": {
+                    "type": "string"
+                }
+            }
+        },
         "models.Status": {
             "title": "Status",
             "type": "object",
@@ -1272,34 +2306,13 @@
                 }
             }
         },
-        "models.User": {
-            "title": "User",
-            "type": "object",
-            "properties": {
-                "Id": {
-                    "type": "string"
-                },
-                "Password": {
-                    "type": "string"
-                },
-                "Profile": {
-                    "$ref": "#/definitions/models.Profile"
-                },
-                "Username": {
-                    "type": "string"
-                }
-            }
-        },
-        "models.Users": {
-            "title": "Users",
+        "models.Theme": {
+            "title": "Theme",
             "type": "object",
             "properties": {
                 "Active": {
                     "type": "integer",
                     "format": "int64"
-                },
-                "Address": {
-                    "type": "string"
                 },
                 "CreatedBy": {
                     "type": "integer",
@@ -1313,82 +2326,123 @@
                     "type": "string",
                     "format": "datetime"
                 },
-                "Dob": {
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ThemeCode": {
+                    "type": "string"
+                },
+                "ThemeConfigs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.Theme_configs"
+                    }
+                },
+                "ThemeId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ThemeName": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.Theme_configs": {
+            "title": "Theme_configs",
+            "type": "object",
+            "properties": {
+                "Active": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
                     "type": "string",
                     "format": "datetime"
                 },
-                "Email": {
-                    "type": "string"
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
                 },
-                "FullName": {
-                    "type": "string"
-                },
-                "Gender": {
-                    "type": "string"
-                },
-                "IdNumber": {
-                    "type": "string"
-                },
-                "IdType": {
-                    "type": "string"
-                },
-                "ImagePath": {
-                    "type": "string"
-                },
-                "IsVerified": {
-                    "type": "boolean"
-                },
-                "MaritalStatus": {
-                    "type": "string"
+                "Id": {
+                    "type": "integer",
+                    "format": "int64"
                 },
                 "ModifiedBy": {
                     "type": "integer",
                     "format": "int64"
                 },
-                "Password": {
+                "Theme": {
+                    "$ref": "#/definitions/models.Theme"
+                },
+                "ThemeConfigCode": {
                     "type": "string"
                 },
-                "PhoneNumber": {
-                    "type": "string"
-                },
-                "Role": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "UserDetails": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "UserId": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "UserType": {
-                    "type": "integer",
-                    "format": "int64"
-                },
-                "Username": {
+                "ThemeProperties": {
                     "type": "string"
                 }
             }
         },
-        "requests.BranchRequestDTO": {
-            "title": "BranchRequestDTO",
+        "requests.ApplicationRequest": {
+            "title": "ApplicationRequest",
             "type": "object",
             "properties": {
-                "AddedBy": {
+                "ApplicationImage": {
                     "type": "string"
                 },
-                "Branch": {
+                "ApplicationLogo": {
                     "type": "string"
                 },
-                "CountryCode": {
+                "ApplicationName": {
                     "type": "string"
                 },
-                "Location": {
+                "DefaultFontsize": {
                     "type": "string"
                 },
-                "PhoneNumber": {
+                "ThemeCode": {
+                    "type": "string"
+                },
+                "ThemeColors": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.ApplicationShopRequest": {
+            "title": "ApplicationShopRequest",
+            "type": "object",
+            "properties": {
+                "ApplicationId": {
+                    "type": "string"
+                },
+                "ShopId": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.BillerRequestDTO": {
+            "title": "BillerRequestDTO",
+            "type": "object",
+            "properties": {
+                "BillerCode": {
+                    "type": "string"
+                },
+                "BillerName": {
+                    "type": "string"
+                },
+                "BillerReferenceId": {
+                    "type": "string"
+                },
+                "CreatedBy": {
+                    "type": "string"
+                },
+                "Description": {
+                    "type": "string"
+                },
+                "OperatorCode": {
                     "type": "string"
                 }
             }
@@ -1464,18 +2518,145 @@
                 }
             }
         },
-        "responses.BranchResponseDTO": {
-            "title": "BranchResponseDTO",
+        "requests.Status": {
+            "title": "Status",
             "type": "object",
             "properties": {
-                "Branch": {
-                    "$ref": "#/definitions/models.Branches"
+                "Status": {
+                    "type": "string"
+                },
+                "StatusCode": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.ThemeRequest": {
+            "title": "ThemeRequest",
+            "type": "object",
+            "properties": {
+                "ThemeCode": {
+                    "type": "string"
+                },
+                "ThemeName": {
+                    "type": "string"
+                }
+            }
+        },
+        "requests.UpdateThemeRequest": {
+            "title": "UpdateThemeRequest",
+            "type": "object",
+            "properties": {
+                "Config": {
+                    "type": "string"
+                },
+                "ThemeCode": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ApplicationResponse": {
+            "title": "ApplicationResponse",
+            "type": "object",
+            "properties": {
+                "Result": {
+                    "$ref": "#/definitions/responses.ApplicationResponseData"
                 },
                 "StatusCode": {
                     "type": "integer",
                     "format": "int64"
                 },
-                "StatusDesc": {
+                "StatusMessage": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ApplicationResponseDTO": {
+            "title": "ApplicationResponseDTO",
+            "type": "object"
+        },
+        "responses.ApplicationResponseData": {
+            "title": "ApplicationResponseData",
+            "type": "object",
+            "properties": {
+                "Active": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ApplicationCode": {
+                    "type": "string"
+                },
+                "ApplicationId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ApplicationImage": {
+                    "type": "string"
+                },
+                "ApplicationLogo": {
+                    "type": "string"
+                },
+                "ApplicationName": {
+                    "type": "string"
+                },
+                "ApplicationShops": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.ApplicationShopResponseData"
+                    }
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DefaultFontsize": {
+                    "type": "string"
+                },
+                "Theme": {
+                    "$ref": "#/definitions/responses.ThemePersonalResponseData"
+                },
+                "ThemeColors": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ApplicationShopResponseData": {
+            "title": "ApplicationShopResponseData",
+            "type": "object",
+            "properties": {
+                "ShopId": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ApplicationsData": {
+            "title": "ApplicationsData",
+            "type": "object",
+            "properties": {
+                "Count": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "Data": {
+                    "$ref": "#/definitions/2015.\u003cnil\u003e.ApplicationResponseData"
+                }
+            }
+        },
+        "responses.ApplicationsResponse": {
+            "title": "ApplicationsResponse",
+            "type": "object",
+            "properties": {
+                "Result": {
+                    "$ref": "#/definitions/responses.ApplicationsData"
+                },
+                "StatusCode": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "StatusMessage": {
                     "type": "string"
                 }
             }
@@ -1501,7 +2682,7 @@
             "type": "object",
             "properties": {
                 "Permissions": {
-                    "$ref": "#/definitions/1776.\u003cnil\u003e.0x14000507488"
+                    "$ref": "#/definitions/6567.\u003cnil\u003e.0x459237a39b48"
                 },
                 "StatusCode": {
                     "type": "integer",
@@ -1533,7 +2714,7 @@
             "type": "object",
             "properties": {
                 "Roles": {
-                    "$ref": "#/definitions/1451.\u003cnil\u003e.0x140005073b0"
+                    "$ref": "#/definitions/6242.\u003cnil\u003e.0x459237a39a70"
                 },
                 "StatusCode": {
                     "type": "integer",
@@ -1548,24 +2729,205 @@
             "title": "StatusListResponse",
             "type": "object",
             "properties": {
+                "Result": {
+                    "$ref": "#/definitions/7371.\u003cnil\u003e.StatusResponseDTO"
+                },
                 "StatusCode": {
                     "type": "integer",
                     "format": "int64"
                 },
                 "StatusDesc": {
                     "type": "string"
+                }
+            }
+        },
+        "responses.ThemeConfigData": {
+            "title": "ThemeConfigData",
+            "type": "object",
+            "properties": {
+                "Active": {
+                    "type": "integer",
+                    "format": "int64"
                 },
-                "Statuses": {
-                    "$ref": "#/definitions/2100.\u003cnil\u003e.StatusResponseDTO"
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ThemeConfigCode": {
+                    "type": "string"
+                },
+                "ThemeProperties": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ThemePersonalConfigData": {
+            "title": "ThemePersonalConfigData",
+            "type": "object",
+            "properties": {
+                "Active": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "BannerImages": {
+                    "type": "string"
+                },
+                "BorderRadius": {
+                    "type": "number",
+                    "format": "double"
+                },
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ShowBanner": {
+                    "type": "boolean"
+                },
+                "ThemeConfigCode": {
+                    "type": "string"
+                },
+                "ThemeProperties": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ThemePersonalResponseData": {
+            "title": "ThemePersonalResponseData",
+            "type": "object",
+            "properties": {
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ThemeCode": {
+                    "type": "string"
+                },
+                "ThemeConfig": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.ThemePersonalConfigData"
+                    }
+                },
+                "ThemeId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ThemeName": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ThemeResponse": {
+            "title": "ThemeResponse",
+            "type": "object",
+            "properties": {
+                "Result": {
+                    "$ref": "#/definitions/responses.ThemeResponseData"
+                },
+                "StatusCode": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "StatusMessage": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ThemeResponseData": {
+            "title": "ThemeResponseData",
+            "type": "object",
+            "properties": {
+                "CreatedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "DateCreated": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "DateModified": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "ModifiedBy": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ThemeCode": {
+                    "type": "string"
+                },
+                "ThemeConfig": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.ThemeConfigData"
+                    }
+                },
+                "ThemeId": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "ThemeName": {
+                    "type": "string"
+                }
+            }
+        },
+        "responses.ThemeResponseList": {
+            "title": "ThemeResponseList",
+            "type": "object",
+            "properties": {
+                "Result": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/responses.ThemeResponseData"
+                    }
+                },
+                "StatusCode": {
+                    "type": "integer",
+                    "format": "int64"
+                },
+                "StatusMessage": {
+                    "type": "string"
                 }
             }
         }
     },
     "tags": [
-        {
-            "name": "branches",
-            "description": "BranchesController operations for Branches\n"
-        },
         {
             "name": "countries",
             "description": "CountriesController operations for Countries\n"
@@ -1581,6 +2943,26 @@
         {
             "name": "roles-and-permissions",
             "description": "Role_permissionsController operations for Role_permissions\n"
+        },
+        {
+            "name": "services",
+            "description": "ServicesController operations for Services\n"
+        },
+        {
+            "name": "operators",
+            "description": "OperatorController operations for Operator\n"
+        },
+        {
+            "name": "billers",
+            "description": "BillersController operations for Billers\n"
+        },
+        {
+            "name": "applications",
+            "description": "ApplicationController operations for Application\n"
+        },
+        {
+            "name": "themes",
+            "description": "ThemeController operations for Theme\n"
         }
     ]
 }
