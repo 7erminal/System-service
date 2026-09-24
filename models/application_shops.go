@@ -10,7 +10,7 @@ import (
 	"github.com/beego/beego/v2/client/orm"
 )
 
-type Application_shops struct {
+type ApplicationShops struct {
 	Id           int64        `orm:"auto;column(application_shop_id)"`
 	Application  *Application `orm:"rel(fk)"`
 	Shop         string       `orm:"column(shop_id);size(255)"`
@@ -22,43 +22,43 @@ type Application_shops struct {
 }
 
 func init() {
-	orm.RegisterModel(new(Application_shops))
+	orm.RegisterModel(new(ApplicationShops))
 }
 
-// AddApplication_shops insert a new Application_shops into database and returns
+// AddApplicationShops insert a new ApplicationShops into database and returns
 // last inserted Id on success.
-func AddApplication_shops(m *Application_shops) (id int64, err error) {
+func AddApplicationShops(m *ApplicationShops) (id int64, err error) {
 	o := orm.NewOrm()
 	id, err = o.Insert(m)
 	return
 }
 
-// GetApplication_shopsById retrieves Application_shops by Id. Returns error if
+// GetApplicationShopsById retrieves ApplicationShops by Id. Returns error if
 // Id doesn't exist
-func GetApplication_shopsById(id int64) (v *Application_shops, err error) {
+func GetApplicationShopsById(id int64) (v *ApplicationShops, err error) {
 	o := orm.NewOrm()
-	v = &Application_shops{Id: id}
-	if err = o.QueryTable(new(Application_shops)).Filter("Id", id).RelatedSel().One(v); err == nil {
+	v = &ApplicationShops{Id: id}
+	if err = o.QueryTable(new(ApplicationShops)).Filter("Id", id).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-func GetApplication_shopsByAppAndShop(appid int64, shopid string) (v *Application_shops, err error) {
+func GetApplicationShopsByAppAndShop(appid int64, shopid string) (v *ApplicationShops, err error) {
 	o := orm.NewOrm()
-	v = &Application_shops{}
-	if err = o.QueryTable(new(Application_shops)).Filter("Application__ApplicationId", appid).Filter("Shop", shopid).RelatedSel().One(v); err == nil {
+	v = &ApplicationShops{}
+	if err = o.QueryTable(new(ApplicationShops)).Filter("Application__ApplicationId", appid).Filter("Shop", shopid).RelatedSel().One(v); err == nil {
 		return v, nil
 	}
 	return nil, err
 }
 
-// GetAllApplication_shops retrieves all Application_shops matches certain condition. Returns empty list if
+// GetAllApplicationShops retrieves all ApplicationShops matches certain condition. Returns empty list if
 // no records exist
-func GetAllApplication_shops(query map[string]string, fields []string, sortby []string, order []string,
+func GetAllApplicationShops(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(Application_shops))
+	qs := o.QueryTable(new(ApplicationShops))
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
@@ -104,7 +104,7 @@ func GetAllApplication_shops(query map[string]string, fields []string, sortby []
 		}
 	}
 
-	var l []Application_shops
+	var l []ApplicationShops
 	qs = qs.OrderBy(sortFields...).RelatedSel()
 	if _, err = qs.Limit(limit, offset).All(&l, fields...); err == nil {
 		if len(fields) == 0 {
@@ -127,11 +127,11 @@ func GetAllApplication_shops(query map[string]string, fields []string, sortby []
 	return nil, err
 }
 
-// UpdateApplication_shops updates Application_shops by Id and returns error if
+// UpdateApplicationShops updates ApplicationShops by Id and returns error if
 // the record to be updated doesn't exist
-func UpdateApplication_shopsById(m *Application_shops) (err error) {
+func UpdateApplicationShopsById(m *ApplicationShops) (err error) {
 	o := orm.NewOrm()
-	v := Application_shops{Id: m.Id}
+	v := ApplicationShops{Id: m.Id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
@@ -142,15 +142,15 @@ func UpdateApplication_shopsById(m *Application_shops) (err error) {
 	return
 }
 
-// DeleteApplication_shops deletes Application_shops by Id and returns error if
+// DeleteApplicationShops deletes ApplicationShops by Id and returns error if
 // the record to be deleted doesn't exist
-func DeleteApplication_shops(id int64) (err error) {
+func DeleteApplicationShops(id int64) (err error) {
 	o := orm.NewOrm()
-	v := Application_shops{Id: id}
+	v := ApplicationShops{Id: id}
 	// ascertain id exists in the database
 	if err = o.Read(&v); err == nil {
 		var num int64
-		if num, err = o.Delete(&Application_shops{Id: id}); err == nil {
+		if num, err = o.Delete(&ApplicationShops{Id: id}); err == nil {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}

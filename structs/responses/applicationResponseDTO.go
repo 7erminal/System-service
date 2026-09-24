@@ -73,6 +73,11 @@ type ApplicationResponseData struct {
 	DateModified     time.Time
 	Active           int
 	Theme            *ThemePersonalResponseData
+	ApplicationShops []ApplicationShopResponseData
+}
+
+type ApplicationShopResponseData struct {
+	ShopId string
 }
 
 type ApplicationResponse struct {

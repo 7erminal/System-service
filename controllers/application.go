@@ -174,18 +174,26 @@ func (c *ApplicationController) GetOne() {
 				CreatedBy:    v.Theme.CreatedBy,
 				ModifiedBy:   v.Theme.ModifiedBy,
 			}
+
+			appShops := []responses.ApplicationShopResponseData{}
+			for _, as := range a.ApplicationShops {
+				appShops = append(appShops, responses.ApplicationShopResponseData{
+					ShopId: as.Shop,
+				})
+			}
 			result = responses.ApplicationResponseData{
-				ApplicationId:    v.Application.ApplicationId,
-				ApplicationCode:  v.Application.ApplicationCode,
-				ApplicationName:  v.Application.ApplicationName,
-				ApplicationLogo:  v.Application.ApplicationLogo,
-				ThemeColors:      v.Application.ThemeColors,
-				DefaultFontsize:  v.Application.DefaultFontsize,
-				ApplicationImage: v.Application.ApplicationImage,
-				DateCreated:      v.Application.DateCreated,
-				DateModified:     v.Application.DateModified,
-				Active:           v.Application.Active,
+				ApplicationId:    a.ApplicationId,
+				ApplicationCode:  a.ApplicationCode,
+				ApplicationName:  a.ApplicationName,
+				ApplicationLogo:  a.ApplicationLogo,
+				ThemeColors:      a.ThemeColors,
+				DefaultFontsize:  a.DefaultFontsize,
+				ApplicationImage: a.ApplicationImage,
+				DateCreated:      a.DateCreated,
+				DateModified:     a.DateModified,
+				Active:           a.Active,
 				Theme:            &themeResp,
+				ApplicationShops: appShops,
 			}
 		} else {
 			statusCode = 404
@@ -314,6 +322,7 @@ func (c *ApplicationController) GetAll() {
 					ModifiedBy:   m.Theme.ModifiedBy,
 					ThemeConfig:  themeConfigs,
 				},
+				ApplicationShops: []responses.ApplicationShopResponseData{},
 			})
 		}
 		result = appsResp
@@ -650,11 +659,11 @@ func (c *ApplicationController) AddApplicationShop() {
 		shopResp := functions.GetShop(&c.Controller, v.ShopId)
 
 		if shopResp.StatusCode == 200 {
-			asm := models.Application_shops{
+			asm := models.ApplicationShops{
 				Application: application,
 				Shop:        shopResp.Result.ShopId,
 			}
-			if _, err := models.AddApplication_shops(&asm); err == nil {
+			if _, err := models.AddApplicationShops(&asm); err == nil {
 				message := "Shop Added Successfully"
 				statusCode = 200
 				statusMessage = message
@@ -714,8 +723,8 @@ func (c *ApplicationController) RemoveApplicationShop() {
 		shopResp := functions.GetShop(&c.Controller, v.ShopId)
 
 		if shopResp.StatusCode == 200 {
-			if as, err := models.GetApplication_shopsByAppAndShop(application.ApplicationId, shopResp.Result.ShopId); err == nil {
-				if err := models.DeleteApplication_shops(as.Id); err == nil {
+			if as, err := models.GetApplicationShopsByAppAndShop(application.ApplicationId, shopResp.Result.ShopId); err == nil {
+				if err := models.DeleteApplicationShops(as.Id); err == nil {
 					message := "Shop Removed Successfully"
 					statusCode = 200
 					statusMessage = message
