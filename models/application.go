@@ -18,8 +18,8 @@ type Application struct {
 	ThemeColors      string    `orm:"size(255)"`
 	DefaultFontsize  string    `orm:"size(10)"`
 	ApplicationImage string    `orm:"size(255)"`
-	DateCreated      time.Time `orm:"type(datetime)"`
-	DateModified     time.Time `orm:"type(datetime)"`
+	DateCreated      time.Time `orm:"type(datetime);auto_now_add"`
+	DateModified     time.Time `orm:"type(datetime);auto_now"`
 	CreatedBy        int
 	ModifiedBy       int
 	Active           int

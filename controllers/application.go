@@ -69,6 +69,7 @@ func (c *ApplicationController) Post() {
 			ThemeColors:      req.ThemeColors,
 			DefaultFontsize:  req.DefaultFontsize,
 			ApplicationImage: req.ApplicationImage,
+			Active:           1,
 		}
 		if id, err := models.AddApplication(&v); err == nil {
 
@@ -367,7 +368,7 @@ func (c *ApplicationController) Put() {
 	var result responses.ApplicationResponseData
 
 	// Check if the application exists
-	_, err := models.GetApplicationById(id)
+	app, err := models.GetApplicationById(id)
 	if err != nil {
 		statusCode = 404
 		statusMessage = "Application not found"
@@ -384,11 +385,13 @@ func (c *ApplicationController) Put() {
 
 	v := models.Application{
 		ApplicationId:    id,
+		ApplicationCode:  app.ApplicationCode,
 		ApplicationName:  req.ApplicationName,
 		ApplicationLogo:  req.ApplicationLogo,
 		ThemeColors:      req.ThemeColors,
 		DefaultFontsize:  req.DefaultFontsize,
 		ApplicationImage: req.ApplicationImage,
+		Active:           app.Active,
 	}
 	if err := models.UpdateApplicationById(&v); err == nil {
 		statusCode = 200
