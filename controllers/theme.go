@@ -78,8 +78,9 @@ func (c *ThemeController) Post() {
 				Active:          themeConfig.Active,
 			},
 		}
+		themeIdStr := strconv.FormatInt(v.ThemeId, 10)
 		result = responses.ThemeResponseData{
-			ThemeId:     v.ThemeId,
+			ThemeId:     themeIdStr,
 			ThemeCode:   v.ThemeCode,
 			ThemeName:   v.ThemeName,
 			ThemeConfig: themeConfigsResp,
@@ -132,7 +133,7 @@ func (c *ThemeController) GetOne() {
 			})
 		}
 		result = responses.ThemeResponseData{
-			ThemeId:     v.ThemeId,
+			ThemeId:     strconv.FormatInt(v.ThemeId, 10),
 			ThemeCode:   v.ThemeCode,
 			ThemeName:   v.ThemeName,
 			ThemeConfig: themeConfigsResp,
@@ -238,7 +239,7 @@ func (c *ThemeController) GetAll() {
 			}
 
 			themesResp = append(themesResp, responses.ThemeResponseData{
-				ThemeId:     m.ThemeId,
+				ThemeId:     strconv.FormatInt(m.ThemeId, 10),
 				ThemeCode:   m.ThemeCode,
 				ThemeName:   m.ThemeName,
 				ThemeConfig: themeConfigsResp,
@@ -320,7 +321,7 @@ func (c *ThemeController) Put() {
 					},
 				}
 				result = responses.ThemeResponseData{
-					ThemeId:     theme.ThemeId,
+					ThemeId:     strconv.FormatInt(theme.ThemeId, 10),
 					ThemeCode:   theme.ThemeCode,
 					ThemeName:   theme.ThemeName,
 					ThemeConfig: themeConfigsResp,
@@ -416,7 +417,7 @@ func (c *ThemeController) AddThemeConfig() {
 				})
 			}
 			result = responses.ThemeResponseData{
-				ThemeId:     freshTheme.ThemeId,
+				ThemeId:     strconv.FormatInt(freshTheme.ThemeId, 10),
 				ThemeCode:   freshTheme.ThemeCode,
 				ThemeName:   freshTheme.ThemeName,
 				ThemeConfig: themeConfigsResp,
@@ -497,7 +498,7 @@ func (c *ThemeController) RemoveThemeConfig() {
 				})
 			}
 			result = responses.ThemeResponseData{
-				ThemeId:     freshTheme.ThemeId,
+				ThemeId:     strconv.FormatInt(freshTheme.ThemeId, 10),
 				ThemeCode:   freshTheme.ThemeCode,
 				ThemeName:   freshTheme.ThemeName,
 				ThemeConfig: themeConfigsResp,
@@ -547,7 +548,7 @@ func (c *ThemeController) Delete() {
 		statusCode = 200
 		statusMessage = "Theme deleted successfully"
 		result = responses.ThemeResponseData{
-			ThemeId: id,
+			ThemeId: strconv.FormatInt(id, 10),
 		}
 
 	} else {

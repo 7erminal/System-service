@@ -28,7 +28,7 @@ type ThemeConfigData struct {
 }
 
 type ThemePersonalResponseData struct {
-	ThemeId      int64
+	ThemeId      string
 	ThemeCode    string
 	ThemeName    string
 	DateCreated  time.Time
@@ -39,7 +39,7 @@ type ThemePersonalResponseData struct {
 }
 
 type ThemeResponseData struct {
-	ThemeId      int64
+	ThemeId      string
 	ThemeCode    string
 	ThemeName    string
 	DateCreated  time.Time
@@ -62,7 +62,7 @@ type ThemeResponseList struct {
 }
 
 type ApplicationResponseData struct {
-	ApplicationId    int64
+	ApplicationId    string
 	ApplicationCode  string
 	ApplicationName  string
 	ApplicationLogo  string
@@ -156,7 +156,7 @@ type ShopResp struct {
 }
 
 type BranchResp struct {
-	BranchId     int64
+	BranchId     string
 	BranchName   string
 	Description  string
 	Location     string
@@ -169,7 +169,7 @@ type BranchResp struct {
 }
 
 type CountryResp struct {
-	CountryId    int64
+	CountryId    string
 	CountryName  string
 	CountryCode  string
 	Active       int

@@ -7,7 +7,7 @@ type BillerResponseDTO struct {
 }
 
 type BillerObject struct {
-	BillerId          int64
+	BillerId          string
 	BillerName        string
 	BillerCode        string
 	BillerReferenceId string

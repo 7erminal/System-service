@@ -45,7 +45,26 @@ func (c *CountriesController) Post() {
 		if currency, err := models.GetCurrenciesById(currencyId); err == nil {
 			var country models.Countries = models.Countries{Country: v.Country, CountryCode: v.CountryCode, DefaultCurrency: currency, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: 1, ModifiedBy: 1}
 			if _, err := models.AddCountries(&country); err == nil {
-				resp := responses.CountryResponseDTO{StatusCode: 200, Result: &country, StatusDesc: "Country added Successfully"}
+				countryIdStr := strconv.FormatInt(country.CountryId, 10)
+				createdByStr := strconv.FormatInt(int64(country.CreatedBy), 10)
+				modifiedByStr := strconv.FormatInt(int64(country.ModifiedBy), 10)
+
+				countryResp := responses.Countries{
+					CountryId:   countryIdStr,
+					Country:     country.Country,
+					CountryCode: country.CountryCode,
+					Description: country.Description,
+					DefaultCurrency: &responses.Currencies{
+						CurrencyId: strconv.FormatInt(country.DefaultCurrency.CurrencyId, 10),
+						Symbol:     country.DefaultCurrency.Symbol,
+						Currency:   country.DefaultCurrency.Currency,
+					},
+					CreatedBy:    createdByStr,
+					ModifiedBy:   modifiedByStr,
+					DateCreated:  country.DateCreated,
+					DateModified: country.DateModified,
+				}
+				resp := responses.CountryResponseDTO{StatusCode: 200, Result: &countryResp, StatusDesc: "Country added Successfully"}
 				c.Ctx.Output.SetStatus(200)
 				c.Data["json"] = resp
 			} else {
@@ -88,7 +107,25 @@ func (c *CountriesController) GetOne() {
 		// c.Ctx.Output.SetStatus(403)
 		// c.Data["json"] = err.Error()
 	} else {
-		resp := responses.CountryResponseDTO{StatusCode: 200, Result: v, StatusDesc: "Country fetched Successfully"}
+		countryIdStr := strconv.FormatInt(v.CountryId, 10)
+		createdByStr := strconv.FormatInt(int64(v.CreatedBy), 10)
+		modifiedByStr := strconv.FormatInt(int64(v.ModifiedBy), 10)
+		countryResp := responses.Countries{
+			CountryId:   countryIdStr,
+			Country:     v.Country,
+			CountryCode: v.CountryCode,
+			Description: v.Description,
+			DefaultCurrency: &responses.Currencies{
+				CurrencyId: strconv.FormatInt(v.DefaultCurrency.CurrencyId, 10),
+				Symbol:     v.DefaultCurrency.Symbol,
+				Currency:   v.DefaultCurrency.Currency,
+			},
+			CreatedBy:    createdByStr,
+			ModifiedBy:   modifiedByStr,
+			DateCreated:  v.DateCreated,
+			DateModified: v.DateModified,
+		}
+		resp := responses.CountryResponseDTO{StatusCode: 200, Result: &countryResp, StatusDesc: "Country fetched Successfully"}
 		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = resp
 	}
@@ -114,7 +151,25 @@ func (c *CountriesController) GetOneByCode() {
 		//
 		// c.Data["json"] = err.Error()
 	} else {
-		resp := responses.CountryResponseDTO{StatusCode: 200, Result: v, StatusDesc: "Country fetched Successfully"}
+		countryIdStr := strconv.FormatInt(v.CountryId, 10)
+		createdByStr := strconv.FormatInt(int64(v.CreatedBy), 10)
+		modifiedByStr := strconv.FormatInt(int64(v.ModifiedBy), 10)
+		countryResp := responses.Countries{
+			CountryId:   countryIdStr,
+			Country:     v.Country,
+			CountryCode: v.CountryCode,
+			Description: v.Description,
+			DefaultCurrency: &responses.Currencies{
+				CurrencyId: strconv.FormatInt(v.DefaultCurrency.CurrencyId, 10),
+				Symbol:     v.DefaultCurrency.Symbol,
+				Currency:   v.DefaultCurrency.Currency,
+			},
+			CreatedBy:    createdByStr,
+			ModifiedBy:   modifiedByStr,
+			DateCreated:  v.DateCreated,
+			DateModified: v.DateModified,
+		}
+		resp := responses.CountryResponseDTO{StatusCode: 200, Result: &countryResp, StatusDesc: "Country fetched Successfully"}
 		c.Ctx.Output.SetStatus(200)
 		c.Data["json"] = resp
 	}
@@ -181,10 +236,27 @@ func (c *CountriesController) GetAll() {
 		resp := responses.CountriesResponseDTO{StatusCode: 608, Result: nil, StatusDesc: "Error fetching countries"}
 		c.Data["json"] = resp
 	} else {
-		countriesResp := []models.Countries{}
+		countriesResp := []responses.Countries{}
 		for _, urs := range l {
-			m := urs.(models.Countries)
-
+			v := urs.(models.Countries)
+			countryIdStr := strconv.FormatInt(v.CountryId, 10)
+			createdByStr := strconv.FormatInt(int64(v.CreatedBy), 10)
+			modifiedByStr := strconv.FormatInt(int64(v.ModifiedBy), 10)
+			m := responses.Countries{
+				CountryId:   countryIdStr,
+				Country:     v.Country,
+				CountryCode: v.CountryCode,
+				Description: v.Description,
+				DefaultCurrency: &responses.Currencies{
+					CurrencyId: strconv.FormatInt(v.DefaultCurrency.CurrencyId, 10),
+					Symbol:     v.DefaultCurrency.Symbol,
+					Currency:   v.DefaultCurrency.Currency,
+				},
+				CreatedBy:    createdByStr,
+				ModifiedBy:   modifiedByStr,
+				DateCreated:  v.DateCreated,
+				DateModified: v.DateModified,
+			}
 			countriesResp = append(countriesResp, m)
 		}
 		resp := responses.CountriesResponseDTO{StatusCode: 200, Result: &countriesResp, StatusDesc: "Countries fetched successfully"}

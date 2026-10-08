@@ -48,8 +48,9 @@ func (c *OperatorController) Post() {
 		c.Ctx.Output.SetStatus(201)
 		dateCreatedStr := v.DateCreated.Format("2006-01-02 15:04:05")
 		dateModifiedStr := v.DateModified.Format("2006-01-02 15:04:05")
+		operatorIdStr := strconv.FormatInt(v.OperatorId, 10)
 		operatorObj := responses.OperatorObject{
-			OperatorId:   v.OperatorId,
+			OperatorId:   operatorIdStr,
 			OperatorName: v.OperatorName,
 			Description:  v.Description,
 			DateCreated:  dateCreatedStr,
@@ -107,7 +108,7 @@ func (c *OperatorController) GetOne() {
 		dateCreatedStr := v.DateCreated.Format("2006-01-02 15:04:05")
 		dateModifiedStr := v.DateModified.Format("2006-01-02 15:04:05")
 		operatorObj := responses.OperatorObject{
-			OperatorId:   v.OperatorId,
+			OperatorId:   strconv.FormatInt(v.OperatorId, 10),
 			OperatorName: v.OperatorName,
 			Description:  v.Description,
 			DateCreated:  dateCreatedStr,
@@ -199,8 +200,9 @@ func (c *OperatorController) GetAll() {
 			m := urs.(models.Operator)
 			dateCreatedStr := m.DateCreated.Format("2006-01-02 15:04:05")
 			dateModifiedStr := m.DateModified.Format("2006-01-02 15:04:05")
+			operatorIdStr := strconv.FormatInt(m.OperatorId, 10)
 			operatorObj = append(operatorObj, responses.OperatorObject{
-				OperatorId:   m.OperatorId,
+				OperatorId:   operatorIdStr,
 				OperatorName: m.OperatorName,
 				Description:  m.Description,
 				DateCreated:  dateCreatedStr,

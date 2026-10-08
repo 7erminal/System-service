@@ -7,7 +7,7 @@ type OperatorResponseDTO struct {
 }
 
 type OperatorObject struct {
-	OperatorId   int64
+	OperatorId   string
 	OperatorName string
 	Description  string
 	DateCreated  string

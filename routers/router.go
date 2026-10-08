@@ -30,11 +30,6 @@ func init() {
 				&controllers.StatusController{},
 			),
 		),
-		beego.NSNamespace("/roles-and-permissions",
-			beego.NSInclude(
-				&controllers.Role_permissionsController{},
-			),
-		),
 		beego.NSNamespace("/services",
 			beego.NSInclude(
 				&controllers.ServicesController{},

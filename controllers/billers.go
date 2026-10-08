@@ -54,8 +54,9 @@ func (c *BillersController) Post() {
 
 			dateCreatedStr := biller.DateCreated.Format("2006-01-02 15:04:05")
 			dateModifiedStr := biller.DateModified.Format("2006-01-02 15:04:05")
+			billerIdStr := strconv.FormatInt(biller.BillerId, 10)
 			billerObj := responses.BillerObject{
-				BillerId:     biller.BillerId,
+				BillerId:     billerIdStr,
 				BillerName:   biller.BillerName,
 				CreatedBy:    biller.CreatedBy,
 				ModifiedBy:   biller.ModifiedBy,
@@ -113,7 +114,7 @@ func (c *BillersController) GetOne() {
 			dateCreatedStr := v.DateCreated.Format("2006-01-02 15:04:05")
 			dateModifiedStr := v.DateModified.Format("2006-01-02 15:04:05")
 			billerObj := responses.BillerObject{
-				BillerId:     v.BillerId,
+				BillerId:     strconv.FormatInt(v.BillerId, 10),
 				BillerName:   v.BillerName,
 				CreatedBy:    v.CreatedBy,
 				ModifiedBy:   v.ModifiedBy,
@@ -133,7 +134,7 @@ func (c *BillersController) GetOne() {
 		dateCreatedStr := v.DateCreated.Format("2006-01-02 15:04:05")
 		dateModifiedStr := v.DateModified.Format("2006-01-02 15:04:05")
 		billerObj := responses.BillerObject{
-			BillerId:     v.BillerId,
+			BillerId:     strconv.FormatInt(v.BillerId, 10),
 			BillerName:   v.BillerName,
 			CreatedBy:    v.CreatedBy,
 			ModifiedBy:   v.ModifiedBy,
@@ -222,8 +223,9 @@ func (c *BillersController) GetAll() {
 			dateModifiedStr := m.DateModified.Format("2006-01-02 15:04:05")
 			m.DateCreated, _ = time.Parse("2006-01-02 15:04:05", dateCreatedStr)
 			m.DateModified, _ = time.Parse("2006-01-02 15:04:05", dateModifiedStr)
+			billerIdStr := strconv.FormatInt(m.BillerId, 10)
 			billerObj = append(billerObj, responses.BillerObject{
-				BillerId:     m.BillerId,
+				BillerId:     billerIdStr,
 				BillerName:   m.BillerName,
 				CreatedBy:    m.CreatedBy,
 				ModifiedBy:   m.ModifiedBy,

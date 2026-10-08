@@ -89,12 +89,12 @@ func (c *ApplicationController) Post() {
 				v.ApplicationId = id
 
 				themeResp := responses.ThemePersonalResponseData{
-					ThemeId:   theme.ThemeId,
+					ThemeId:   strconv.FormatInt(theme.ThemeId, 10),
 					ThemeCode: theme.ThemeCode,
 					ThemeName: theme.ThemeName,
 				}
 				result = responses.ApplicationResponseData{
-					ApplicationId:    v.ApplicationId,
+					ApplicationId:    strconv.FormatInt(v.ApplicationId, 10),
 					ApplicationCode:  v.ApplicationCode,
 					ApplicationName:  v.ApplicationName,
 					ApplicationLogo:  v.ApplicationLogo,
@@ -167,7 +167,7 @@ func (c *ApplicationController) GetOne() {
 				})
 			}
 			themeResp := responses.ThemePersonalResponseData{
-				ThemeId:      v.Theme.ThemeId,
+				ThemeId:      strconv.FormatInt(v.Theme.ThemeId, 10),
 				ThemeCode:    v.Theme.ThemeCode,
 				ThemeName:    v.Theme.ThemeName,
 				ThemeConfig:  themeConfigs,
@@ -184,7 +184,7 @@ func (c *ApplicationController) GetOne() {
 				})
 			}
 			result = responses.ApplicationResponseData{
-				ApplicationId:    a.ApplicationId,
+				ApplicationId:    strconv.FormatInt(a.ApplicationId, 10),
 				ApplicationCode:  a.ApplicationCode,
 				ApplicationName:  a.ApplicationName,
 				ApplicationLogo:  a.ApplicationLogo,
@@ -304,7 +304,7 @@ func (c *ApplicationController) GetAll() {
 			}
 
 			appsResp = append(appsResp, responses.ApplicationResponseData{
-				ApplicationId:    m.Application.ApplicationId,
+				ApplicationId:    strconv.FormatInt(m.Application.ApplicationId, 10),
 				ApplicationCode:  m.Application.ApplicationCode,
 				ApplicationName:  m.Application.ApplicationName,
 				ApplicationLogo:  m.Application.ApplicationLogo,
@@ -315,7 +315,7 @@ func (c *ApplicationController) GetAll() {
 				DateModified:     m.Application.DateModified,
 				Active:           m.Application.Active,
 				Theme: &responses.ThemePersonalResponseData{
-					ThemeId:      m.Theme.ThemeId,
+					ThemeId:      strconv.FormatInt(m.Theme.ThemeId, 10),
 					ThemeCode:    m.Theme.ThemeCode,
 					ThemeName:    m.Theme.ThemeName,
 					DateCreated:  m.Theme.DateCreated,
@@ -397,7 +397,7 @@ func (c *ApplicationController) Put() {
 		statusCode = 200
 		statusMessage = "Application updated successfully"
 		result = responses.ApplicationResponseData{
-			ApplicationId:    v.ApplicationId,
+			ApplicationId:    strconv.FormatInt(v.ApplicationId, 10),
 			ApplicationCode:  v.ApplicationCode,
 			ApplicationName:  v.ApplicationName,
 			ApplicationLogo:  v.ApplicationLogo,
@@ -556,7 +556,7 @@ func (c *ApplicationController) UpdateTheme() {
 			})
 		}
 		result = responses.ApplicationResponseData{
-			ApplicationId:    app.ApplicationId,
+			ApplicationId:    strconv.FormatInt(app.ApplicationId, 10),
 			ApplicationCode:  app.ApplicationCode,
 			ApplicationName:  app.ApplicationName,
 			ApplicationLogo:  app.ApplicationLogo,
@@ -567,7 +567,7 @@ func (c *ApplicationController) UpdateTheme() {
 			DateModified:     app.DateModified,
 			Active:           app.Active,
 			Theme: &responses.ThemePersonalResponseData{
-				ThemeId:      updatedAppTheme.Theme.ThemeId,
+				ThemeId:      strconv.FormatInt(updatedAppTheme.Theme.ThemeId, 10),
 				ThemeCode:    updatedAppTheme.Theme.ThemeCode,
 				ThemeName:    updatedAppTheme.Theme.ThemeName,
 				DateCreated:  updatedAppTheme.Theme.DateCreated,
@@ -626,7 +626,7 @@ func (c *ApplicationController) Delete() {
 		statusCode = 200
 		statusMessage = "Application deleted successfully"
 		result = responses.ApplicationResponseData{
-			ApplicationId: id,
+			ApplicationId: strconv.FormatInt(id, 10),
 		}
 	} else {
 		statusCode = 500
@@ -684,7 +684,7 @@ func (c *ApplicationController) AddApplicationShop() {
 				statusCode = 200
 				statusMessage = message
 				appData := responses.ApplicationResponseData{
-					ApplicationId:    application.ApplicationId,
+					ApplicationId:    strconv.FormatInt(application.ApplicationId, 10),
 					ApplicationCode:  application.ApplicationCode,
 					ApplicationName:  application.ApplicationName,
 					ApplicationLogo:  application.ApplicationLogo,
@@ -746,7 +746,7 @@ func (c *ApplicationController) RemoveApplicationShop() {
 					statusCode = 200
 					statusMessage = message
 					appData := responses.ApplicationResponseData{
-						ApplicationId:    application.ApplicationId,
+						ApplicationId:    strconv.FormatInt(application.ApplicationId, 10),
 						ApplicationCode:  application.ApplicationCode,
 						ApplicationName:  application.ApplicationName,
 						ApplicationLogo:  application.ApplicationLogo,
@@ -858,7 +858,7 @@ func (c *ApplicationController) GetApplicationShops() {
 			m := shop.(models.ApplicationShops)
 			result = append(result, responses.ApplicationShopFullResponseData{
 				Application: responses.ApplicationResponseData{
-					ApplicationId:    m.Application.ApplicationId,
+					ApplicationId:    strconv.FormatInt(m.Application.ApplicationId, 10),
 					ApplicationCode:  m.Application.ApplicationCode,
 					ApplicationName:  m.Application.ApplicationName,
 					ApplicationLogo:  m.Application.ApplicationLogo,

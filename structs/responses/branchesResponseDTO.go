@@ -6,7 +6,7 @@ import (
 )
 
 type Branches struct {
-	BranchId      int64
+	BranchId      string
 	Branch        string
 	Country       *models.Countries
 	Location      string
