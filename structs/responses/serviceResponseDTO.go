@@ -13,8 +13,8 @@ type ServiceObject struct {
 	ServiceDescription string
 	DateCreated        string
 	DateModified       string
-	CreatedBy          int
-	ModifiedBy         int
+	CreatedBy          string
+	ModifiedBy         string
 	Active             int
 }
 

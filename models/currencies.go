@@ -18,8 +18,8 @@ type Currencies struct {
 	Active       int       `orm:"omitempty"`
 	DateCreated  time.Time `orm:"type(datetime);omitempty"`
 	DateModified time.Time `orm:"type(datetime);omitempty"`
-	CreatedBy    int       `orm:"omitempty"`
-	ModifiedBy   int       `orm:"omitempty"`
+	CreatedBy    string    `orm:"omitempty"`
+	ModifiedBy   string    `orm:"omitempty"`
 }
 
 func init() {

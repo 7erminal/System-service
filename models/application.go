@@ -20,8 +20,8 @@ type Application struct {
 	ApplicationImage string    `orm:"size(255)"`
 	DateCreated      time.Time `orm:"type(datetime);auto_now_add"`
 	DateModified     time.Time `orm:"type(datetime);auto_now"`
-	CreatedBy        int
-	ModifiedBy       int
+	CreatedBy        string
+	ModifiedBy       string
 	Active           int
 	ApplicationShops []*ApplicationShops `orm:"reverse(many)"`
 }

@@ -19,8 +19,8 @@ type Application_themes struct {
 	BorderRadius float64      `orm:"type(double)"`
 	DateCreated  time.Time    `orm:"type(datetime)"`
 	DateModified time.Time    `orm:"type(datetime)"`
-	CreatedBy    int
-	ModifiedBy   int
+	CreatedBy    string
+	ModifiedBy   string
 	Active       int
 }
 

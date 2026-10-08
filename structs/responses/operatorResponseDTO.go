@@ -12,8 +12,8 @@ type OperatorObject struct {
 	Description  string
 	DateCreated  string
 	DateModified string
-	CreatedBy    int
-	ModifiedBy   int
+	CreatedBy    string
+	ModifiedBy   string
 	Active       int
 }
 

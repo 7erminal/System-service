@@ -17,8 +17,8 @@ type Operator struct {
 	Description  string    `orm:"size(255)"`
 	DateCreated  time.Time `orm:"type(datetime)"`
 	DateModified time.Time `orm:"type(datetime)"`
-	CreatedBy    int
-	ModifiedBy   int
+	CreatedBy    string    `orm:"omitempty"`
+	ModifiedBy   string    `orm:"omitempty"`
 	Active       int
 }
 

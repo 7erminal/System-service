@@ -16,8 +16,8 @@ type Theme struct {
 	ThemeName    string    `orm:"size(255)"`
 	DateCreated  time.Time `orm:"type(datetime)"`
 	DateModified time.Time `orm:"type(datetime)"`
-	CreatedBy    int
-	ModifiedBy   int
+	CreatedBy    string    `orm:"omitempty"`
+	ModifiedBy   string    `orm:"omitempty"`
 	Active       int
 	ThemeConfigs []*Theme_configs `orm:"reverse(many)"`
 }

@@ -16,8 +16,8 @@ type ApplicationShops struct {
 	Shop         string       `orm:"column(shop_id);size(255)"`
 	DateCreated  time.Time    `orm:"type(datetime);auto_now_add"`
 	DateModified time.Time    `orm:"type(datetime);auto_now"`
-	CreatedBy    int
-	ModifiedBy   int
+	CreatedBy    string
+	ModifiedBy   string
 	Active       int
 }
 

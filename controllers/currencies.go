@@ -42,10 +42,11 @@ func (c *CurrenciesController) Post() {
 	var v requests.CurrenciesRequestDTO
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 
-	userCheck := functions.GetUserDetails(&c.Controller, v.AddedBy)
+	userid := v.AddedBy
+	userCheck := functions.GetUserDetails(&c.Controller, userid)
 
 	if userCheck.StatusCode == 200 {
-		var currency models.Currencies = models.Currencies{Symbol: v.Symbol, Currency: v.Currency, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: int(v.AddedBy), ModifiedBy: int(v.AddedBy)}
+		var currency models.Currencies = models.Currencies{Symbol: v.Symbol, Currency: v.Currency, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: userid, ModifiedBy: userid}
 		if _, err := models.AddCurrencies(&currency); err == nil {
 			currencyIdStr := strconv.FormatInt(currency.CurrencyId, 10)
 			currencyResp := responses.Currencies{

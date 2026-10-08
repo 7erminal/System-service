@@ -12,10 +12,10 @@ import (
 
 type Status struct {
 	Active       int       `orm:"column(active);null"`
-	CreatedBy    int       `orm:"column(created_by);null"`
+	CreatedBy    string    `orm:"column(created_by);null"`
 	DateCreated  time.Time `orm:"column(date_created);type(datetime);null;auto_now_add"`
 	DateModified time.Time `orm:"column(date_modified);type(datetime);null"`
-	ModifiedBy   int       `orm:"column(modified_by);null"`
+	ModifiedBy   string    `orm:"column(modified_by);null"`
 	Status       string    `orm:"column(status);size(128)"`
 	StatusCode   string    `orm:"column(status_code);size(128)"`
 	StatusId     int64     `orm:"column(status_id);auto"`

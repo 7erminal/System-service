@@ -3,7 +3,6 @@ package functions
 import (
 	"encoding/json"
 	"io"
-	"strconv"
 	"system_service/api"
 	"system_service/structs/responses"
 
@@ -11,14 +10,14 @@ import (
 	beego "github.com/beego/beego/v2/server/web"
 )
 
-func GetUserDetails(c *beego.Controller, userid int64) (resp responses.UserResponseDTO) {
+func GetUserDetails(c *beego.Controller, userid string) (resp responses.UserResponseDTO) {
 	host, _ := beego.AppConfig.String("customerBaseUrl")
 
 	logs.Info("Getting user details ", userid)
 
 	request := api.NewRequest(
 		host,
-		"/v1/users/verify-user/"+strconv.FormatInt(userid, 10),
+		"/v1/users/verify-user/"+userid,
 		api.GET)
 	// request.Params["username"] = username
 	// request.Params = {"UserId": strconv.Itoa(int(userid))}

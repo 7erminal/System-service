@@ -12,8 +12,8 @@ type ThemePersonalConfigData struct {
 	BorderRadius    float64
 	DateCreated     time.Time
 	DateModified    time.Time
-	CreatedBy       int
-	ModifiedBy      int
+	CreatedBy       string
+	ModifiedBy      string
 	Active          int
 }
 
@@ -22,8 +22,8 @@ type ThemeConfigData struct {
 	ThemeProperties string
 	DateCreated     time.Time
 	DateModified    time.Time
-	CreatedBy       int
-	ModifiedBy      int
+	CreatedBy       string
+	ModifiedBy      string
 	Active          int
 }
 
@@ -33,8 +33,8 @@ type ThemePersonalResponseData struct {
 	ThemeName    string
 	DateCreated  time.Time
 	DateModified time.Time
-	CreatedBy    int
-	ModifiedBy   int
+	CreatedBy    string
+	ModifiedBy   string
 	ThemeConfig  []ThemePersonalConfigData
 }
 
@@ -44,8 +44,8 @@ type ThemeResponseData struct {
 	ThemeName    string
 	DateCreated  time.Time
 	DateModified time.Time
-	CreatedBy    int
-	ModifiedBy   int
+	CreatedBy    string
+	ModifiedBy   string
 	ThemeConfig  []ThemeConfigData
 }
 
@@ -149,8 +149,8 @@ type ShopResp struct {
 	ShopLocation        string
 	DateCreated         time.Time
 	DateModified        time.Time
-	CreatedBy           int
-	ModifiedBy          int
+	CreatedBy           string
+	ModifiedBy          string
 	Active              int
 	ShopBranches        []ShopBranchResp
 }
@@ -164,8 +164,8 @@ type BranchResp struct {
 	Active       int
 	DateCreated  time.Time
 	DateModified time.Time
-	CreatedBy    int
-	ModifiedBy   int
+	CreatedBy    string
+	ModifiedBy   string
 }
 
 type CountryResp struct {
@@ -175,6 +175,6 @@ type CountryResp struct {
 	Active       int
 	DateCreated  time.Time
 	DateModified time.Time
-	CreatedBy    int
-	ModifiedBy   int
+	CreatedBy    string
+	ModifiedBy   string
 }

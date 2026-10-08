@@ -40,14 +40,15 @@ func (c *CountriesController) Post() {
 	var v requests.CountriesRequestDTO
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 
+	createdByStr := v.AddedBy
+	modifiedByStr := v.AddedBy
+
 	if _, err := models.GetCountriesByCode(v.CountryCode); err != nil {
 		currencyId, _ := strconv.ParseInt(v.CurrencyId, 10, 64)
 		if currency, err := models.GetCurrenciesById(currencyId); err == nil {
-			var country models.Countries = models.Countries{Country: v.Country, CountryCode: v.CountryCode, DefaultCurrency: currency, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: 1, ModifiedBy: 1}
+			var country models.Countries = models.Countries{Country: v.Country, CountryCode: v.CountryCode, DefaultCurrency: currency, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: createdByStr, ModifiedBy: modifiedByStr}
 			if _, err := models.AddCountries(&country); err == nil {
 				countryIdStr := strconv.FormatInt(country.CountryId, 10)
-				createdByStr := strconv.FormatInt(int64(country.CreatedBy), 10)
-				modifiedByStr := strconv.FormatInt(int64(country.ModifiedBy), 10)
 
 				countryResp := responses.Countries{
 					CountryId:   countryIdStr,
@@ -108,8 +109,8 @@ func (c *CountriesController) GetOne() {
 		// c.Data["json"] = err.Error()
 	} else {
 		countryIdStr := strconv.FormatInt(v.CountryId, 10)
-		createdByStr := strconv.FormatInt(int64(v.CreatedBy), 10)
-		modifiedByStr := strconv.FormatInt(int64(v.ModifiedBy), 10)
+		createdByStr := v.CreatedBy
+		modifiedByStr := v.ModifiedBy
 		countryResp := responses.Countries{
 			CountryId:   countryIdStr,
 			Country:     v.Country,
@@ -152,8 +153,8 @@ func (c *CountriesController) GetOneByCode() {
 		// c.Data["json"] = err.Error()
 	} else {
 		countryIdStr := strconv.FormatInt(v.CountryId, 10)
-		createdByStr := strconv.FormatInt(int64(v.CreatedBy), 10)
-		modifiedByStr := strconv.FormatInt(int64(v.ModifiedBy), 10)
+		createdByStr := v.CreatedBy
+		modifiedByStr := v.ModifiedBy
 		countryResp := responses.Countries{
 			CountryId:   countryIdStr,
 			Country:     v.Country,
@@ -240,8 +241,8 @@ func (c *CountriesController) GetAll() {
 		for _, urs := range l {
 			v := urs.(models.Countries)
 			countryIdStr := strconv.FormatInt(v.CountryId, 10)
-			createdByStr := strconv.FormatInt(int64(v.CreatedBy), 10)
-			modifiedByStr := strconv.FormatInt(int64(v.ModifiedBy), 10)
+			createdByStr := v.CreatedBy
+			modifiedByStr := v.ModifiedBy
 			m := responses.Countries{
 				CountryId:   countryIdStr,
 				Country:     v.Country,

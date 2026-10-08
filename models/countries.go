@@ -18,8 +18,8 @@ type Countries struct {
 	DefaultCurrency *Currencies `orm:"rel(fk);column(default_currency)"`
 	DateCreated     time.Time   `orm:"type(datetime)"`
 	DateModified    time.Time   `orm:"type(datetime)"`
-	CreatedBy       int
-	ModifiedBy      int
+	CreatedBy       string
+	ModifiedBy      string
 }
 
 func init() {

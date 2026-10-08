@@ -17,8 +17,8 @@ type Role_permissions struct {
 	Action           *Actions     `orm:"rel(fk);column(action_id)"`
 	DateCreated      time.Time    `orm:"type(datetime)"`
 	DateModified     time.Time    `orm:"type(datetime)"`
-	CreatedBy        int
-	ModifiedBy       int
+	CreatedBy        string       `orm:"omitempty"`
+	ModifiedBy       string       `orm:"omitempty"`
 	Active           int
 }
 
