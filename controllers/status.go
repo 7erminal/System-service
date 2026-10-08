@@ -45,6 +45,8 @@ func (c *StatusController) Post() {
 		Status:     req.Status,
 		StatusCode: req.StatusCode,
 		Active:     1,
+		CreatedBy:  req.AddedBy,
+		ModifiedBy: req.AddedBy,
 	}
 	if _, err := models.AddStatus(&v); err == nil {
 		c.Ctx.Output.SetStatus(201)
@@ -219,6 +221,7 @@ func (c *StatusController) Put() {
 		StatusId:   id,
 		StatusCode: req.StatusCode,
 		Status:     req.Status,
+		ModifiedBy: req.AddedBy,
 	}
 	if err := models.UpdateStatusById(&v); err == nil {
 		statusCode = 200

@@ -48,7 +48,12 @@ func (c *ThemeController) Post() {
 
 	logs.Info("Request received: ", req)
 
-	v := models.Theme{ThemeCode: req.ThemeCode, ThemeName: req.ThemeName}
+	v := models.Theme{
+		ThemeCode:  req.ThemeCode,
+		ThemeName:  req.ThemeName,
+		CreatedBy:  req.AddedBy,
+		ModifiedBy: req.AddedBy,
+	}
 	if _, err := models.AddTheme(&v); err == nil {
 		c.Ctx.Output.SetStatus(201)
 		statusCode = 200
@@ -58,6 +63,9 @@ func (c *ThemeController) Post() {
 			ThemeConfigCode: req.ThemeCode + "_CONFIG",
 			ThemeProperties: "",
 			Theme:           &v,
+			CreatedBy:       req.AddedBy,
+			ModifiedBy:      req.AddedBy,
+			Active:          1,
 		}
 
 		if _, err := models.AddTheme_configs(&themeConfig); err == nil {
@@ -316,7 +324,7 @@ func (c *ThemeController) Put() {
 						DateCreated:     themeConfig.DateCreated,
 						DateModified:    themeConfig.DateModified,
 						CreatedBy:       themeConfig.CreatedBy,
-						ModifiedBy:      themeConfig.ModifiedBy,
+						ModifiedBy:      req.UpdatedBy,
 						Active:          themeConfig.Active,
 					},
 				}

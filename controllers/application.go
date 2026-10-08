@@ -392,6 +392,7 @@ func (c *ApplicationController) Put() {
 		DefaultFontsize:  req.DefaultFontsize,
 		ApplicationImage: req.ApplicationImage,
 		Active:           app.Active,
+		ModifiedBy:       req.AddedBy,
 	}
 	if err := models.UpdateApplicationById(&v); err == nil {
 		statusCode = 200
