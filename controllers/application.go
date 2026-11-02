@@ -679,6 +679,7 @@ func (c *ApplicationController) AddApplicationShop() {
 			asm := models.ApplicationShops{
 				Application: application,
 				Shop:        shopResp.Result.ShopId,
+				Active:      1,
 			}
 			if _, err := models.AddApplicationShops(&asm); err == nil {
 				message := "Shop Added Successfully"
