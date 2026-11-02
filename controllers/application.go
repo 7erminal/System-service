@@ -156,9 +156,6 @@ func (c *ApplicationController) GetOne() {
 				themeConfigs = append(themeConfigs, responses.ThemePersonalConfigData{
 					ThemeConfigCode: tc.ThemeConfigCode,
 					ThemeProperties: tc.ThemeProperties,
-					ShowBanner:      v.ShowBanner,
-					BannerImages:    v.BannerImages,
-					BorderRadius:    v.BorderRadius,
 					DateCreated:     tc.DateCreated,
 					DateModified:    tc.DateModified,
 					CreatedBy:       tc.CreatedBy,
@@ -292,9 +289,6 @@ func (c *ApplicationController) GetAll() {
 				themeConfigs = append(themeConfigs, responses.ThemePersonalConfigData{
 					ThemeConfigCode: tc.ThemeConfigCode,
 					ThemeProperties: tc.ThemeProperties,
-					ShowBanner:      m.ShowBanner,
-					BannerImages:    m.BannerImages,
-					BorderRadius:    m.BorderRadius,
 					DateCreated:     tc.DateCreated,
 					DateModified:    tc.DateModified,
 					CreatedBy:       tc.CreatedBy,
@@ -546,9 +540,6 @@ func (c *ApplicationController) UpdateTheme() {
 			themeConfigs = append(themeConfigs, responses.ThemePersonalConfigData{
 				ThemeConfigCode: updatedAppTheme.Theme.ThemeConfigs[x].ThemeConfigCode,
 				ThemeProperties: updatedAppTheme.Theme.ThemeConfigs[x].ThemeProperties,
-				ShowBanner:      updatedAppTheme.ShowBanner,
-				BannerImages:    updatedAppTheme.BannerImages,
-				BorderRadius:    updatedAppTheme.BorderRadius,
 				DateCreated:     updatedAppTheme.Theme.ThemeConfigs[x].DateCreated,
 				DateModified:    updatedAppTheme.Theme.ThemeConfigs[x].DateModified,
 				CreatedBy:       updatedAppTheme.Theme.ThemeConfigs[x].CreatedBy,

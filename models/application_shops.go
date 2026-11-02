@@ -14,6 +14,9 @@ type ApplicationShops struct {
 	Id           int64        `orm:"auto;column(application_shop_id)"`
 	Application  *Application `orm:"rel(fk)"`
 	Shop         string       `orm:"column(shop_id);size(255)"`
+	ShowBanner   bool         `orm:"type(boolean)"`
+	BannerImages string       `orm:"type(text)"`
+	BorderRadius float64      `orm:"type(double)"`
 	DateCreated  time.Time    `orm:"type(datetime);auto_now_add"`
 	DateModified time.Time    `orm:"type(datetime);auto_now"`
 	CreatedBy    string
