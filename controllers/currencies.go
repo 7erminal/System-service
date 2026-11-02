@@ -46,7 +46,15 @@ func (c *CurrenciesController) Post() {
 	userCheck := functions.GetUserDetails(&c.Controller, userid)
 
 	if userCheck.StatusCode == 200 {
-		var currency models.Currencies = models.Currencies{Symbol: v.Symbol, Currency: v.Currency, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: userid, ModifiedBy: userid}
+		var currency models.Currencies = models.Currencies{
+			Symbol:       v.Symbol,
+			Currency:     v.Currency,
+			DateCreated:  time.Now(),
+			DateModified: time.Now(),
+			CreatedBy:    userid,
+			ModifiedBy:   userid,
+			Active:       1,
+		}
 		if _, err := models.AddCurrencies(&currency); err == nil {
 			currencyIdStr := strconv.FormatInt(currency.CurrencyId, 10)
 			currencyResp := responses.Currencies{

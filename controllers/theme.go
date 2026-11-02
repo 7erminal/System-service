@@ -53,6 +53,7 @@ func (c *ThemeController) Post() {
 		ThemeName:  req.ThemeName,
 		CreatedBy:  req.AddedBy,
 		ModifiedBy: req.AddedBy,
+		Active:     1,
 	}
 	if _, err := models.AddTheme(&v); err == nil {
 		c.Ctx.Output.SetStatus(201)

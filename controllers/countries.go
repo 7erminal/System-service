@@ -46,7 +46,15 @@ func (c *CountriesController) Post() {
 	if _, err := models.GetCountriesByCode(v.CountryCode); err != nil {
 		currencyId, _ := strconv.ParseInt(v.CurrencyId, 10, 64)
 		if currency, err := models.GetCurrenciesById(currencyId); err == nil {
-			var country models.Countries = models.Countries{Country: v.Country, CountryCode: v.CountryCode, DefaultCurrency: currency, DateCreated: time.Now(), DateModified: time.Now(), CreatedBy: createdByStr, ModifiedBy: modifiedByStr}
+			var country models.Countries = models.Countries{
+				Country:         v.Country,
+				CountryCode:     v.CountryCode,
+				DefaultCurrency: currency,
+				DateCreated:     time.Now(),
+				DateModified:    time.Now(),
+				CreatedBy:       createdByStr,
+				ModifiedBy:      modifiedByStr,
+			}
 			if _, err := models.AddCountries(&country); err == nil {
 				countryIdStr := strconv.FormatInt(country.CountryId, 10)
 
