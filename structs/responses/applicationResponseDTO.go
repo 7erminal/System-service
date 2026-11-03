@@ -73,13 +73,13 @@ type ApplicationResponseData struct {
 	DateModified     time.Time
 	Active           int
 	Theme            *ThemePersonalResponseData
-	ApplicationShops []ApplicationShopResponseData
+	Shops            []ApplicationShopResponseData
 }
 
 type ApplicationShopResponseData struct {
 	ApplicationShopId string
+	ApplicationId     string
 	ShopId            string
-	Shop              string
 	ShowBanner        bool
 	BannerImages      string
 	BorderRadius      float64
@@ -99,7 +99,7 @@ type ApplicationShopFullResponseData struct {
 type ApplicationShopsResponse struct {
 	StatusCode    int
 	StatusMessage string
-	Result        []ApplicationShopFullResponseData
+	Result        []ApplicationShopResponseData
 }
 
 type ApplicationResponse struct {

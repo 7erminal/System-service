@@ -195,7 +195,7 @@ func (c *ApplicationController) GetOne() {
 				DateModified:     a.DateModified,
 				Active:           a.Active,
 				Theme:            &themeResp,
-				ApplicationShops: appShops,
+				Shops:            appShops,
 			}
 		} else {
 			statusCode = 404
@@ -308,7 +308,7 @@ func (c *ApplicationController) GetAll() {
 					s := shop.(models.ApplicationShops)
 					appShops = append(appShops, responses.ApplicationShopResponseData{
 						ApplicationShopId: strconv.FormatInt(s.Id, 10),
-						Shop:              s.Shop,
+						ShopId:            s.Shop,
 						ShowBanner:        s.ShowBanner,
 						BannerImages:      s.BannerImages,
 						BorderRadius:      s.BorderRadius,
@@ -342,7 +342,7 @@ func (c *ApplicationController) GetAll() {
 					ModifiedBy:   m.Theme.ModifiedBy,
 					ThemeConfig:  themeConfigs,
 				},
-				ApplicationShops: appShops,
+				Shops: appShops,
 			})
 		}
 		result = appsResp
@@ -823,7 +823,7 @@ func (c *ApplicationController) GetApplicationShops() {
 
 	statusCode := 400
 	statusMessage := "Bad Request"
-	var result []responses.ApplicationShopFullResponseData
+	var result []responses.ApplicationShopResponseData
 
 	// fields: col1,col2,entity.col3
 	if v := c.GetString("fields"); v != "" {
@@ -873,23 +873,33 @@ func (c *ApplicationController) GetApplicationShops() {
 	} else {
 		for _, shop := range l {
 			m := shop.(models.ApplicationShops)
-			result = append(result, responses.ApplicationShopFullResponseData{
+
+			// type ApplicationShopResponseData struct {
+			// 	ApplicationShopId string
+			// 	ShopId            string
+			// 	Shop              string
+			// 	ShowBanner        bool
+			// 	BannerImages      string
+			// 	BorderRadius      float64
+			// 	DateCreated       time.Time
+			// 	DateModified      time.Time
+			// 	CreatedBy         string
+			// 	ModifiedBy        string
+			// 	Active            int
+			// }
+
+			result = append(result, responses.ApplicationShopResponseData{
 				ApplicationShopId: strconv.FormatInt(m.Id, 10),
-				Application: responses.ApplicationResponseData{
-					ApplicationId:    strconv.FormatInt(m.Application.ApplicationId, 10),
-					ApplicationCode:  m.Application.ApplicationCode,
-					ApplicationName:  m.Application.ApplicationName,
-					ApplicationLogo:  m.Application.ApplicationLogo,
-					ThemeColors:      m.Application.ThemeColors,
-					DefaultFontsize:  m.Application.DefaultFontsize,
-					ApplicationImage: m.Application.ApplicationImage,
-					DateCreated:      m.Application.DateCreated,
-					DateModified:     m.Application.DateModified,
-					Active:           m.Application.Active,
-					Theme:            nil,
-					ApplicationShops: []responses.ApplicationShopResponseData{},
-				},
-				ShopId: m.Shop,
+				ShopId:            m.Shop,
+				ApplicationId:     strconv.FormatInt(m.Application.ApplicationId, 10),
+				ShowBanner:        m.ShowBanner,
+				BannerImages:      m.BannerImages,
+				BorderRadius:      m.BorderRadius,
+				DateCreated:       m.DateCreated,
+				DateModified:      m.DateModified,
+				CreatedBy:         m.CreatedBy,
+				ModifiedBy:        m.ModifiedBy,
+				Active:            m.Active,
 			})
 		}
 		statusCode = 200
