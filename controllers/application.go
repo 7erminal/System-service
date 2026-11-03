@@ -37,6 +37,7 @@ func (c *ApplicationController) URLMapping() {
 	c.Mapping("GetApplicationShops", c.GetApplicationShops)
 	c.Mapping("UpdateApplicationShopBanner", c.UpdateApplicationShopBanner)
 	c.Mapping("ToggleApplicationShopBanner", c.ToggleApplicationShopBanner)
+	c.Mapping("UpdateApplicationTheme", c.UpdateApplicationTheme)
 }
 
 // Post ...
@@ -852,6 +853,7 @@ func (c *ApplicationController) GetApplicationShops() {
 		for _, shop := range l {
 			m := shop.(models.ApplicationShops)
 			result = append(result, responses.ApplicationShopFullResponseData{
+				ApplicationShopId: strconv.FormatInt(m.Id, 10),
 				Application: responses.ApplicationResponseData{
 					ApplicationId:    strconv.FormatInt(m.Application.ApplicationId, 10),
 					ApplicationCode:  m.Application.ApplicationCode,
@@ -1065,6 +1067,65 @@ func (c *ApplicationController) ToggleApplicationShopBanner() {
 	} else {
 		statusCode = 404
 		statusMessage = "Application shop not found"
+		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+		c.Data["json"] = resp
+	}
+
+	c.ServeJSON()
+}
+
+// UpdateApplicationTheme ...
+// @Title Update Application Theme
+// @Description Update theme colors and default font size for an application
+// @Param	body		body 	requests.UpdateApplicationThemeRequest	true		"body for theme update"
+// @Success 200 {object} responses.ApplicationResponse
+// @Failure 400 bad request
+// @router /update-theme [put]
+func (c *ApplicationController) UpdateApplicationTheme() {
+	var v requests.UpdateApplicationThemeRequest
+	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+
+	statusCode := 400
+	statusMessage := "Bad Request"
+
+	if v.ApplicationId == 0 {
+		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: "ApplicationId is required", Result: nil}
+		c.Data["json"] = resp
+		c.ServeJSON()
+		return
+	}
+
+	if app, err := models.GetApplicationById(v.ApplicationId); err == nil {
+		app.ThemeColors = v.ThemeColors
+		app.DefaultFontsize = v.DefaultFontsize
+		app.ModifiedBy = v.UpdatedBy
+
+		if err := models.UpdateApplicationById(app); err == nil {
+			statusCode = 200
+			statusMessage = "Application theme updated successfully"
+			appData := responses.ApplicationResponseData{
+				ApplicationId:    strconv.FormatInt(app.ApplicationId, 10),
+				ApplicationCode:  app.ApplicationCode,
+				ApplicationName:  app.ApplicationName,
+				ApplicationLogo:  app.ApplicationLogo,
+				ThemeColors:      app.ThemeColors,
+				DefaultFontsize:  app.DefaultFontsize,
+				ApplicationImage: app.ApplicationImage,
+				DateCreated:      app.DateCreated,
+				DateModified:     app.DateModified,
+				Active:           app.Active,
+			}
+			var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &appData}
+			c.Data["json"] = resp
+		} else {
+			statusCode = 500
+			statusMessage = err.Error()
+			var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+			c.Data["json"] = resp
+		}
+	} else {
+		statusCode = 404
+		statusMessage = "Application not found"
 		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
 		c.Data["json"] = resp
 	}

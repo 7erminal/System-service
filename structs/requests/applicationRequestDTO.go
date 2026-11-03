@@ -40,3 +40,10 @@ type ToggleApplicationShopBannerRequest struct {
 	ShowBanner        bool   `json:"ShowBanner"`
 	UpdatedBy         string `json:"UpdatedBy"`
 }
+
+type UpdateApplicationThemeRequest struct {
+	ApplicationId   int64  `json:"ApplicationId"`
+	ThemeColors     string `json:"ThemeColors"`
+	DefaultFontsize string `json:"DefaultFontsize"`
+	UpdatedBy       string `json:"UpdatedBy"`
+}
