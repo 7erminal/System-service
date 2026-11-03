@@ -83,7 +83,25 @@ func init() {
         beego.ControllerComments{
             Method: "RemoveApplicationShop",
             Router: `/remove-shop`,
-            AllowHTTPMethods: []string{"post"},
+            AllowHTTPMethods: []string{"delete"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["system_service/controllers:ApplicationController"] = append(beego.GlobalControllerRouter["system_service/controllers:ApplicationController"],
+        beego.ControllerComments{
+            Method: "ToggleApplicationShopBanner",
+            Router: `/shop/toggle-banner`,
+            AllowHTTPMethods: []string{"put"},
+            MethodParams: param.Make(),
+            Filters: nil,
+            Params: nil})
+
+    beego.GlobalControllerRouter["system_service/controllers:ApplicationController"] = append(beego.GlobalControllerRouter["system_service/controllers:ApplicationController"],
+        beego.ControllerComments{
+            Method: "UpdateApplicationShopBanner",
+            Router: `/shop/update-banner`,
+            AllowHTTPMethods: []string{"put"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})
@@ -345,150 +363,6 @@ func init() {
             Method: "Delete",
             Router: `/:id`,
             AllowHTTPMethods: []string{"delete"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:PermissionsController"] = append(beego.GlobalControllerRouter["system_service/controllers:PermissionsController"],
-        beego.ControllerComments{
-            Method: "Post",
-            Router: `/`,
-            AllowHTTPMethods: []string{"post"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:PermissionsController"] = append(beego.GlobalControllerRouter["system_service/controllers:PermissionsController"],
-        beego.ControllerComments{
-            Method: "GetAll",
-            Router: `/`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:PermissionsController"] = append(beego.GlobalControllerRouter["system_service/controllers:PermissionsController"],
-        beego.ControllerComments{
-            Method: "GetOne",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:PermissionsController"] = append(beego.GlobalControllerRouter["system_service/controllers:PermissionsController"],
-        beego.ControllerComments{
-            Method: "Put",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"put"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:PermissionsController"] = append(beego.GlobalControllerRouter["system_service/controllers:PermissionsController"],
-        beego.ControllerComments{
-            Method: "Delete",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"delete"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:Role_permissionsController"] = append(beego.GlobalControllerRouter["system_service/controllers:Role_permissionsController"],
-        beego.ControllerComments{
-            Method: "Post",
-            Router: `/`,
-            AllowHTTPMethods: []string{"post"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:Role_permissionsController"] = append(beego.GlobalControllerRouter["system_service/controllers:Role_permissionsController"],
-        beego.ControllerComments{
-            Method: "GetAll",
-            Router: `/`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:Role_permissionsController"] = append(beego.GlobalControllerRouter["system_service/controllers:Role_permissionsController"],
-        beego.ControllerComments{
-            Method: "GetOne",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:Role_permissionsController"] = append(beego.GlobalControllerRouter["system_service/controllers:Role_permissionsController"],
-        beego.ControllerComments{
-            Method: "Put",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"put"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:Role_permissionsController"] = append(beego.GlobalControllerRouter["system_service/controllers:Role_permissionsController"],
-        beego.ControllerComments{
-            Method: "Delete",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"delete"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:RolesController"] = append(beego.GlobalControllerRouter["system_service/controllers:RolesController"],
-        beego.ControllerComments{
-            Method: "Post",
-            Router: `/`,
-            AllowHTTPMethods: []string{"post"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:RolesController"] = append(beego.GlobalControllerRouter["system_service/controllers:RolesController"],
-        beego.ControllerComments{
-            Method: "GetAll",
-            Router: `/`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:RolesController"] = append(beego.GlobalControllerRouter["system_service/controllers:RolesController"],
-        beego.ControllerComments{
-            Method: "GetOne",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"get"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:RolesController"] = append(beego.GlobalControllerRouter["system_service/controllers:RolesController"],
-        beego.ControllerComments{
-            Method: "Put",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"put"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:RolesController"] = append(beego.GlobalControllerRouter["system_service/controllers:RolesController"],
-        beego.ControllerComments{
-            Method: "Delete",
-            Router: `/:id`,
-            AllowHTTPMethods: []string{"delete"},
-            MethodParams: param.Make(),
-            Filters: nil,
-            Params: nil})
-
-    beego.GlobalControllerRouter["system_service/controllers:RolesController"] = append(beego.GlobalControllerRouter["system_service/controllers:RolesController"],
-        beego.ControllerComments{
-            Method: "GetOneByName",
-            Router: `/role/:role`,
-            AllowHTTPMethods: []string{"get"},
             MethodParams: param.Make(),
             Filters: nil,
             Params: nil})

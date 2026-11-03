@@ -938,3 +938,118 @@ func (c *ApplicationController) UploadImage() {
 	c.Data["json"] = response
 	c.ServeJSON()
 }
+
+// UpdateApplicationShopBanner ...
+// @Title Update Application Shop Banner
+// @Description Update border radius and banner images for a shop
+// @Param	body		body 	requests.UpdateApplicationShopBannerRequest	true		"body for banner update"
+// @Success 200 {object} responses.ApplicationResponse
+// @Failure 400 bad request
+// @router /shop/update-banner [put]
+func (c *ApplicationController) UpdateApplicationShopBanner() {
+	var v requests.UpdateApplicationShopBannerRequest
+	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+
+	statusCode := 400
+	statusMessage := "Bad Request"
+
+	if v.ApplicationShopId == 0 {
+		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: "ApplicationShopId is required", Result: nil}
+		c.Data["json"] = resp
+		c.ServeJSON()
+		return
+	}
+
+	if appShop, err := models.GetApplicationShopsById(v.ApplicationShopId); err == nil {
+		appShop.BannerImages = v.BannerImages
+		appShop.BorderRadius = v.BorderRadius
+
+		if err := models.UpdateApplicationShopsById(appShop); err == nil {
+			statusCode = 200
+			statusMessage = "Banner updated successfully"
+			appData := responses.ApplicationResponseData{
+				ApplicationId:    strconv.FormatInt(appShop.Application.ApplicationId, 10),
+				ApplicationCode:  appShop.Application.ApplicationCode,
+				ApplicationName:  appShop.Application.ApplicationName,
+				ApplicationLogo:  appShop.Application.ApplicationLogo,
+				ThemeColors:      appShop.Application.ThemeColors,
+				DefaultFontsize:  appShop.Application.DefaultFontsize,
+				ApplicationImage: appShop.Application.ApplicationImage,
+				DateCreated:      appShop.Application.DateCreated,
+				DateModified:     appShop.Application.DateModified,
+				Active:           appShop.Application.Active,
+			}
+			var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &appData}
+			c.Data["json"] = resp
+		} else {
+			statusCode = 500
+			statusMessage = err.Error()
+			var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+			c.Data["json"] = resp
+		}
+	} else {
+		statusCode = 404
+		statusMessage = "Application shop not found"
+		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+		c.Data["json"] = resp
+	}
+
+	c.ServeJSON()
+}
+
+// ToggleApplicationShopBanner ...
+// @Title Toggle Application Shop Banner
+// @Description Toggle the show banner on and off for a shop
+// @Param	body		body 	requests.ToggleApplicationShopBannerRequest	true		"body for banner toggle"
+// @Success 200 {object} responses.ApplicationResponse
+// @Failure 400 bad request
+// @router /shop/toggle-banner [put]
+func (c *ApplicationController) ToggleApplicationShopBanner() {
+	var v requests.ToggleApplicationShopBannerRequest
+	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
+
+	statusCode := 400
+	statusMessage := "Bad Request"
+
+	if v.ApplicationShopId == 0 {
+		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: "ApplicationShopId is required", Result: nil}
+		c.Data["json"] = resp
+		c.ServeJSON()
+		return
+	}
+
+	if appShop, err := models.GetApplicationShopsById(v.ApplicationShopId); err == nil {
+		appShop.ShowBanner = v.ShowBanner
+
+		if err := models.UpdateApplicationShopsById(appShop); err == nil {
+			statusCode = 200
+			statusMessage = "Banner toggled successfully"
+			appData := responses.ApplicationResponseData{
+				ApplicationId:    strconv.FormatInt(appShop.Application.ApplicationId, 10),
+				ApplicationCode:  appShop.Application.ApplicationCode,
+				ApplicationName:  appShop.Application.ApplicationName,
+				ApplicationLogo:  appShop.Application.ApplicationLogo,
+				ThemeColors:      appShop.Application.ThemeColors,
+				DefaultFontsize:  appShop.Application.DefaultFontsize,
+				ApplicationImage: appShop.Application.ApplicationImage,
+				DateCreated:      appShop.Application.DateCreated,
+				DateModified:     appShop.Application.DateModified,
+				Active:           appShop.Application.Active,
+			}
+			var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: &appData}
+			c.Data["json"] = resp
+		} else {
+			statusCode = 500
+			statusMessage = err.Error()
+			var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+			c.Data["json"] = resp
+		}
+	} else {
+		statusCode = 404
+		statusMessage = "Application shop not found"
+		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: statusMessage, Result: nil}
+		c.Data["json"] = resp
+	}
+
+	c.ServeJSON()
+}

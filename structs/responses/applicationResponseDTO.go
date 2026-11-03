@@ -77,7 +77,10 @@ type ApplicationResponseData struct {
 }
 
 type ApplicationShopResponseData struct {
-	ShopId string
+	ShopId       string
+	ShowBanner   bool
+	BannerImages string
+	BorderRadius float64
 }
 
 type ApplicationShopFullResponseData struct {

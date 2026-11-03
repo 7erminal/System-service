@@ -27,3 +27,14 @@ type ApplicationShopRequest struct {
 	ApplicationId string
 	AddedBy       string
 }
+
+type UpdateApplicationShopBannerRequest struct {
+	ApplicationShopId int64   `json:"ApplicationShopId"`
+	BannerImages      string  `json:"BannerImages"`
+	BorderRadius      float64 `json:"BorderRadius"`
+}
+
+type ToggleApplicationShopBannerRequest struct {
+	ApplicationShopId int64 `json:"ApplicationShopId"`
+	ShowBanner        bool  `json:"ShowBanner"`
+}
