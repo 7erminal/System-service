@@ -300,6 +300,27 @@ func (c *ApplicationController) GetAll() {
 				})
 			}
 
+			appShops := []responses.ApplicationShopResponseData{}
+			shopQuery := make(map[string]string)
+			shopQuery["Application"] = strconv.FormatInt(m.Application.ApplicationId, 10)
+			if shops, err := models.GetAllApplicationShops(shopQuery, []string{}, []string{}, []string{}, 0, 1000); err == nil {
+				for _, shop := range shops {
+					s := shop.(models.ApplicationShops)
+					appShops = append(appShops, responses.ApplicationShopResponseData{
+						ApplicationShopId: strconv.FormatInt(s.Id, 10),
+						Shop:              s.Shop,
+						ShowBanner:        s.ShowBanner,
+						BannerImages:      s.BannerImages,
+						BorderRadius:      s.BorderRadius,
+						DateCreated:       s.DateCreated,
+						DateModified:      s.DateModified,
+						CreatedBy:         s.CreatedBy,
+						ModifiedBy:        s.ModifiedBy,
+						Active:            s.Active,
+					})
+				}
+			}
+
 			appsResp = append(appsResp, responses.ApplicationResponseData{
 				ApplicationId:    strconv.FormatInt(m.Application.ApplicationId, 10),
 				ApplicationCode:  m.Application.ApplicationCode,
@@ -321,7 +342,7 @@ func (c *ApplicationController) GetAll() {
 					ModifiedBy:   m.Theme.ModifiedBy,
 					ThemeConfig:  themeConfigs,
 				},
-				ApplicationShops: []responses.ApplicationShopResponseData{},
+				ApplicationShops: appShops,
 			})
 		}
 		result = appsResp
