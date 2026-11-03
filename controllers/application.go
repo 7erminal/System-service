@@ -35,6 +35,8 @@ func (c *ApplicationController) URLMapping() {
 	c.Mapping("RemoveApplicationShop", c.RemoveApplicationShop)
 	c.Mapping("AddApplicationShop", c.AddApplicationShop)
 	c.Mapping("GetApplicationShops", c.GetApplicationShops)
+	c.Mapping("UpdateApplicationShopBanner", c.UpdateApplicationShopBanner)
+	c.Mapping("ToggleApplicationShopBanner", c.ToggleApplicationShopBanner)
 }
 
 // Post ...
