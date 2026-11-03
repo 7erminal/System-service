@@ -79,10 +79,16 @@ type ApplicationResponseData struct {
 type ApplicationShopResponseData struct {
 	ApplicationShopId string
 	ApplicationId     string
+	ApplicationCode   string
+	ApplicationName   string
+	ApplicationLogo   string
 	ShopId            string
 	ShowBanner        bool
 	BannerImages      string
-	BorderRadius      float64
+	BorderRadius      string
+	ThemeColors       string
+	DefaultFontsize   string
+	ApplicationImage  string
 	DateCreated       time.Time
 	DateModified      time.Time
 	CreatedBy         string
