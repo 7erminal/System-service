@@ -32,9 +32,11 @@ type UpdateApplicationShopBannerRequest struct {
 	ApplicationShopId int64   `json:"ApplicationShopId"`
 	BannerImages      string  `json:"BannerImages"`
 	BorderRadius      float64 `json:"BorderRadius"`
+	UpdatedBy         string  `json:"UpdatedBy"`
 }
 
 type ToggleApplicationShopBannerRequest struct {
-	ApplicationShopId int64 `json:"ApplicationShopId"`
-	ShowBanner        bool  `json:"ShowBanner"`
+	ApplicationShopId int64  `json:"ApplicationShopId"`
+	ShowBanner        bool   `json:"ShowBanner"`
+	UpdatedBy         string `json:"UpdatedBy"`
 }

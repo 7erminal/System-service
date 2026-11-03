@@ -953,6 +953,13 @@ func (c *ApplicationController) UpdateApplicationShopBanner() {
 	statusCode := 400
 	statusMessage := "Bad Request"
 
+	if v.UpdatedBy == "" {
+		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: 400, StatusMessage: "UpdatedBy is required", Result: nil}
+		c.Data["json"] = resp
+		c.ServeJSON()
+		return
+	}
+
 	if v.ApplicationShopId == 0 {
 		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: "ApplicationShopId is required", Result: nil}
 		c.Data["json"] = resp
@@ -963,6 +970,7 @@ func (c *ApplicationController) UpdateApplicationShopBanner() {
 	if appShop, err := models.GetApplicationShopsById(v.ApplicationShopId); err == nil {
 		appShop.BannerImages = v.BannerImages
 		appShop.BorderRadius = v.BorderRadius
+		appShop.ModifiedBy = v.UpdatedBy
 
 		if err := models.UpdateApplicationShopsById(appShop); err == nil {
 			statusCode = 200
@@ -1008,6 +1016,13 @@ func (c *ApplicationController) ToggleApplicationShopBanner() {
 	var v requests.ToggleApplicationShopBannerRequest
 	json.Unmarshal(c.Ctx.Input.RequestBody, &v)
 
+	if v.UpdatedBy == "" {
+		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: 400, StatusMessage: "UpdatedBy is required", Result: nil}
+		c.Data["json"] = resp
+		c.ServeJSON()
+		return
+	}
+
 	statusCode := 400
 	statusMessage := "Bad Request"
 
@@ -1020,6 +1035,7 @@ func (c *ApplicationController) ToggleApplicationShopBanner() {
 
 	if appShop, err := models.GetApplicationShopsById(v.ApplicationShopId); err == nil {
 		appShop.ShowBanner = v.ShowBanner
+		appShop.ModifiedBy = v.UpdatedBy
 
 		if err := models.UpdateApplicationShopsById(appShop); err == nil {
 			statusCode = 200
