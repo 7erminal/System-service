@@ -964,14 +964,15 @@ func (c *ApplicationController) UpdateApplicationShopBanner() {
 		return
 	}
 
-	if v.ApplicationShopId == 0 {
+	if v.ApplicationShopId == "" {
 		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: "ApplicationShopId is required", Result: nil}
 		c.Data["json"] = resp
 		c.ServeJSON()
 		return
 	}
 
-	if appShop, err := models.GetApplicationShopsById(v.ApplicationShopId); err == nil {
+	appidint, _ := strconv.ParseInt(v.ApplicationShopId, 10, 64)
+	if appShop, err := models.GetApplicationShopsById(appidint); err == nil {
 		appShop.BannerImages = v.BannerImages
 		appShop.BorderRadius = v.BorderRadius
 		appShop.ModifiedBy = v.UpdatedBy
@@ -1030,14 +1031,15 @@ func (c *ApplicationController) ToggleApplicationShopBanner() {
 	statusCode := 400
 	statusMessage := "Bad Request"
 
-	if v.ApplicationShopId == 0 {
+	if v.ApplicationShopId == "" {
 		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: "ApplicationShopId is required", Result: nil}
 		c.Data["json"] = resp
 		c.ServeJSON()
 		return
 	}
 
-	if appShop, err := models.GetApplicationShopsById(v.ApplicationShopId); err == nil {
+	appidint, _ := strconv.ParseInt(v.ApplicationShopId, 10, 64)
+	if appShop, err := models.GetApplicationShopsById(appidint); err == nil {
 		appShop.ShowBanner = v.ShowBanner
 		appShop.ModifiedBy = v.UpdatedBy
 
@@ -1088,14 +1090,15 @@ func (c *ApplicationController) UpdateApplicationTheme() {
 	statusCode := 400
 	statusMessage := "Bad Request"
 
-	if v.ApplicationId == 0 {
+	if v.ApplicationId == "" {
 		var resp responses.ApplicationResponse = responses.ApplicationResponse{StatusCode: statusCode, StatusMessage: "ApplicationId is required", Result: nil}
 		c.Data["json"] = resp
 		c.ServeJSON()
 		return
 	}
 
-	if app, err := models.GetApplicationById(v.ApplicationId); err == nil {
+	appidint, _ := strconv.ParseInt(v.ApplicationId, 10, 64)
+	if app, err := models.GetApplicationById(appidint); err == nil {
 		app.ThemeColors = v.ThemeColors
 		app.DefaultFontsize = v.DefaultFontsize
 		app.ModifiedBy = v.UpdatedBy
