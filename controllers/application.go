@@ -145,7 +145,8 @@ func (c *ApplicationController) GetOne() {
 	var result responses.ApplicationResponseData
 
 	if err != nil {
-
+		statusCode = 404
+		statusMessage = "Application not found"
 	} else {
 
 		v, erra := models.GetApplication_themesByApplicationId(a.ApplicationId)
@@ -177,6 +178,7 @@ func (c *ApplicationController) GetOne() {
 				ModifiedBy:   v.Theme.ModifiedBy,
 			}
 
+			logs.Info("Application shops retrieved :: ", a.ApplicationShops)
 			appShops := []responses.ApplicationShopResponseData{}
 			for _, as := range a.ApplicationShops {
 				appShops = append(appShops, responses.ApplicationShopResponseData{
