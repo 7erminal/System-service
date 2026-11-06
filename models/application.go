@@ -43,7 +43,8 @@ func AddApplication(m *Application) (id int64, err error) {
 func GetApplicationById(id int64) (v *Application, err error) {
 	o := orm.NewOrm()
 	v = &Application{ApplicationId: id}
-	if err = o.QueryTable(new(Application)).Filter("ApplicationId", id).RelatedSel().One(v); err == nil {
+	if err = o.QueryTable(new(Application)).Filter("ApplicationId", id).One(v); err == nil {
+		o.LoadRelated(v, "ApplicationShops")
 		return v, nil
 	}
 	return nil, err
@@ -52,7 +53,8 @@ func GetApplicationById(id int64) (v *Application, err error) {
 func GetApplicationByCode(code string) (v *Application, err error) {
 	o := orm.NewOrm()
 	v = &Application{ApplicationCode: code}
-	if err = o.QueryTable(new(Application)).Filter("ApplicationCode", code).RelatedSel().One(v); err == nil {
+	if err = o.QueryTable(new(Application)).Filter("ApplicationCode", code).One(v); err == nil {
+		o.LoadRelated(v, "ApplicationShops")
 		return v, nil
 	}
 	return nil, err
