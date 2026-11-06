@@ -183,7 +183,20 @@ func (c *ApplicationController) GetOne() {
 			appShops := []responses.ApplicationShopResponseData{}
 			for _, as := range a.ApplicationShops {
 				appShops = append(appShops, responses.ApplicationShopResponseData{
-					ShopId: as.Shop,
+					ShopId:           as.Shop,
+					ApplicationId:    strconv.FormatInt(a.ApplicationId, 10),
+					ApplicationCode:  a.ApplicationCode,
+					ApplicationName:  a.ApplicationName,
+					ApplicationLogo:  a.ApplicationLogo,
+					ApplicationImage: a.ApplicationImage,
+					ShowBanner:       as.ShowBanner,
+					BannerImages:     as.BannerImages,
+					BorderRadius:     strconv.FormatFloat(as.BorderRadius, 'f', -1, 64),
+					ThemeColors:      a.ThemeColors,
+					DefaultFontsize:  a.DefaultFontsize,
+					DateCreated:      a.DateCreated,
+					DateModified:     a.DateModified,
+					Active:           a.Active,
 				})
 			}
 			result = responses.ApplicationResponseData{
