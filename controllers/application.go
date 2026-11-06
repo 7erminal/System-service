@@ -148,7 +148,8 @@ func (c *ApplicationController) GetOne() {
 		statusCode = 404
 		statusMessage = "Application not found"
 	} else {
-
+		logs.Info("Application retrieved: ", a)
+		logs.Info("Application shops retrieved: ", a.ApplicationShops)
 		v, erra := models.GetApplication_themesByApplicationId(a.ApplicationId)
 		if erra == nil {
 			statusCode = 200
