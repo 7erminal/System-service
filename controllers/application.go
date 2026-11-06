@@ -897,20 +897,6 @@ func (c *ApplicationController) GetApplicationShops() {
 		for _, shop := range l {
 			m := shop.(models.ApplicationShops)
 
-			// type ApplicationShopResponseData struct {
-			// 	ApplicationShopId string
-			// 	ShopId            string
-			// 	Shop              string
-			// 	ShowBanner        bool
-			// 	BannerImages      string
-			// 	BorderRadius      float64
-			// 	DateCreated       time.Time
-			// 	DateModified      time.Time
-			// 	CreatedBy         string
-			// 	ModifiedBy        string
-			// 	Active            int
-			// }
-
 			result = append(result, responses.ApplicationShopResponseData{
 				ApplicationShopId: strconv.FormatInt(m.Id, 10),
 				ShopId:            m.Shop,
