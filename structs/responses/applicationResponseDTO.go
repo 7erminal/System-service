@@ -86,6 +86,7 @@ type ApplicationShopResponseData struct {
 	ShowBanner        bool
 	BannerImages      string
 	BorderRadius      string
+	BaseUrl           string
 	ThemeColors       string
 	DefaultFontsize   string
 	ApplicationImage  string

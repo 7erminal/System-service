@@ -17,6 +17,7 @@ type ApplicationShops struct {
 	ShowBanner   bool         `orm:"type(boolean)"`
 	BannerImages string       `orm:"type(text)"`
 	BorderRadius float64      `orm:"type(double)"`
+	BaseUrl      string       `orm:"type(text)"`
 	DateCreated  time.Time    `orm:"type(datetime);auto_now_add"`
 	DateModified time.Time    `orm:"type(datetime);auto_now"`
 	CreatedBy    string

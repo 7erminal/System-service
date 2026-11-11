@@ -32,6 +32,7 @@ type UpdateApplicationShopBannerRequest struct {
 	ApplicationShopId string  `json:"ApplicationShopId"`
 	BannerImages      string  `json:"BannerImages"`
 	BorderRadius      float64 `json:"BorderRadius"`
+	BaseUrl           string  `json:"BaseUrl"`
 	UpdatedBy         string  `json:"UpdatedBy"`
 }
 

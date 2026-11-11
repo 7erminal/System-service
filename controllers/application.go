@@ -911,6 +911,7 @@ func (c *ApplicationController) GetApplicationShops() {
 				ThemeColors:       m.Application.ThemeColors,
 				DefaultFontsize:   m.Application.DefaultFontsize,
 				ApplicationImage:  m.Application.ApplicationImage,
+				BaseUrl:           m.BaseUrl,
 				DateCreated:       m.DateCreated,
 				DateModified:      m.DateModified,
 				CreatedBy:         m.CreatedBy,
@@ -1023,6 +1024,7 @@ func (c *ApplicationController) UpdateApplicationShopBanner() {
 		appShop.BannerImages = v.BannerImages
 		appShop.BorderRadius = v.BorderRadius
 		appShop.ModifiedBy = v.UpdatedBy
+		appShop.BaseUrl = v.BaseUrl
 
 		if err := models.UpdateApplicationShopsById(appShop); err == nil {
 			statusCode = 200
